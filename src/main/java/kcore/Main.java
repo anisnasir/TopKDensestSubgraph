@@ -70,6 +70,7 @@ public class Main {
 	
 	long endTime   = System.currentTimeMillis();
 	System.out.println("Reading input time : " + ((endTime-startTime)/(double)1000) + " secs ");
+	startTime = System.currentTimeMillis();
 	//System.out.println(nodeMap.map);
 	//System.out.println(degreeMap.map);
 	KCore kCore = new KCore();
