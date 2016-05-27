@@ -9,16 +9,50 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
+
 public class Main {
+	private static void ErrorMessage() {
+		System.err.println("Choose the type of simulator using:");
+		System.err
+				.println("0 K Core Decomposition");
+		System.err
+				.println("1 Charikar" ) ; 
+		System.err
+				.println("2 Bahmani <epsilon>" ) ;
+		System.exit(1);
+	}
+	private static void displayAlgorithm( int simulatorType) {
+		if(simulatorType == 0 ) { 
+			System.out.println("Executing K core decomposition");
+		}else if (simulatorType == 1) {
+			System.out.println("Executing charikar greedy densest subgraph ");
+		}
+	}
 	public static void main(String[] args) throws IOException {
-		String inFileName= args[0];
+		double epsilon = 0 ;
+		if(args.length <1 ) {
+			System.out.println("simulator type missing");
+		}
+		int simulatorType = Integer.parseInt(args[0]);
+		
+		if(simulatorType == 0 || simulatorType == 1) {
+			if(args.length < 2) {
+				ErrorMessage();
+			}
+		}else if (simulatorType == 2) {
+			if(args.length < 3) {
+				ErrorMessage();
+			}
+			epsilon = Double.parseDouble(args[2]);
+		}
+		
+		
+		String inFileName= args[1];
+		
 		String sep = "\t";
 		BufferedReader in = null;
 		
 		long startTime = System.currentTimeMillis();
-		
-		
-        
 		try {
             InputStream rawin = new FileInputStream(inFileName);
             if (inFileName.endsWith(".gz"))
@@ -73,11 +107,28 @@ public class Main {
 	startTime = System.currentTimeMillis();
 	//System.out.println(nodeMap.map);
 	//System.out.println(degreeMap.map);
-	KCore kCore = new KCore();
-	endTime   = System.currentTimeMillis();
-	System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
-	
-	System.out.println(kCore.getCore(degreeMap,nodeMap));
+	if(simulatorType == 0) { 
+		displayAlgorithm(simulatorType);
+		KCore kCore = new KCore();
+		endTime   = System.currentTimeMillis();
+		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		
+		System.out.println(kCore.getCore(degreeMap,nodeMap));
+	}else if (simulatorType == 1) {
+		displayAlgorithm(simulatorType);
+		Charikar densest = new Charikar();
+		endTime   = System.currentTimeMillis();
+		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		
+		System.out.println(densest.getDensest(degreeMap,nodeMap));
+	} else if (simulatorType == 2) {
+		displayAlgorithm(simulatorType);
+		Bahmani densest = new Bahmani(epsilon);
+		endTime   = System.currentTimeMillis();
+		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		
+		System.out.println(densest.getDensest(degreeMap,nodeMap));
+	}
 		
 	}
 	

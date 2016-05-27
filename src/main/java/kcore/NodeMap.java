@@ -11,8 +11,10 @@ import java.util.Map.Entry;
  */
 public class NodeMap {
 	HashMap<String,HashSet<String>>  map;
+	public int numEdges;
 	public NodeMap() {
 		map = new HashMap<String,HashSet<String>> ();
+		numEdges= 0;
 	}
 	
 	public int addNode(String src, String dest) { 
