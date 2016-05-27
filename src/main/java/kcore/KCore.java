@@ -8,8 +8,8 @@ public class KCore {
 	
 	KCore() {
 	}
-	HashMap<String, Integer> getCore(DegreeMap degreeMap,NodeMap nodeMap, int numEdges, int numNodes) {
-		HashMap<String, Integer> core = new HashMap<String,Integer>();
+	HashMap<Integer, ArrayList<String>> getCore(DegreeMap degreeMap,NodeMap nodeMap, int numEdges, int numNodes) {
+		HashMap<Integer, ArrayList<String>> core = new HashMap<Integer,ArrayList<String>>();
 		int coreNumber =0;
 		
 		int i = 0 ;
@@ -25,7 +25,7 @@ public class KCore {
 				//System.out.println(element + " " + nodeMap.getDegree(element));
 				if(degree > coreNumber)
 					coreNumber = degree;
-				core.put(element, coreNumber);
+				put(core, element, coreNumber);
 				HashSet<String> neighbors;
 				
 				if (nodeMap.getNeighbors(element) == null)
@@ -51,13 +51,13 @@ public class KCore {
 		
 	}
 	
-	ArrayList<ArrayList<String>> deepCopy(ArrayList<ArrayList<String>> graph) {
-		ArrayList<ArrayList<String>> returnGraph = new ArrayList<ArrayList<String>>();
-		for(int i =0 ;i<graph.size();i++) {
-			returnGraph.add(graph.get(i));
+	void put(HashMap<Integer, ArrayList<String>> map, String element, Integer coreNumber) {
+		if(map.containsKey(coreNumber)) {
+			map.get(coreNumber).add(element);
+		}else {
+			ArrayList<String> temp = new ArrayList<String>();
+			temp.add(element);
+			map.put(coreNumber,temp);
 		}
-		return returnGraph;
-		
 	}
-	
 }

@@ -63,8 +63,8 @@ public class Main {
 				}
 		}
 	in.close();
-	System.out.println(nodeMap.map);
-	System.out.println(degreeMap.map);
+	//System.out.println(nodeMap.map);
+	//System.out.println(degreeMap.map);
 	KCore kCore = new KCore();
 	System.out.println(kCore.getCore(degreeMap,nodeMap,edgeCounter-1 , nodeMap.getNumNodes()));
 		
