@@ -1,6 +1,7 @@
 package kcore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeMap;
 
@@ -8,7 +9,7 @@ public class KCore {
 	
 	KCore() {
 	}
-	TreeMap<Integer, ArrayList<String>> getCore(DegreeMap degreeMap,NodeMap nodeMap, int numEdges, int numNodes) {
+	ArrayList<String> getCore(DegreeMap degreeMap,NodeMap nodeMap, int numEdges, int numNodes) {
 		TreeMap<Integer, ArrayList<String>> core = new TreeMap<Integer,ArrayList<String>>();
 		int coreNumber =0;
 		
@@ -47,7 +48,8 @@ public class KCore {
 				}	
 			}	
 		}
-		return core;
+		System.out.println("main core " + core.lastKey());
+		return core.get(core.lastKey());
 		
 	}
 	
