@@ -2,38 +2,40 @@ package kcore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
 
 
 
 /*
  * Degree map store <degree, Set<String> nodes> in a HashMap
  */
-public class DegreeMap {
-	HashMap<Integer,ArrayList<String>>  map;
-	DegreeMap() {
-		map = new HashMap<Integer,ArrayList<String>> ();
+public class DegreeMap1 {
+	ArrayList<ArrayList<String>>  map;
+	int capacity;
+	DegreeMap1() {
+		map = new ArrayList<ArrayList<String>> ();
+		capacity = 2;
+		for(int i =0;i< capacity;i++) {
+			map.add(new ArrayList<String>());
+		}
 	}
 	
 	void addNode(int degree, String nodeId) {
-		if (map.containsKey(degree)) {
-			ArrayList<String> nodes = map.get(degree);
-			nodes.add(nodeId);
-			map.put(degree, nodes);
-		}else {
-			ArrayList<String> neighbors = new ArrayList<String> ();
-			neighbors.add(nodeId);
-			map.put(degree, neighbors);
-		}
+		while(degree >= capacity) 
+			increaseCapacity();
+		
+		map.get(degree).add(nodeId);
 	}
 	
 	void removeNode(int degree, String nodeId) {
-		if (map.containsKey(degree)) {
-			ArrayList<String> nodes = map.get(degree);
-			nodes.remove(nodeId);
-			map.put(degree, nodes);
-		}
+		map.get(degree).remove(nodeId);
 	}
 	
+	void increaseCapacity() {
+		capacity=2*capacity;
+		for(int i = capacity/2;i<capacity;i++) 
+			map.add(new ArrayList<String>());
+	}
 	ArrayList<String> getNodes(int degree) {
 		return this.map.get(degree);
 	}

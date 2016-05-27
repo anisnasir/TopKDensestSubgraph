@@ -8,7 +8,7 @@ public class KCore {
 	
 	KCore() {
 	}
-	ArrayList<String> getCore(DegreeMap degreeMap,NodeMap nodeMap) {
+	ArrayList<String> getCore(DegreeMap1 degreeMap,NodeMap nodeMap) {
 		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
