@@ -14,6 +14,10 @@ public class Main {
 		String inFileName= args[0];
 		String sep = "\t";
 		BufferedReader in = null;
+		
+		long startTime = System.currentTimeMillis();
+		
+		
         
 		try {
             InputStream rawin = new FileInputStream(inFileName);
@@ -63,9 +67,15 @@ public class Main {
 				}
 		}
 	in.close();
+	
+	long endTime   = System.currentTimeMillis();
+	System.out.println("Reading input time : " + ((endTime-startTime)/(double)1000) + " secs ");
 	//System.out.println(nodeMap.map);
 	//System.out.println(degreeMap.map);
 	KCore kCore = new KCore();
+	endTime   = System.currentTimeMillis();
+	System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+	
 	System.out.println(kCore.getCore(degreeMap,nodeMap,edgeCounter-1 , nodeMap.getNumNodes()));
 		
 	}
