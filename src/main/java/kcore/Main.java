@@ -77,7 +77,7 @@ public class Main {
 	endTime   = System.currentTimeMillis();
 	System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 	
-	System.out.println(kCore.getCore(degreeMap,nodeMap,edgeCounter-1 , nodeMap.getNumNodes()));
+	System.out.println(kCore.getCore(degreeMap,nodeMap));
 		
 	}
 	
