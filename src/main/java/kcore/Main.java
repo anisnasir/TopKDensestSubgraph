@@ -11,7 +11,7 @@ import java.util.zip.GZIPInputStream;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		String inFileName = "/Users/anis/Datasets/Densest/twitter_combined_modified.txt";
+		String inFileName= args[0];
 		String sep = "\t";
 		BufferedReader in = null;
         
