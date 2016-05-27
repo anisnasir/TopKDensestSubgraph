@@ -10,7 +10,7 @@ public class KCore {
 	KCore() {
 	}
 	ArrayList<String> getCore(DegreeMap degreeMap,NodeMap nodeMap, int numEdges, int numNodes) {
-		TreeMap<Integer, ArrayList<String>> core = new TreeMap<Integer,ArrayList<String>>();
+		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
 		int i = 0 ;
@@ -24,9 +24,11 @@ public class KCore {
 				String element = temp.remove(0);
 				int degree = nodeMap.getDegree(element);
 				//System.out.println(element + " " + nodeMap.getDegree(element));
-				if(degree > coreNumber)
+				if(degree > coreNumber) {
 					coreNumber = degree;
-				put(core, element, coreNumber);
+					core = new ArrayList<String>();
+				}
+				core.add(element);
 				HashSet<String> neighbors;
 				
 				if (nodeMap.getNeighbors(element) == null)
@@ -48,8 +50,8 @@ public class KCore {
 				}	
 			}	
 		}
-		System.out.println("main core " + core.lastKey());
-		return core.get(core.lastKey());
+		System.out.println("main core " + coreNumber);
+		return core;
 		
 	}
 	
