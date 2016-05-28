@@ -1,5 +1,6 @@
 package kcore;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 
@@ -7,13 +8,13 @@ import java.util.ArrayList;
  * Degree map store <degree, Set<String> nodes> in a HashMap
  */
 public class DegreeMap {
-	ArrayList<ArrayList<String>>  map;
+	ArrayList<HashSet<String>>  map;
 	int capacity;
 	DegreeMap() {
-		map = new ArrayList<ArrayList<String>> ();
+		map = new ArrayList<HashSet<String>> ();
 		capacity = 2;
 		for(int i =0;i< capacity;i++) {
-			map.add(new ArrayList<String>());
+			map.add(new HashSet<String>());
 		}
 	}
 	
@@ -31,9 +32,9 @@ public class DegreeMap {
 	void increaseCapacity() {
 		capacity=2*capacity;
 		for(int i = capacity/2;i<capacity;i++) 
-			map.add(new ArrayList<String>());
+			map.add(new HashSet<String>());
 	}
-	ArrayList<String> getNodes(int degree) {
+	HashSet<String> getNodes(int degree) {
 		return this.map.get(degree);
 	}
 	
@@ -47,7 +48,7 @@ public class DegreeMap {
 		addNode(degree-1,nodeId);
 	}
 	
-	ArrayList<String> getNodesBetween(double upperBound, double lowerBound) {
+	HashSet<String> getNodesBetween(double upperBound, double lowerBound) {
 		if(Math.floor(upperBound) < lowerBound) {
 			return null;
 		}else {

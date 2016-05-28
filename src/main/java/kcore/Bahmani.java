@@ -22,7 +22,7 @@ public class Bahmani {
 		int i = 0 ;
 		while(i < degreeMap.capacity){
 			while(i < threshold && i<degreeMap.capacity) {
-				ArrayList<String> temp = degreeMap.map.get(i);
+				ArrayList<String> temp = new ArrayList<String>(degreeMap.map.get(i));
 			
 				if(temp.size() == 0) {
 					i++;

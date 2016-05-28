@@ -58,8 +58,6 @@ public class Main {
 		long startTime = System.currentTimeMillis();
 		try {
             InputStream rawin = new FileInputStream(inFileName);
-            if (inFileName.endsWith(".gz"))
-                rawin = new GZIPInputStream(rawin);
             in = new BufferedReader(new InputStreamReader(rawin));
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
@@ -126,10 +124,10 @@ public class Main {
 		
 	} else if (simulatorType == 2) {
 		displayAlgorithm(simulatorType);
-		Bahmani densest = new Bahmani(epsilon);
-		endTime   = System.currentTimeMillis();
-		System.out.println(densest.getDensest(degreeMap,nodeMap));
-		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		//Bahmani densest = new Bahmani(epsilon);
+		//endTime   = System.currentTimeMillis();
+		//System.out.println(densest.getDensest(degreeMap,nodeMap));
+		//System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
 	}
 		
