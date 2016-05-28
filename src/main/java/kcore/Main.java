@@ -26,7 +26,10 @@ public class Main {
 			System.out.println("Executing K core decomposition");
 		}else if (simulatorType == 1) {
 			System.out.println("Executing charikar greedy densest subgraph ");
-		}
+		}else if (simulatorType == 2) {
+                        System.out.println("Executing Bahmani densest subgraph ");
+                }
+		
 	}
 	public static void main(String[] args) throws IOException {
 		double epsilon = 0 ;
@@ -111,23 +114,23 @@ public class Main {
 		displayAlgorithm(simulatorType);
 		KCore kCore = new KCore();
 		endTime   = System.currentTimeMillis();
+		System.out.println(kCore.getCore(degreeMap,nodeMap));
 		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
-		System.out.println(kCore.getCore(degreeMap,nodeMap));
 	}else if (simulatorType == 1) {
 		displayAlgorithm(simulatorType);
 		Charikar densest = new Charikar();
 		endTime   = System.currentTimeMillis();
+		System.out.println(densest.getDensest(degreeMap,nodeMap));
 		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
-		System.out.println(densest.getDensest(degreeMap,nodeMap));
 	} else if (simulatorType == 2) {
 		displayAlgorithm(simulatorType);
 		Bahmani densest = new Bahmani(epsilon);
 		endTime   = System.currentTimeMillis();
+		System.out.println(densest.getDensest(degreeMap,nodeMap));
 		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
-		System.out.println(densest.getDensest(degreeMap,nodeMap));
 	}
 		
 	}
