@@ -2,7 +2,6 @@ package kcore;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.TreeMap;
 
 public class KCore {
 	
@@ -14,16 +13,20 @@ public class KCore {
 		
 		int i = 0 ;
 		while(i < degreeMap.capacity){
-			ArrayList<String> temp = new ArrayList<String>(degreeMap.map.get(i));
-			
+			HashSet<String> temp = degreeMap.map.get(i);
 			if(temp.size() == 0) {
 				i++;
 			}
 			else { 
-				String element = temp.remove(0);
+				String element= "";
+				for(String str:temp) {
+					element = str;
+					break;
+				}
 				int degree = nodeMap.getDegree(element);
+				temp.remove(element);
 				//System.out.println(element + " " + nodeMap.getDegree(element));
-				if(degree > coreNumber) {
+				if(degree >= coreNumber) {
 					coreNumber = degree;
 					core = new ArrayList<String>();
 				}
@@ -52,15 +55,5 @@ public class KCore {
 		System.out.println("main core " + coreNumber);
 		return core;
 		
-	}
-	
-	void put(TreeMap<Integer, ArrayList<String>> map, String element, Integer coreNumber) {
-		if(map.containsKey(coreNumber)) {
-			map.get(coreNumber).add(element);
-		}else {
-			ArrayList<String> temp = new ArrayList<String>();
-			temp.add(element);
-			map.put(coreNumber,temp);
-		}
 	}
 }

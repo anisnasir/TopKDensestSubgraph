@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.zip.GZIPInputStream;
 
 
 public class Main {
@@ -111,23 +110,23 @@ public class Main {
 	if(simulatorType == 0) { 
 		displayAlgorithm(simulatorType);
 		KCore kCore = new KCore();
-		endTime   = System.currentTimeMillis();
 		System.out.println(kCore.getCore(degreeMap,nodeMap));
+		endTime   = System.currentTimeMillis();
 		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
 	}else if (simulatorType == 1) {
 		displayAlgorithm(simulatorType);
 		Charikar densest = new Charikar();
-		endTime   = System.currentTimeMillis();
 		System.out.println(densest.getDensest(degreeMap,nodeMap));
+		endTime   = System.currentTimeMillis();
 		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
 	} else if (simulatorType == 2) {
 		displayAlgorithm(simulatorType);
-		//Bahmani densest = new Bahmani(epsilon);
-		//endTime   = System.currentTimeMillis();
-		//System.out.println(densest.getDensest(degreeMap,nodeMap));
-		//System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		Bahmani densest = new Bahmani(epsilon);
+		System.out.println(densest.getDensest(degreeMap,nodeMap));
+		endTime   = System.currentTimeMillis();
+		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
 	}
 		
