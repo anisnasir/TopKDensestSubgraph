@@ -11,6 +11,7 @@ public class Charikar {
 		int numNodes = nodeMap.getNumNodes();
 		int numEdges = nodeMap.numEdges;
 		
+		System.out.println("num edges" + numEdges + " num nodes: " + numNodes);
 		double density = numEdges/(double)numNodes;
 		ArrayList<String> densest = new ArrayList<String>();
 		
