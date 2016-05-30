@@ -139,11 +139,13 @@ public class Main {
 	
 	 static void verifyDegrees(DegreeMap degreeMap, NodeMap nodeMap ) {
 		int i = 0 ;
+		int count = 0 ;
 		System.out.println("Capacity: " + degreeMap.capacity);
 		while(i < degreeMap.capacity) { 
 			
 			HashSet<String> nodes = degreeMap.map.get(i);
 			for(String str: nodes) {
+				count+=i;
 				if(nodeMap.getDegree(str) != i) 
 				{
 					System.out.println("degree map and node map does violate the memory");
@@ -151,6 +153,7 @@ public class Main {
 			}
 			i++;
 		}
+		System.out.println("total edges: " + count);
 	}
 	
 
