@@ -11,6 +11,9 @@ public class KCore {
 		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
+		int counter  = 0 ;
+		int PRINT_INTERVAL = 1000000;
+		long simulationStartTime = System.currentTimeMillis();
 		int i = 0 ;
 		while(i < degreeMap.capacity){
 			HashSet<String> temp = degreeMap.map.get(i);
@@ -25,6 +28,16 @@ public class KCore {
 				}
 				int degree = nodeMap.getDegree(element);
 				temp.remove(element);
+				counter++;
+				
+				if (++counter % PRINT_INTERVAL == 0) {
+					System.out.println("Read " + counter/PRINT_INTERVAL
+							+ "M edges.\tSimulation time: "
+							+ (System.currentTimeMillis() - simulationStartTime)
+							/ 1000 + " seconds");
+					
+				}
+				
 				//System.out.println(element + " " + nodeMap.getDegree(element));
 				if(degree >= coreNumber) {
 					coreNumber = degree;
