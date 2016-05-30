@@ -18,6 +18,7 @@ public class NodeMap {
 	}
 	
 	public int addNode(String src, String dest) { 
+		numEdges++;
 		if (map.containsKey(src)) {
 			HashSet<String> neighbors = map.get(src);
 			neighbors.add(dest);
@@ -29,6 +30,7 @@ public class NodeMap {
 			map.put(src, neighbors);
 			return neighbors.size();
 		}
+		
 	}
 	
 	int removeNode(String src, String dest) { 
@@ -36,6 +38,7 @@ public class NodeMap {
 		{
 			HashSet<String> neighbors = map.get(src);
 			neighbors.remove(dest);
+			numEdges--;
 			if(!neighbors.isEmpty()) {
 				map.put(src, neighbors);
 				return neighbors.size();
@@ -56,6 +59,9 @@ public class NodeMap {
 	}
 	int getNumNodes() {
 		return map.size();
+	}
+	int getNumEdges () { 
+		return this.numEdges/2;
 	}
 	public void printMap() {
 	    Iterator<Entry<String, HashSet<String>>> it = map.entrySet().iterator();

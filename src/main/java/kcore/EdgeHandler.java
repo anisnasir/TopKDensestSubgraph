@@ -15,7 +15,6 @@ public class EdgeHandler {
 		//update node map
 		nodeMap.addNode(src, dest);
 		nodeMap.addNode(dest, src);
-		nodeMap.numEdges++;
 
 		//update degree map
 		degreeMap.incrementDegree(predegree1, src);
@@ -37,6 +36,5 @@ public class EdgeHandler {
 		//removes from each others neighbor table
 		nodeMap.removeNode(oldSrc, oldDest);
 		nodeMap.removeNode(oldDest, oldSrc);
-		nodeMap.numEdges--;
 	}
 }

@@ -38,9 +38,8 @@ public class KCore {
 							/ 1000 + " seconds");
 					
 				}
-				
 				//System.out.println(element + " " + nodeMap.getDegree(element));
-				if(degree >= coreNumber) {
+				if(degree > coreNumber) {
 					coreNumber = degree;
 					core = new ArrayList<String>();
 				}

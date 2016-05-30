@@ -9,15 +9,10 @@ public class Charikar {
 	}
 	ArrayList<String> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
 		int numNodes = nodeMap.getNumNodes();
-		int numEdges = nodeMap.numEdges;
+		int numEdges = nodeMap.getNumEdges();
 		
-		System.out.println("num edges" + numEdges + " num nodes: " + numNodes);
 		double density = numEdges/(double)numNodes;
 		ArrayList<String> densest = new ArrayList<String>();
-		
-		int counter  = 0 ;
-		int PRINT_INTERVAL = 1000000;
-		long simulationStartTime = System.currentTimeMillis();
 		
 		
 		int i = 0 ;
@@ -38,13 +33,6 @@ public class Charikar {
 				densest.add(element);
 				//System.out.println(element + " " + nodeMap.getDegree(element));
 				
-				if (++counter % PRINT_INTERVAL == 0) {
-					System.out.println("Removed " + counter/PRINT_INTERVAL
-							+ "M nodes.\tSimulation time: "
-							+ (System.currentTimeMillis() - simulationStartTime)
-							/ 1000 + " seconds");
-					
-				}
 				
 				HashSet<String> neighbors;
 				
@@ -80,7 +68,6 @@ public class Charikar {
 					density = newDensity;
 					densest = new ArrayList<String>();
 				}
-				
 			}	
 		}
 		System.out.println("Density: " + density);
