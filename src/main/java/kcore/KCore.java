@@ -32,8 +32,8 @@ public class KCore {
 				counter++;
 				
 				if (++counter % PRINT_INTERVAL == 0) {
-					System.out.println("Read " + counter/PRINT_INTERVAL
-							+ "M edges.\tSimulation time: "
+					System.out.println("Removed " + counter/PRINT_INTERVAL
+							+ "M nodes.\tSimulation time: "
 							+ (System.currentTimeMillis() - simulationStartTime)
 							/ 1000 + " seconds");
 					

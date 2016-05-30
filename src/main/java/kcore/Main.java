@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashSet;
 
 
 public class Main {
@@ -130,11 +131,25 @@ public class Main {
 		endTime   = System.currentTimeMillis();
 		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
+	} else if (simulatorType == 3) {
+		verifyDegrees(degreeMap, nodeMap);
 	}
 		
 	}
 	
-	
+	 static void verifyDegrees(DegreeMap degreeMap, NodeMap nodeMap ) {
+		int i = 0 ;
+		while(i < degreeMap.capacity) { 
+			i++;
+			HashSet<String> nodes = degreeMap.map.get(i);
+			for(String str: nodes) {
+				if(nodeMap.getDegree(str) != i) 
+				{
+					System.out.println("degree map and node map does violate the memory");
+				}
+			}
+		}
+	}
 	
 
 }

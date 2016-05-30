@@ -21,11 +21,11 @@ public class Bahmani {
 
 		ArrayList<String> densest = new ArrayList<String>(nodeMap.map.keySet());
 		
-		int i = 0 ;
+		int i = 0, j = 0 ;
 		while(i < degreeMap.capacity){
 			while(i < threshold && i<degreeMap.capacity) {
 				HashSet<String> temp = degreeMap.map.get(i);
-			
+				 
 				if(temp.size() == 0) {
 					i++;
 				}
@@ -38,8 +38,8 @@ public class Bahmani {
 					temp.remove(element);
 					
 					if (++counter % PRINT_INTERVAL == 0) {
-						System.out.println("Read " + counter/PRINT_INTERVAL
-								+ "M edges.\tSimulation time: "
+						System.out.println("Removed " + counter/PRINT_INTERVAL
+								+ "M nodes.\tSimulation time: "
 								+ (System.currentTimeMillis() - simulationStartTime)
 								/ 1000 + " seconds");
 						
@@ -62,8 +62,8 @@ public class Bahmani {
 						
 							int nodeDegree = nodeMap.getDegree(neighbor);
 							degreeMap.decremnetDegree(nodeDegree+1, neighbor);
-							if(nodeDegree < i) {
-								i=nodeDegree;
+							if(nodeDegree < j) {
+								j = nodeDegree;
 							}	
 						}
 					}
@@ -82,6 +82,10 @@ public class Bahmani {
 				densest = new ArrayList<String>(nodeMap.map.keySet());
 			}
 			threshold = 2*(1+epsilon)*newDensity;
+			
+			if(j < i) {
+				i = j;
+			}
 		}
 		System.out.println(density);
 
