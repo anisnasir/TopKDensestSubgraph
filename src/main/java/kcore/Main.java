@@ -153,7 +153,8 @@ public class Main {
 			}
 			i++;
 		}
-		System.out.println("total edges: " + count);
+		System.out.println("total edges: " + count/2);
+		System.out.println("num edges " + nodeMap.numEdges  + " num nodes " + nodeMap.getNumNodes() );
 	}
 	
 
