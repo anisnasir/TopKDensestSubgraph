@@ -75,7 +75,6 @@ public class Charikar {
 					return densest;
 				}
 				
-				System.out.println( numEdges + " " + numNodes);
 				double newDensity = numEdges/(double)numNodes;
 				if(newDensity > density) {
 					density = newDensity;

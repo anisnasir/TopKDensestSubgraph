@@ -61,7 +61,10 @@ public class Bahmani {
 							numEdges--;
 						
 							int nodeDegree = nodeMap.getDegree(neighbor);
-							degreeMap.decremnetDegree(nodeDegree+1, neighbor);	
+							degreeMap.decremnetDegree(nodeDegree+1, neighbor);
+							if(nodeDegree < i) {
+								i=nodeDegree;
+							}	
 						}
 					}
 					numNodes--;
