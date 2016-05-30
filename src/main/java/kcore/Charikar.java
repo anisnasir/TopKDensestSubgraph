@@ -22,6 +22,7 @@ public class Charikar {
 		
 		int i = 0 ;
 		while(i < degreeMap.capacity){
+			System.out.println(density);
 			HashSet<String> temp = degreeMap.map.get(i);
 			
 			if(temp.size() == 0) {
