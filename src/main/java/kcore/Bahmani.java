@@ -15,11 +15,12 @@ public class Bahmani {
 		double density = numEdges/(double)numNodes;
 		ArrayList<String> densest = new ArrayList<String>();
 
+		System.out.println(numNodes);
 		double threshold = 2*(1+epsilon)*density;
 
 		while(numNodes > 0){
 			int i = 0 ;
-			while(i<threshold) { 
+			while( i <= threshold ) { 
 				HashSet<String> temp = new HashSet<String>(degreeMap.map.get(i));
 				while(!temp.isEmpty()) {
 					String element= "";
@@ -32,8 +33,6 @@ public class Bahmani {
 	
 					densest.add(element);
 					//System.out.println(element + " " + nodeMap.getDegree(element));
-	
-	
 					HashSet<String> neighbors;
 	
 					if (nodeMap.getNeighbors(element) == null)
@@ -61,6 +60,7 @@ public class Bahmani {
 				}
 				i++;
 			}
+			System.out.println(numNodes);
 			double newDensity = numEdges/(double)numNodes;
 			if(newDensity > density) {
 				density = newDensity;
