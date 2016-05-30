@@ -37,19 +37,25 @@ public class Charikar {
 				else 
 					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
 				
-				for(String neighbor:neighbors) {
-					//System.out.println(element+ " " + neighbor);
-					nodeMap.removeNode(element, neighbor);
-					nodeMap.removeNode(neighbor, element);
-					numEdges--;
+				if(neighbors.size() > 0 ) {
+					for(String neighbor:neighbors) {
+						//System.out.println(element+ " " + neighbor);
+						nodeMap.removeNode(element, neighbor);
+						nodeMap.removeNode(neighbor, element);
+						numEdges--;
 					
-					int nodeDegree = nodeMap.getDegree(neighbor);
-					degreeMap.decremnetDegree(nodeDegree+1, neighbor);
-					if(nodeDegree < i) {
-						i=nodeDegree;
-					}		
+						int nodeDegree = nodeMap.getDegree(neighbor);
+						degreeMap.decremnetDegree(nodeDegree+1, neighbor);
+						if(nodeDegree < i) {
+							i=nodeDegree;
+						}	
+					}
 				}
 				numNodes--;
+				if(numNodes == 0) {
+					System.out.println("main core " + density);
+					return densest;
+				}
 				
 				double newDensity = numEdges/(double)numNodes;
 				if(newDensity >density) {

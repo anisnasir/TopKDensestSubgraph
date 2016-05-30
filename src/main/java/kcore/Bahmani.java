@@ -15,8 +15,7 @@ public class Bahmani {
 		
 		double density = numEdges/(double)numNodes;
 		double threshold = 2*(1+epsilon)*density;
-		
-		
+
 		ArrayList<String> densest = new ArrayList<String>(nodeMap.map.keySet());
 		
 		int i = 0 ;

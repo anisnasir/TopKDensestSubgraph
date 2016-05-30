@@ -38,17 +38,18 @@ public class KCore {
 				else 
 					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
 				
-				for(String neighbor:neighbors) {
-					//System.out.println(element+ " " + neighbor);
-					nodeMap.removeNode(element, neighbor);
-					nodeMap.removeNode(neighbor, element);
-					
-					int nodeDegree = nodeMap.getDegree(neighbor);
-					degreeMap.decremnetDegree(nodeDegree+1, neighbor);
-					if(nodeDegree < i) {
-						i=nodeDegree;
+				if(neighbors.size() > 0 ) {
+					for(String neighbor:neighbors) {
+						//System.out.println(element+ " " + neighbor);
+						nodeMap.removeNode(element, neighbor);
+						nodeMap.removeNode(neighbor, element);
+											
+						int nodeDegree = nodeMap.getDegree(neighbor);
+						degreeMap.decremnetDegree(nodeDegree+1, neighbor);
+						if(nodeDegree < i) {
+							i=nodeDegree;
+						}	
 					}
-						
 				}	
 			}	
 		}
