@@ -50,14 +50,14 @@ public class Bahmani {
 	
 							int nodeDegree = nodeMap.getDegree(neighbor);
 							degreeMap.decremnetDegree(nodeDegree+1, neighbor);
-	
 						}
 					}
 					numNodes--;
-					if(numNodes == 0)
-						break;
-	
-					temp.remove(element);
+					if(numNodes == 0) { 
+						System.out.println("Density: " + density);
+						System.out.println("Densest size: " + densest.size());
+						return densest;
+					}
 				}
 				i++;
 			}
@@ -66,8 +66,7 @@ public class Bahmani {
 				density = newDensity;
 				densest = new ArrayList<String>();
 			}
-			
-			threshold = 2*(1+epsilon)*density;
+			threshold = 2*(1+epsilon)*newDensity;
 		}
 		System.out.println("Density: " + density);
 		System.out.println("Densest size: " + densest.size());
