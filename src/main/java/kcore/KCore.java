@@ -14,6 +14,7 @@ public class KCore {
 		int counter  = 0 ;
 		int PRINT_INTERVAL = 1000000;
 		long simulationStartTime = System.currentTimeMillis();
+		
 		int i = 0 ;
 		while(i < degreeMap.capacity){
 			HashSet<String> temp = degreeMap.map.get(i);
@@ -67,6 +68,8 @@ public class KCore {
 			}	
 		}
 		System.out.println("main core " + coreNumber);
+
+		System.out.println("Densest size: " + core.size());
 		return core;
 		
 	}

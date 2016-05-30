@@ -22,6 +22,7 @@ public class Charikar {
 		int i = 0 ;
 		while(i < degreeMap.capacity){
 			HashSet<String> temp = degreeMap.map.get(i);
+			
 			if(temp.size() == 0) {
 				i++;
 			}
@@ -32,6 +33,7 @@ public class Charikar {
 					break;
 				}
 				temp.remove(element);
+				
 				densest.add(element);
 				//System.out.println(element + " " + nodeMap.getDegree(element));
 				
@@ -67,6 +69,8 @@ public class Charikar {
 				numNodes--;
 				if(numNodes == 0) {
 					System.out.println("Density: " + density);
+
+					System.out.println("Densest size: " + densest.size());
 					return densest;
 				}
 				
@@ -78,7 +82,8 @@ public class Charikar {
 				
 			}	
 		}
-		System.out.println("Density " + density);
+		System.out.println("Density: " + density);
+		System.out.println("Densest size: " + densest.size());
 		return densest;
 		
 	}

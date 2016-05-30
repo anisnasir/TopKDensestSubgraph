@@ -72,6 +72,8 @@ public class Bahmani {
 			}
 			if(numNodes == 0 ) {
 				System.out.println(density);
+
+				System.out.println("Densest size: " + densest.size());
 				return densest;
 			}
 			double newDensity = numEdges/(double)numNodes;
@@ -82,6 +84,8 @@ public class Bahmani {
 			threshold = 2*(1+epsilon)*newDensity;
 		}
 		System.out.println(density);
+
+		System.out.println("Densest size: " + densest.size());
 		return densest;
 		
 	}
