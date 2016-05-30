@@ -30,6 +30,8 @@ public class Charikar {
 				}
 				temp.remove(element);
 				
+				System.out.println(element);
+				
 				densest.add(element);
 				//System.out.println(element + " " + nodeMap.getDegree(element));
 				

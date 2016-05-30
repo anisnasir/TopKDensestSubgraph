@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 
 
 public class Main {
@@ -122,40 +121,19 @@ public class Main {
 		Charikar densest = new Charikar();
 		System.out.println(densest.getDensest(degreeMap,nodeMap));
 		endTime   = System.currentTimeMillis();
-		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
 	} else if (simulatorType == 2) {
 		displayAlgorithm(simulatorType);
 		Bahmani densest = new Bahmani(epsilon);
 		System.out.println(densest.getDensest(degreeMap,nodeMap));
 		endTime   = System.currentTimeMillis();
-		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+		System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
 		
-	} else if (simulatorType == 3) {
-		verifyDegrees(degreeMap, nodeMap);
-	}
+	} 
 		
 	}
 	
-	 static void verifyDegrees(DegreeMap degreeMap, NodeMap nodeMap ) {
-		int i = 0 ;
-		int count = 0 ;
-		System.out.println("Capacity: " + degreeMap.capacity);
-		while(i < degreeMap.capacity) { 
-			
-			HashSet<String> nodes = degreeMap.map.get(i);
-			for(String str: nodes) {
-				count+=i;
-				if(nodeMap.getDegree(str) != i) 
-				{
-					System.out.println("degree map and node map does violate the memory");
-				}
-			}
-			i++;
-		}
-		System.out.println("total edges: " + count/2);
-		System.out.println("num edges " + nodeMap.numEdges  + " num nodes " + nodeMap.getNumNodes() );
-	}
 	
 
 }
