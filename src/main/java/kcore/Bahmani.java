@@ -67,6 +67,7 @@ public class Bahmani {
 				densest = new ArrayList<String>();
 			}
 			threshold = 2*(1+epsilon)*newDensity;
+			System.out.println(newDensity + " " + threshold);
 		}
 		System.out.println("Density: " + density);
 		System.out.println("Densest size: " + densest.size());
