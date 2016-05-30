@@ -14,60 +14,55 @@ public class Bahmani {
 
 		double density = numEdges/(double)numNodes;
 		ArrayList<String> densest = new ArrayList<String>();
-
-		System.out.println(numNodes);
+		
 		double threshold = 2*(1+epsilon)*density;
 
 		while(numNodes > 0){
 			int i = 0 ;
+			HashSet<String> temp = new HashSet<String>();
 			while( i <= threshold ) { 
-				HashSet<String> temp = new HashSet<String>(degreeMap.map.get(i));
-				while(!temp.isEmpty()) {
-					String element= "";
-					for(String str:temp) {
-						element = str;
-						break;
-					}
-					temp.remove(element);
-					degreeMap.removeNode(i, element);
-	
-					densest.add(element);
-					//System.out.println(element + " " + nodeMap.getDegree(element));
-					HashSet<String> neighbors;
-	
-					if (nodeMap.getNeighbors(element) == null)
-						neighbors = new HashSet<String>();
-					else 
-						neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
-	
-					if(neighbors.size() > 0 ) {
-						for(String neighbor:neighbors) {
-							//System.out.println(element+ " " + neighbor);
-							nodeMap.removeNode(element, neighbor);
-							nodeMap.removeNode(neighbor, element);
-							numEdges--;
-	
-							int nodeDegree = nodeMap.getDegree(neighbor);
-							degreeMap.decremnetDegree(nodeDegree+1, neighbor);
-						}
-					}
-					numNodes--;
-					if(numNodes == 0) { 
-						System.out.println("Density: " + density);
-						System.out.println("Densest size: " + densest.size());
-						return densest;
-					}
-				}
+				temp.addAll(new HashSet<String>(degreeMap.map.get(i)));
 				i++;
 			}
-			System.out.println(numNodes);
+			
+			
+			for(String element: temp) {
+				densest.add(element);
+				
+				//System.out.println(element + " " + nodeMap.getDegree(element));
+				HashSet<String> neighbors;
+
+				if (nodeMap.getNeighbors(element) == null)
+					neighbors = new HashSet<String>();
+				else 
+					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
+
+				if(neighbors.size() > 0 ) {
+					degreeMap.removeNode(neighbors.size(), element);
+					for(String neighbor:neighbors) {
+						//System.out.println(element+ " " + neighbor);
+						nodeMap.removeNode(element, neighbor);
+						nodeMap.removeNode(neighbor, element);
+						numEdges--;
+
+						int nodeDegree = nodeMap.getDegree(neighbor);
+						degreeMap.decremnetDegree(nodeDegree+1, neighbor);
+					}
+				}else 
+					degreeMap.removeNode(0, element);
+			}
+			numNodes--;
+			if(numNodes == 0) { 
+				System.out.println("Density: " + density);
+				System.out.println("Densest size: " + densest.size());
+				return densest;
+			}
 			double newDensity = numEdges/(double)numNodes;
 			if(newDensity > density) {
 				density = newDensity;
 				densest = new ArrayList<String>();
 			}
 			threshold = 2*(1+epsilon)*newDensity;
-			System.out.println(newDensity + " " + threshold);
 		}
 		System.out.println("Density: " + density);
 		System.out.println("Densest size: " + densest.size());
