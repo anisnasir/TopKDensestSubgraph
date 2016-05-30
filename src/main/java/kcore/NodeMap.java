@@ -17,23 +17,21 @@ public class NodeMap {
 		numEdges= 0;
 	}
 	
-	public int addNode(String src, String dest) { 
+	public void addNode(String src, String dest) { 
 		numEdges++;
 		if (map.containsKey(src)) {
 			HashSet<String> neighbors = map.get(src);
 			neighbors.add(dest);
 			map.put(src, neighbors);
-			return neighbors.size();
 		}else {
 			HashSet<String> neighbors = new HashSet<String> ();
 			neighbors.add(dest);
 			map.put(src, neighbors);
-			return neighbors.size();
 		}
 		
 	}
 	
-	int removeNode(String src, String dest) { 
+	void removeNode(String src, String dest) { 
 		if(map.containsKey(src))
 		{
 			HashSet<String> neighbors = map.get(src);
@@ -41,15 +39,11 @@ public class NodeMap {
 			numEdges--;
 			if(!neighbors.isEmpty()) {
 				map.put(src, neighbors);
-				return neighbors.size();
 			}
 			else {
 				map.remove(src);
-				return 0;
 			}
-		}else 
-			return 0;
-		
+		}
 	}
 	int getDegree(String nodeId) {
 		if (map.containsKey(nodeId))

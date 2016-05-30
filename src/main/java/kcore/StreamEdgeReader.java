@@ -10,12 +10,10 @@ import java.io.IOException;
 public class StreamEdgeReader {
 	private BufferedReader in;
 	private String sep ;
-	long edgeCount;
 
 	public StreamEdgeReader(BufferedReader input, String sep) {
 		this.in = input;
 		this.sep = sep;
-		this.edgeCount = 0;
 	}
 
 	public StreamEdge nextItem() throws IOException {
@@ -32,9 +30,8 @@ public class StreamEdgeReader {
 			if (tokens.length < 2)
 				return null;
 
-			edgeCount++;
-			String src = tokens[0];
-			String dest = tokens[1];
+			String src = tokens[0].trim();
+			String dest = tokens[1].trim();
 			if(src.compareTo(dest) < 0)
 				return new StreamEdge(src, dest);
 			else
@@ -46,11 +43,5 @@ public class StreamEdgeReader {
 		}
 
 		
-	}
-	
-	public long getEdgeCount() {
-		return this.edgeCount;
-	}
-	
-	
+	}	
 }

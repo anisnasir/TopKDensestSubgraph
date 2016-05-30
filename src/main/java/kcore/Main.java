@@ -89,10 +89,7 @@ public class Main {
 				
 			}
 			
-			//System.out.println(item);
-			if(!nodeMap.contains(item)) {
-				utility.handleEdgeAddition(item,nodeMap,degreeMap);
-			}
+			utility.handleEdgeAddition(item,nodeMap,degreeMap);
 			
 			item = reader.nextItem();
 			if(item !=null)
