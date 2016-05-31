@@ -63,8 +63,12 @@ public class Bahmani {
 				density = newDensity;
 				densest = new ArrayList<String>();
 			}
-			if(numNodes == prevNumNodes)
-				break;
+			if(numNodes == prevNumNodes) {
+				densest.addAll(nodeMap.map.keySet());
+				System.out.println("Density: " + density);
+				System.out.println("Densest size: " + densest.size());
+				return densest;
+			}
 			else
 				prevNumNodes = numNodes;
 			threshold = 2*(1+epsilon)*newDensity;
