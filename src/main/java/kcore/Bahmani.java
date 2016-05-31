@@ -65,7 +65,7 @@ public class Bahmani {
 				return densest;
 			}
 			double newDensity = numEdges/(double)numNodes;
-			if(newDensity > density) {
+			if(newDensity >= density) {
 				density = newDensity;
 				densest = new ArrayList<String>();
 			}

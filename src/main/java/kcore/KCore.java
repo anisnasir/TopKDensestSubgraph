@@ -1,6 +1,5 @@
 package kcore;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class KCore {
@@ -28,7 +27,7 @@ public class KCore {
 				int degree = nodeMap.getDegree(element);
 				
 				//System.out.println(element + " " + nodeMap.getDegree(element));
-				if(degree > coreNumber) {
+				if(degree >= coreNumber) {
 					coreNumber = degree;
 					//System.out.println(core);
 					core = new HashSet<String>();

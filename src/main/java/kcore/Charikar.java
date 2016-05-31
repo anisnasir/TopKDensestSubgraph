@@ -66,7 +66,7 @@ public class Charikar {
 				}
 				
 				double newDensity = numEdges/(double)numNodes;
-				if(newDensity > density) {
+				if(newDensity >= density) {
 					density = newDensity;
 					densest = new ArrayList<String>();
 				}
