@@ -23,6 +23,8 @@ public class KCore {
 					element = str;
 					break;
 				}
+				temp.remove(element);
+				//System.out.println(element);
 				int degree = nodeMap.getDegree(element);
 				
 				//System.out.println(element + " " + nodeMap.getDegree(element));
@@ -52,12 +54,12 @@ public class KCore {
 						}	
 					}
 				}
-				temp.remove(element);
+				
 				
 			}	
 		}
 		System.out.println("main core " + coreNumber);
-		System.out.println(core);
+		//System.out.println(core);
 		System.out.println("Densest size: " + core.size());
 		return core;
 		
