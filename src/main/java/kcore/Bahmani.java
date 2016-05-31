@@ -17,16 +17,18 @@ public class Bahmani {
 		
 		double threshold = 2*(1+epsilon)*density;
 
+		int nextMin = 0 ;
 		double prevNumNodes=numNodes;
 		while(numNodes > 0){
-			int i = 0 ;
+			int i = nextMin ;
 			HashSet<String> temp = new HashSet<String>();
 			while( i <= threshold ) { 
 				temp.addAll(new HashSet<String>(degreeMap.map.get(i)));
 				i++;
 			}
+			//System.out.println(temp);
 			
-			
+			numNodes-=temp.size();
 			for(String element: temp) {
 				densest.add(element);
 				
@@ -48,11 +50,15 @@ public class Bahmani {
 
 						int nodeDegree = nodeMap.getDegree(neighbor);
 						degreeMap.decremnetDegree(nodeDegree+1, neighbor);
+						
+						if(nodeDegree< nextMin) {
+							nextMin = nodeDegree;
+						}
 					}
 				}else 
 					degreeMap.removeNode(0, element);
 			}
-			numNodes--;
+			
 			if(numNodes == 0) { 
 				System.out.println("Density: " + density);
 				System.out.println("Densest size: " + densest.size());

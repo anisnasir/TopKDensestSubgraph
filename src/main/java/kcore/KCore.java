@@ -7,8 +7,8 @@ public class KCore {
 	
 	KCore() {
 	}
-	HashSet<String> getCore(DegreeMap degreeMap,NodeMap nodeMap) {
-		HashSet<String> core = new HashSet<String>();
+	ArrayList<String> getCore(DegreeMap degreeMap,NodeMap nodeMap) {
+		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
 		int i = 0 ;
@@ -28,7 +28,7 @@ public class KCore {
 				//System.out.println(element + " " + nodeMap.getDegree(element));
 				if(degree > coreNumber) {
 					coreNumber = degree;
-					core = new HashSet<String>();
+					core = new ArrayList<String>();
 				}
 				core.add(element);
 				HashSet<String> neighbors;
