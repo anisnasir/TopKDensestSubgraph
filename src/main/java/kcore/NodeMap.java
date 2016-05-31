@@ -17,7 +17,7 @@ public class NodeMap {
 		numEdges= 0;
 	}
 	
-	public void addNode(String src, String dest) { 
+	public void addEdge(String src, String dest) { 
 		numEdges++;
 		if (map.containsKey(src)) {
 			HashSet<String> neighbors = map.get(src);
@@ -31,7 +31,7 @@ public class NodeMap {
 		
 	}
 	
-	void removeNode(String src, String dest) { 
+	void removeEdge(String src, String dest) { 
 		if(map.containsKey(src))
 		{
 			HashSet<String> neighbors = map.get(src);

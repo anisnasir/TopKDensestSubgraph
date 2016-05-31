@@ -13,8 +13,8 @@ public class EdgeHandler {
 		int predegree2 = nodeMap.getDegree(dest);
 		
 		//update node map
-		nodeMap.addNode(src, dest);
-		nodeMap.addNode(dest, src);
+		nodeMap.addEdge(src, dest);
+		nodeMap.addEdge(dest, src);
 
 		//update degree map
 		degreeMap.incrementDegree(predegree1, src);
@@ -34,7 +34,7 @@ public class EdgeHandler {
 		degreeMap.decremnetDegree(oldDestDegree, oldDest);
 					
 		//removes from each others neighbor table
-		nodeMap.removeNode(oldSrc, oldDest);
-		nodeMap.removeNode(oldDest, oldSrc);
+		nodeMap.removeEdge(oldSrc, oldDest);
+		nodeMap.removeEdge(oldDest, oldSrc);
 	}
 }

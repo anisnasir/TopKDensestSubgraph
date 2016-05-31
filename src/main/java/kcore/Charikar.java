@@ -46,8 +46,8 @@ public class Charikar {
 				if(neighbors.size() > 0 ) {
 					for(String neighbor:neighbors) {
 						//System.out.println(element+ " " + neighbor);
-						nodeMap.removeNode(element, neighbor);
-						nodeMap.removeNode(neighbor, element);
+						nodeMap.removeEdge(element, neighbor);
+						nodeMap.removeEdge(neighbor, element);
 						numEdges--;
 					
 						int nodeDegree = nodeMap.getDegree(neighbor);
