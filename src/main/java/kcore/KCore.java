@@ -10,6 +10,9 @@ public class KCore {
 		HashSet<String> core = new HashSet<String>();
 		int coreNumber =0;
 		
+		int numEdges = 0;
+		int numNodes = 0;
+		
 		int i = 0 ;
 		while(i < degreeMap.capacity){
 			HashSet<String> temp = degreeMap.map.get(i);
@@ -31,8 +34,11 @@ public class KCore {
 					coreNumber = degree;
 					//System.out.println(core);
 					core = new HashSet<String>();
+					numNodes = 0;
+					numEdges = 0;
 				}
 				core.add(element);
+				numNodes++;
 				HashSet<String> neighbors;
 				
 				if (nodeMap.getNeighbors(element) == null)
@@ -45,7 +51,8 @@ public class KCore {
 						//System.out.println(element+ " " + neighbor);
 						nodeMap.removeEdge(element, neighbor);
 						nodeMap.removeEdge(neighbor, element);
-											
+						numEdges++;
+						
 						int nodeDegree = nodeMap.getDegree(neighbor);
 						degreeMap.decremnetDegree(nodeDegree+1, neighbor);
 						if(nodeDegree < i) {
@@ -58,6 +65,7 @@ public class KCore {
 			}	
 		}
 		System.out.println("main core " + coreNumber);
+		System.out.println("Density: " + (numEdges/(double)numNodes));
 		//System.out.println(core);
 		System.out.println("Densest size: " + core.size());
 		return core;

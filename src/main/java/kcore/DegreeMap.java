@@ -17,7 +17,6 @@ public class DegreeMap {
 			map.add(new HashSet<String>());
 		}
 	}
-	
 	void addNode(int degree, String nodeId) {
 		while(degree >= capacity) 
 			increaseCapacity();
