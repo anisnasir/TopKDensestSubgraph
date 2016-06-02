@@ -89,4 +89,13 @@ public class NodeMap {
 		
 	}
 	
+	NodeMap getCopy() {
+		NodeMap returnMap = new NodeMap();
+		returnMap.numEdges = this.numEdges;
+		for(String key: this.map.keySet()) {
+			returnMap.map.put(key, new HashSet<String>(this.map.get(key)));
+		}
+		return returnMap;
+	}
+	
 }

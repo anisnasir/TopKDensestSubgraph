@@ -10,6 +10,10 @@ import java.util.HashSet;
 public class DegreeMap {
 	ArrayList<HashSet<String>>  map;
 	int capacity;
+	DegreeMap(int i) {
+		map = new ArrayList<HashSet<String>> ();
+		capacity = i;
+	}
 	DegreeMap() {
 		map = new ArrayList<HashSet<String>> ();
 		capacity = 2;
@@ -46,6 +50,11 @@ public class DegreeMap {
 		removeNode(degree,nodeId);
 		addNode(degree-1,nodeId);
 	}
+	void decremnetDegreeExpire(int degree, String nodeId) {
+		removeNode(degree,nodeId);
+		if(degree-1 > 0)
+			addNode(degree-1,nodeId);
+	}
 	
 	HashSet<String> getNodesBetween(double upperBound, double lowerBound) {
 		if(Math.floor(upperBound) < lowerBound) {
@@ -53,6 +62,14 @@ public class DegreeMap {
 		}else {
 			return map.get((int)Math.round(lowerBound));
 		}
+	}
+	
+	DegreeMap getCopy() {
+		DegreeMap returnMap = new DegreeMap(this.capacity);
+		for(int i =0; i< this.capacity ;i++) {
+			returnMap.map.add(new HashSet<String>(this.map.get(i)));
+		}
+		return returnMap;
 	}
 	
 

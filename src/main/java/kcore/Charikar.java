@@ -7,7 +7,7 @@ public class Charikar {
 	
 	Charikar() {
 	}
-	ArrayList<String> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
+	Output getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
 		int numNodes = nodeMap.getNumNodes();
 		int numEdges = nodeMap.getNumEdges();
 		
@@ -59,10 +59,11 @@ public class Charikar {
 				}
 				numNodes--;
 				if(numNodes == 0) {
-					System.out.println("Density: " + density);
-
-					System.out.println("Densest size: " + densest.size());
-					return densest;
+					Output output = new Output();
+					output.density = (numEdges/(double)numNodes);
+					output.size = densest.size();
+					output.nodes = densest;
+					return output;
 				}
 				
 				double newDensity = numEdges/(double)numNodes;
@@ -72,9 +73,11 @@ public class Charikar {
 				}
 			}	
 		}
-		System.out.println("Density: " + density);
-		System.out.println("Densest size: " + densest.size());
-		return densest;
+		Output output = new Output();
+		output.density = (numEdges/(double)numNodes);
+		output.size = densest.size();
+		output.nodes = densest;
+		return output;
 		
 	}
 }

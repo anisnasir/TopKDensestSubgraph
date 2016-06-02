@@ -1,6 +1,5 @@
 package kcore;
 
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,11 +12,11 @@ public class Main {
 	private static void ErrorMessage() {
 		System.err.println("Choose the type of simulator using:");
 		System.err
-				.println("0 K Core Decomposition");
+				.println("KCore: 0 inputFile <sliding_window>");
 		System.err
-				.println("1 Charikar" ) ; 
+				.println("Charikar: 1 inputFile <sliding_window> " ) ; 
 		System.err
-				.println("2 Bahmani <epsilon>" ) ;
+				.println("Bahmani: 2 inputFile <sliding_window> <epsilon> " ) ;
 		System.exit(1);
 	}
 	private static void displayAlgorithm( int simulatorType) {
@@ -31,18 +30,20 @@ public class Main {
 		
 	}
 	public static void main(String[] args) throws IOException {
-		double epsilon = 0 ;
-		if(args.length <1 ) {
-			System.out.println("simulator type missing");
+		
+		if(args.length <3 ) {
+			ErrorMessage();
 		}
 		int simulatorType = Integer.parseInt(args[0]);
+		int sliding_window = Integer.parseInt(args[2]);
+		double epsilon = 0 ;
 		
 		if(simulatorType == 0 || simulatorType == 1) {
-			if(args.length < 2) {
+			if(args.length < 3) {
 				ErrorMessage();
 			}
 		}else if (simulatorType == 2) {
-			if(args.length < 3) {
+			if(args.length < 4) {
 				ErrorMessage();
 			}
 			epsilon = Double.parseDouble(args[2]);
@@ -76,6 +77,7 @@ public class Main {
 		NodeMap nodeMap = new NodeMap();
 		DegreeMap degreeMap = new DegreeMap();
 		EdgeHandler utility = new EdgeHandler();
+		FixedSizeSlidingWindow sw = new FixedSizeSlidingWindow(sliding_window);
 		
 		//Start reading the input
 		System.out.println("Reading the input");
@@ -91,6 +93,45 @@ public class Main {
 			
 			utility.handleEdgeAddition(item,nodeMap,degreeMap);
 			
+			StreamEdge oldestEdge = sw.add(item);
+
+			if(oldestEdge != null) {
+				utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
+			}
+			
+			long endTime   = System.currentTimeMillis();
+			System.out.println("Reading input time : " + ((endTime-startTime)/(double)1000) + " secs ");
+			startTime = System.currentTimeMillis();
+			//System.out.println(nodeMap.map);
+			//System.out.println(degreeMap.map);
+			if(simulatorType == 0) { 
+				displayAlgorithm(simulatorType);
+				KCore kCore = new KCore();
+				//System.out.println(degreeMap.map);
+				Output output = kCore.getCore(degreeMap.getCopy(),nodeMap.getCopy());
+				output.printOutput();
+				endTime   = System.currentTimeMillis();
+				System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+				
+			}else if (simulatorType == 1) {
+				displayAlgorithm(simulatorType);
+				Charikar densest = new Charikar();
+				Output output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				output.printOutput();
+				endTime   = System.currentTimeMillis();
+				System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
+				
+			} else if (simulatorType == 2) {
+				displayAlgorithm(simulatorType);
+				Bahmani densest = new Bahmani(epsilon);
+				Output output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				output.printOutput();
+				endTime   = System.currentTimeMillis();
+				System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
+				
+			} 
+			
+			
 			item = reader.nextItem();
 			if(item !=null)
 				while(nodeMap.contains(item)) {
@@ -101,33 +142,7 @@ public class Main {
 		}
 	in.close();
 	
-	long endTime   = System.currentTimeMillis();
-	System.out.println("Reading input time : " + ((endTime-startTime)/(double)1000) + " secs ");
-	startTime = System.currentTimeMillis();
-	//System.out.println(nodeMap.map);
-	//System.out.println(degreeMap.map);
-	if(simulatorType == 0) { 
-		displayAlgorithm(simulatorType);
-		KCore kCore = new KCore();
-		System.out.println(kCore.getCore(degreeMap,nodeMap));
-		endTime   = System.currentTimeMillis();
-		System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
-		
-	}else if (simulatorType == 1) {
-		displayAlgorithm(simulatorType);
-		Charikar densest = new Charikar();
-		System.out.println(densest.getDensest(degreeMap,nodeMap));
-		endTime   = System.currentTimeMillis();
-		System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
-		
-	} else if (simulatorType == 2) {
-		displayAlgorithm(simulatorType);
-		Bahmani densest = new Bahmani(epsilon);
-		System.out.println(densest.getDensest(degreeMap,nodeMap));
-		endTime   = System.currentTimeMillis();
-		System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
-		
-	} 
+	
 		
 	}
 	

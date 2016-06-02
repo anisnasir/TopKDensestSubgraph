@@ -1,21 +1,24 @@
 package kcore;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class KCore {
 	
 	KCore() {
 	}
-	HashSet<String> getCore(DegreeMap degreeMap,NodeMap nodeMap) {
-		HashSet<String> core = new HashSet<String>();
+	Output getCore(DegreeMap degreeMap,NodeMap nodeMap) {
+		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
 		int numEdges = 0;
 		int numNodes = 0;
 		
+		//System.out.println(degreeMap.capacity);
 		int i = 0 ;
 		while(i < degreeMap.capacity){
 			HashSet<String> temp = degreeMap.map.get(i);
+			//System.out.println(temp);
 			if(temp.size() == 0) {
 				i++;
 			}
@@ -33,7 +36,7 @@ public class KCore {
 				if(degree >= coreNumber) {
 					coreNumber = degree;
 					//System.out.println(core);
-					core = new HashSet<String>();
+					core = new ArrayList<String>();
 					numNodes = 0;
 					numEdges = 0;
 				}
@@ -64,11 +67,12 @@ public class KCore {
 				
 			}	
 		}
-		System.out.println("main core " + coreNumber);
-		System.out.println("Density: " + (numEdges/(double)numNodes));
-		//System.out.println(core);
-		System.out.println("Densest size: " + core.size());
-		return core;
+		Output output = new Output();
+		output.coreNum = coreNumber;
+		output.density = (numEdges/(double)numNodes);
+		output.size = core.size();
+		output.nodes = core;
+		return output;
 		
 	}
 }

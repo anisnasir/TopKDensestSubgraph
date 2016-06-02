@@ -30,8 +30,8 @@ public class EdgeHandler {
 		int oldDestDegree = nodeMap.getDegree(oldDest);
 		
 		//update degree map
-		degreeMap.decremnetDegree(oldSrcDegree, oldSrc);
-		degreeMap.decremnetDegree(oldDestDegree, oldDest);
+		degreeMap.decremnetDegreeExpire(oldSrcDegree, oldSrc);
+		degreeMap.decremnetDegreeExpire(oldDestDegree, oldDest);
 					
 		//removes from each others neighbor table
 		nodeMap.removeEdge(oldSrc, oldDest);
