@@ -19,6 +19,9 @@ public class EdgeHandler {
 		//update degree map
 		degreeMap.incrementDegree(predegree1, src);
 		degreeMap.incrementDegree(predegree2, dest);
+		
+		//System.out.println(nodeMap.map);
+		//System.out.println(degreeMap.map);
 	}
 	
 	public void handleEdgeDeletion(StreamEdge oldestEdge, NodeMap nodeMap, DegreeMap degreeMap ) {

@@ -3,11 +3,11 @@ package kcore;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class KCore {
+public class KCore implements DensestSubgraph{
 	
 	KCore() {
 	}
-	Output getCore(DegreeMap degreeMap,NodeMap nodeMap) {
+	public ArrayList<Output> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
 		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
@@ -33,7 +33,7 @@ public class KCore {
 				int degree = nodeMap.getDegree(element);
 				
 				//System.out.println(element + " " + nodeMap.getDegree(element));
-				if(degree >= coreNumber) {
+				if(degree > coreNumber) {
 					coreNumber = degree;
 					//System.out.println(core);
 					core = new ArrayList<String>();
@@ -67,12 +67,14 @@ public class KCore {
 				
 			}	
 		}
+		ArrayList<Output> outputArray = new ArrayList<Output>();
 		Output output = new Output();
 		output.coreNum = coreNumber;
 		output.density = (numEdges/(double)numNodes);
 		output.size = core.size();
 		output.nodes = core;
-		return output;
+		outputArray.add(output);
+		return outputArray;
 		
 	}
 }

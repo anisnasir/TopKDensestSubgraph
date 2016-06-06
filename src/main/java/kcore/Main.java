@@ -6,51 +6,54 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 
 public class Main {
 	private static void ErrorMessage() {
 		System.err.println("Choose the type of simulator using:");
 		System.err
-				.println("KCore: 0 inputFile <sliding_window>");
+				.println("KCore: 0 inputFile <sliding_window> [epsilon] outFile [k] ");
 		System.err
-				.println("Charikar: 1 inputFile <sliding_window> " ) ; 
+				.println("Charikar: 1 inputFile <sliding_window> [epsilon] outFile [k] " ) ; 
 		System.err
-				.println("Bahmani: 2 inputFile <sliding_window> <epsilon> " ) ;
-		System.exit(1);
-	}
-	private static void displayAlgorithm( int simulatorType) {
-		if(simulatorType == 0 ) { 
-			System.out.println("Executing K core decomposition");
-		}else if (simulatorType == 1) {
-			System.out.println("Executing charikar greedy densest subgraph ");
-		}else if (simulatorType == 2) {
-                        System.out.println("Executing Bahmani densest subgraph ");
-                }
+				.println("Bahmani: 2 inputFile <sliding_window> <epsilon> outFile [k] " ) ;
+
+		System.err
+				.println("Dynamic K core: 3 inputFile <sliding_window> [epsilon] outFile [k] " ) ;
+		System.err
+				.println("Top-k Bahmani: 4 inputFile <sliding_window> epsilon outFile k " ) ;
+		System.err
+				.println("Top-k KCore: 5 inputFile <sliding_window> [epsilon] outFile k " ) ;
+		System.err
+				.println("Top-k Charikar: 6 inputFile <sliding_window> [epsilon] outFile k " ) ;
+		System.err
+				.println("Top-k KCoreDecomposition: 7 inputFile <sliding_window> [epsilon] outFile k " ) ;
 		
+		System.exit(1);
 	}
 	public static void main(String[] args) throws IOException {
 		
-		if(args.length <3 ) {
+		if(args.length < 4 ) {
 			ErrorMessage();
 		}
 		int simulatorType = Integer.parseInt(args[0]);
+		String inFileName= args[1];
 		int sliding_window = Integer.parseInt(args[2]);
-		double epsilon = 0 ;
-		
-		if(simulatorType == 0 || simulatorType == 1) {
-			if(args.length < 3) {
-				ErrorMessage();
-			}
-		}else if (simulatorType == 2) {
-			if(args.length < 4) {
-				ErrorMessage();
-			}
-			epsilon = Double.parseDouble(args[2]);
+		double epsilon = 0.0;
+		String outFileName = args[4];
+		int k = 0 ;
+		if(simulatorType == 2 ) {
+			epsilon = Double.parseDouble(args[3]);
+		}
+		else if(simulatorType == 4) {
+			epsilon = Double.parseDouble(args[3]);
+			k = Integer.parseInt(args[5]);
+		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 7) {
+			k = Integer.parseInt(args[5]);
 		}
 		
-		
-		String inFileName= args[1];
+	
 		
 		String sep = "\t";
 		BufferedReader in = null;
@@ -79,6 +82,30 @@ public class Main {
 		EdgeHandler utility = new EdgeHandler();
 		FixedSizeSlidingWindow sw = new FixedSizeSlidingWindow(sliding_window);
 		
+		DensestSubgraph densest = null;
+		
+		if(simulatorType == 0) { 
+			densest = new KCore();
+		}else if (simulatorType == 1) {
+			densest = new Charikar();
+		} else if (simulatorType == 2) {
+			densest = new Bahmani(epsilon);
+		} else if (simulatorType == 3) {
+			densest = new KCoreDecomposition(nodeMap.map);
+		} else if (simulatorType == 4) {
+			densest = new BahmaniTopK(epsilon, k);
+		} else if (simulatorType == 5) {
+			densest = new KCoreTopK(k);	
+		} else if (simulatorType == 6) {
+			densest = new CharikarTopK(k);
+		} else if (simulatorType == 7) {
+			densest = new KCoreDecompositionTopK(k, nodeMap);
+		}
+		
+		
+		OutputWriter ow = new OutputWriter(outFileName);
+		ArrayList<Output> output = null;
+		
 		//Start reading the input
 		System.out.println("Reading the input");
 		int edgeCounter = 0;
@@ -104,34 +131,52 @@ public class Main {
 			startTime = System.currentTimeMillis();
 			//System.out.println(nodeMap.map);
 			//System.out.println(degreeMap.map);
+			
 			if(simulatorType == 0) { 
-				displayAlgorithm(simulatorType);
-				KCore kCore = new KCore();
 				//System.out.println(degreeMap.map);
-				Output output = kCore.getCore(degreeMap.getCopy(),nodeMap.getCopy());
-				output.printOutput();
-				endTime   = System.currentTimeMillis();
-				System.out.println("Time to calculate main core : " + ((endTime-startTime)/(double)1000) + " secs ");
+				
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 				
 			}else if (simulatorType == 1) {
-				displayAlgorithm(simulatorType);
-				Charikar densest = new Charikar();
-				Output output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-				output.printOutput();
-				endTime   = System.currentTimeMillis();
-				System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 				
 			} else if (simulatorType == 2) {
-				displayAlgorithm(simulatorType);
-				Bahmani densest = new Bahmani(epsilon);
-				Output output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-				output.printOutput();
-				endTime   = System.currentTimeMillis();
-				System.out.println("Time to calculate densest subgraph : " + ((endTime-startTime)/(double)1000) + " secs ");
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 				
-			} 
+			} else if (simulatorType == 3) {
+				KCoreDecomposition kCore = (KCoreDecomposition) densest;
+				
+				kCore.addEdge(item.getSource(), item.getDestination());
+				if(oldestEdge != null) 
+					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
+				
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			
+			} else if ( simulatorType == 4) {
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+			} else if ( simulatorType == 5) {
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+			} else if ( simulatorType == 6) {
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+			} else if (simulatorType == 7) {
+				KCoreDecompositionTopK kCoreTopK = (KCoreDecompositionTopK) densest;
+				KCoreDecomposition kCore = kCoreTopK.densest;
+				
+				kCore.addEdge(item.getSource(), item.getDestination());
+				if(oldestEdge != null) 
+					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
+				
+				output = densest.getDensest(degreeMap,nodeMap);
+			}
 			
+			endTime   = System.currentTimeMillis();
+			System.out.println("---------------priting output ------------");
+			for(int i =0; i< output.size();i++) {
+				output.get(i).setTimeTaken((endTime-startTime)/1000.0);
+				output.get(i).printOutput();
+				ow.writeOutput(output.get(i));
+			}
+			System.out.println("---------------priting output ------------");
 			item = reader.nextItem();
 			if(item !=null)
 				while(nodeMap.contains(item)) {
@@ -141,6 +186,8 @@ public class Main {
 				}
 		}
 	in.close();
+	ow.close();
+	
 	
 	
 		

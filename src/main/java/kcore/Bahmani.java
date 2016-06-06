@@ -3,26 +3,26 @@ package kcore;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Bahmani {
+public class Bahmani implements DensestSubgraph {
 	double epsilon;
 	Bahmani(double epsilon) {
 		this.epsilon = epsilon;
 	}
-	Output getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
+	public ArrayList<Output> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
 		int numNodes = nodeMap.getNumNodes();
 		int numEdges = nodeMap.getNumEdges();
-
+		
 		double density = numEdges/(double)numNodes;
 		ArrayList<String> densest = new ArrayList<String>();
 		
 		double threshold = 2*(1+epsilon)*density;
-
+		
 		int nextMin = 0 ;
 		double prevNumNodes=numNodes;
 		while(numNodes > 0){
 			int i = nextMin ;
 			HashSet<String> temp = new HashSet<String>();
-			while( i <= threshold ) { 
+			while( i <= threshold && i <degreeMap.capacity ) { 
 				temp.addAll(new HashSet<String>(degreeMap.map.get(i)));
 				i++;
 			}
@@ -60,11 +60,13 @@ public class Bahmani {
 			}
 			
 			if(numNodes == 0) { 
+				ArrayList<Output> outputArray = new ArrayList<Output>();
 				Output output = new Output();
-				output.density = (numEdges/(double)numNodes);
+				output.density = density;
 				output.size = densest.size();
 				output.nodes = densest;
-				return output;
+				outputArray.add(output);
+				return outputArray;
 			}
 			double newDensity = numEdges/(double)numNodes;
 			if(newDensity >= density) {
@@ -73,21 +75,25 @@ public class Bahmani {
 			}
 			if(numNodes == prevNumNodes) {
 				densest.addAll(nodeMap.map.keySet());
+				ArrayList<Output> outputArray = new ArrayList<Output>();
 				Output output = new Output();
-				output.density = (numEdges/(double)numNodes);
+				output.density = density;
 				output.size = densest.size();
 				output.nodes = densest;
-				return output;
+				outputArray.add(output);
+				return outputArray;
 			}
 			else
 				prevNumNodes = numNodes;
 			threshold = 2*(1+epsilon)*newDensity;
 		}
+		ArrayList<Output> outputArray = new ArrayList<Output>();
 		Output output = new Output();
-		output.density = (numEdges/(double)numNodes);
+		output.density = density;
 		output.size = densest.size();
 		output.nodes = densest;
-		return output;
+		outputArray.add(output);
+		return outputArray;
 
 		}
 	}

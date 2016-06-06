@@ -3,11 +3,11 @@ package kcore;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Charikar {
+public class Charikar implements DensestSubgraph{
 	
 	Charikar() {
 	}
-	Output getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
+	public ArrayList<Output> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
 		int numNodes = nodeMap.getNumNodes();
 		int numEdges = nodeMap.getNumEdges();
 		
@@ -59,11 +59,13 @@ public class Charikar {
 				}
 				numNodes--;
 				if(numNodes == 0) {
+					ArrayList<Output> outputArray = new ArrayList<Output>();
 					Output output = new Output();
-					output.density = (numEdges/(double)numNodes);
+					output.density = density;
 					output.size = densest.size();
 					output.nodes = densest;
-					return output;
+					outputArray.add(output);
+					return outputArray;
 				}
 				
 				double newDensity = numEdges/(double)numNodes;
@@ -73,11 +75,13 @@ public class Charikar {
 				}
 			}	
 		}
+		ArrayList<Output> outputArray = new ArrayList<Output>();
 		Output output = new Output();
-		output.density = (numEdges/(double)numNodes);
+		output.density = density;
 		output.size = densest.size();
 		output.nodes = densest;
-		return output;
+		outputArray.add(output);
+		return outputArray;
 		
 	}
 }
