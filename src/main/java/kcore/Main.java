@@ -12,37 +12,30 @@ import java.util.ArrayList;
 public class Main {
 	private static void ErrorMessage() {
 		System.err.println("Choose the type of simulator using:");
-		System.err
-				.println("KCore: 0 inputFile <sliding_window> [epsilon] outFile [k] ");
-		System.err
-				.println("Charikar: 1 inputFile <sliding_window> [epsilon] outFile [k] " ) ; 
-		System.err
-				.println("Bahmani: 2 inputFile <sliding_window> <epsilon> outFile [k] " ) ;
-
-		System.err
-				.println("Dynamic K core: 3 inputFile <sliding_window> [epsilon] outFile [k] " ) ;
-		System.err
-				.println("Top-k Bahmani: 4 inputFile <sliding_window> epsilon outFile k " ) ;
-		System.err
-				.println("Top-k KCore: 5 inputFile <sliding_window> [epsilon] outFile k " ) ;
-		System.err
-				.println("Top-k Charikar: 6 inputFile <sliding_window> [epsilon] outFile k " ) ;
-		System.err
-				.println("Top-k KCoreDecomposition: 7 inputFile <sliding_window> [epsilon] outFile k " ) ;
-		
+		System.err.println("KCore: 0 inputFile <sliding_window> [epsilon] outFile [k] outDir ");
+		System.err.println("Charikar: 1 inputFile <sliding_window> [epsilon] outFile [k] outDir " ) ; 
+		System.err.println("Bahmani: 2 inputFile <sliding_window> <epsilon> outFile [k] outDir " ) ;
+		System.err.println("Dynamic K core: 3 inputFile <sliding_window> [epsilon] outFile [k] outDir " ) ;
+		System.err.println("Top-k Bahmani: 4 inputFile <sliding_window> epsilon outFile k outDir " ) ;
+		System.err.println("Top-k KCore: 5 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
+		System.err.println("Top-k Charikar: 6 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
+		System.err.println("Top-k KCoreDecomposition: 7 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		System.exit(1);
 	}
 	public static void main(String[] args) throws IOException {
 		
-		if(args.length < 4 ) {
+		if(args.length < 7 ) {
 			ErrorMessage();
 		}
+		
+		//retrieve input variables
 		int simulatorType = Integer.parseInt(args[0]);
 		String inFileName= args[1];
 		int sliding_window = Integer.parseInt(args[2]);
 		double epsilon = 0.0;
 		String outFileName = args[4];
-		int k = 0 ;
+		String outDir = args[6];
+		int k = 1 ;
 		if(simulatorType == 2 ) {
 			epsilon = Double.parseDouble(args[3]);
 		}
@@ -53,12 +46,11 @@ public class Main {
 			k = Integer.parseInt(args[5]);
 		}
 		
-	
 		
+		//input reader
 		String sep = "\t";
 		BufferedReader in = null;
 		
-		long startTime = System.currentTimeMillis();
 		try {
             InputStream rawin = new FileInputStream(inFileName);
             in = new BufferedReader(new InputStreamReader(rawin));
@@ -75,6 +67,14 @@ public class Main {
 		//Declare outprint interval variables
 		int PRINT_INTERVAL=1000000;
 		long simulationStartTime = System.currentTimeMillis();
+		
+		//outputWriter
+		ArrayList<OutputWriter> ow = new ArrayList<OutputWriter>();
+		for(int i =0 ;i < k;i++) {
+			ow.add(new OutputWriter(outDir+"/"+outFileName+"_"+i));
+		}
+	
+		ArrayList<Output> output = null;
 		
 		//Data Structures specific to the Algorithm
 		NodeMap nodeMap = new NodeMap();
@@ -103,11 +103,10 @@ public class Main {
 		}
 		
 		
-		OutputWriter ow = new OutputWriter(outFileName);
-		ArrayList<Output> output = null;
 		
 		//Start reading the input
 		System.out.println("Reading the input");
+		
 		int edgeCounter = 0;
 		while (item != null) {
 			if (++edgeCounter % PRINT_INTERVAL == 0) {
@@ -126,23 +125,13 @@ public class Main {
 				utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
 			}
 			
-			long endTime   = System.currentTimeMillis();
-			System.out.println("Reading input time : " + ((endTime-startTime)/(double)1000) + " secs ");
-			startTime = System.currentTimeMillis();
-			//System.out.println(nodeMap.map);
-			//System.out.println(degreeMap.map);
-			
+			long startTime = System.currentTimeMillis();
 			if(simulatorType == 0) { 
-				//System.out.println(degreeMap.map);
-				
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-				
 			}else if (simulatorType == 1) {
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-				
 			} else if (simulatorType == 2) {
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-				
 			} else if (simulatorType == 3) {
 				KCoreDecomposition kCore = (KCoreDecomposition) densest;
 				
@@ -151,7 +140,6 @@ public class Main {
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-			
 			} else if ( simulatorType == 4) {
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if ( simulatorType == 5) {
@@ -169,14 +157,17 @@ public class Main {
 				output = densest.getDensest(degreeMap,nodeMap);
 			}
 			
-			endTime   = System.currentTimeMillis();
-			System.out.println("---------------priting output ------------");
-			for(int i =0; i< output.size();i++) {
-				output.get(i).setTimeTaken((endTime-startTime)/1000.0);
-				output.get(i).printOutput();
-				ow.writeOutput(output.get(i));
+			for(int i =0; i< k;i++) {
+				if( i<output.size()) {
+				output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
+				//output.get(i).printOutput(); 
+				ow.get(i).writeOutput(output.get(i));
+				}else {
+					output = getDummy();
+					ow.get(i).writeOutput(output.get(0));
+				}
+				
 			}
-			System.out.println("---------------priting output ------------");
 			item = reader.nextItem();
 			if(item !=null)
 				while(nodeMap.contains(item)) {
@@ -185,14 +176,30 @@ public class Main {
 						break;
 				}
 		}
+	
+	System.out.println("Finished Processing! Read " + edgeCounter/PRINT_INTERVAL
+			+ "M edges.\tSimulation time: "
+			+ (System.currentTimeMillis() - simulationStartTime)
+			/ 1000 + " seconds");
 	in.close();
-	ow.close();
+	for(int i = 0; i< ow.size();i++)
+		ow.get(i).close();
 	
 	
 	
 		
 	}
 	
-	
+	static ArrayList<Output> getDummy() { 
+		ArrayList<Output> arr = new ArrayList<Output>();
+		Output returnOut = new Output();
+		returnOut.setCoreNum(0);
+		returnOut.setDensity(0.0);
+		returnOut.setSize(0);
+		returnOut.setTimeTaken(0);
+		returnOut.setNodes(new ArrayList<String>());
+		arr.add(returnOut);
+		return arr;
+	}
 
 }

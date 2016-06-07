@@ -53,4 +53,5 @@ public class Output {
 		System.out.println(coreNum+"\t"+density+"\t"+size+"\t"+nodes+"\t"+timeTaken);
 	}
 	
+	
 }
