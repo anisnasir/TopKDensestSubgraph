@@ -35,7 +35,12 @@ public class Main {
 		double epsilon = 0.0;
 		String outFileName = args[4];
 		String outDir = args[6];
-		int k = 1 ;
+		int k = 1;
+		boolean degreeMapFlag = true;
+		
+		if(simulatorType == 0 || simulatorType == 3 || simulatorType == 5 || simulatorType ==7 ) {
+			degreeMapFlag = false;
+		}
 		if(simulatorType == 2 ) {
 			epsilon = Double.parseDouble(args[3]);
 		}
@@ -71,7 +76,7 @@ public class Main {
 		//outputWriter
 		ArrayList<OutputWriter> ow = new ArrayList<OutputWriter>();
 		for(int i =0 ;i < k;i++) {
-			ow.add(new OutputWriter(outDir+"/"+outFileName+"_"+i));
+			ow.add(new OutputWriter(outDir+"/"+outFileName+"_"+i+".out"));
 		}
 	
 		ArrayList<Output> output = null;
@@ -117,12 +122,18 @@ public class Main {
 				
 			}
 			
-			utility.handleEdgeAddition(item,nodeMap,degreeMap);
+			if(degreeMapFlag)
+				utility.handleEdgeAddition(item,nodeMap,degreeMap);
+			else 
+				utility.handleEdgeAddition(item, nodeMap);
 			
 			StreamEdge oldestEdge = sw.add(item);
 
 			if(oldestEdge != null) {
-				utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
+				if(degreeMapFlag)
+					utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
+				else
+					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 			}
 			
 			long startTime = System.currentTimeMillis();

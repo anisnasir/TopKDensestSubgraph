@@ -24,6 +24,15 @@ public class EdgeHandler {
 		//System.out.println(degreeMap.map);
 	}
 	
+	public void handleEdgeAddition(StreamEdge item, NodeMap nodeMap ) {
+		//System.out.println("+ " + item.toString());
+		String src = item.getSource();
+		String dest = item.getDestination();
+		
+		nodeMap.addEdge(src, dest);
+		nodeMap.addEdge(dest, src);
+	}
+	
 	public void handleEdgeDeletion(StreamEdge oldestEdge, NodeMap nodeMap, DegreeMap degreeMap ) {
 		//System.out.println("- " + oldestEdge.toString());
 		String oldSrc = oldestEdge.getSource();
@@ -35,6 +44,16 @@ public class EdgeHandler {
 		//update degree map
 		degreeMap.decremnetDegreeExpire(oldSrcDegree, oldSrc);
 		degreeMap.decremnetDegreeExpire(oldDestDegree, oldDest);
+					
+		//removes from each others neighbor table
+		nodeMap.removeEdge(oldSrc, oldDest);
+		nodeMap.removeEdge(oldDest, oldSrc);
+	}
+	
+	public void handleEdgeDeletion(StreamEdge oldestEdge, NodeMap nodeMap ) {
+		//System.out.println("- " + oldestEdge.toString());
+		String oldSrc = oldestEdge.getSource();
+		String oldDest = oldestEdge.getDestination();
 					
 		//removes from each others neighbor table
 		nodeMap.removeEdge(oldSrc, oldDest);
