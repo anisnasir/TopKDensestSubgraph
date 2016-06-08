@@ -32,11 +32,16 @@ public class NodeMap {
 	}
 	
 	void removeEdge(String src, String dest) { 
+		
 		if(map.containsKey(src))
 		{
+			
 			HashSet<String> neighbors = map.get(src);
+			if(neighbors.contains(dest)) {
+				numEdges--;
+			}
 			neighbors.remove(dest);
-			numEdges--;
+		
 			if(!neighbors.isEmpty()) {
 				map.put(src, neighbors);
 			}
