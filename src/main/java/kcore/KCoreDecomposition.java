@@ -144,7 +144,6 @@ public class KCoreDecomposition implements DensestSubgraph{
 			
 		}
 	}
-	
 	void reColorDelete(int c, HashSet<String> color, HashSet<String> V_c) {
 			boolean flag = false;
 			HashSet<String> nodestoRemove = new HashSet<String>();

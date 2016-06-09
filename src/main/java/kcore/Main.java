@@ -220,10 +220,10 @@ public class Main {
 					if( i<output.size()) {
 						output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
 						//output.get(i).printOutput(); 
-						ow.get(i).writeOutput(output.get(i));
+						//ow.get(i).writeOutput(output.get(i));
 					}else {
 						output = getDummy();
-						ow.get(i).writeOutput(output.get(0));
+						//ow.get(i).writeOutput(output.get(0));
 					}
 					
 				}
