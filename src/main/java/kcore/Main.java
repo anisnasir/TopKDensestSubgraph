@@ -90,7 +90,7 @@ public class Main {
 		StreamEdge item = reader.nextItem();
 		
 		//Declare outprint interval variables
-		int PRINT_INTERVAL=1000000;
+		int PRINT_INTERVAL=10000;
 		long simulationStartTime = System.currentTimeMillis();
 		
 		//outputWriter
