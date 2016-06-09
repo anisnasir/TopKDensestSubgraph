@@ -144,7 +144,7 @@ public class Main {
 						/ 1000 + " seconds");
 				
 			}
-	
+			long startTime = System.currentTimeMillis();
 			//new edge
 			if(degreeMapFlag)
 				utility.handleEdgeAddition(item,nodeMap,degreeMap);
@@ -163,7 +163,7 @@ public class Main {
 				}
 			}
 			
-			long startTime = System.currentTimeMillis();
+			
 			if(simulatorType == 0) { 
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}else if (simulatorType == 1) {
@@ -214,18 +214,20 @@ public class Main {
  				//bag.print();
  				
  			}
-			
-			for(int i =0; i< k;i++) {
-				if( i<output.size()) {
-					output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
-					//output.get(i).printOutput(); 
-					ow.get(i).writeOutput(output.get(i));
-				}else {
-					output = getDummy();
-					ow.get(i).writeOutput(output.get(0));
+			//if(edgeCounter%1000 == 0 ) 
+			{
+				for(int i =0; i< k;i++) {
+					if( i<output.size()) {
+						output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
+						//output.get(i).printOutput(); 
+						ow.get(i).writeOutput(output.get(i));
+					}else {
+						output = getDummy();
+						ow.get(i).writeOutput(output.get(0));
+					}
+					
 				}
-				
-			}
+			} 
 			item = reader.nextItem();
 			if(item !=null)
 				while(nodeMap.contains(item)) {

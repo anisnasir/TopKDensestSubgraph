@@ -111,11 +111,10 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 		int srcDegree = nodeMap.getDegree(src);
 		int dstDegree = nodeMap.getDegree(dst);
-		//System.out.println(src + " " + srcDegree + " " + dst + "  " + dstDegree); 
+		//System.out.println(src + " " + srcDegree + " " + dst + "  " + dstDegree + " " + nodeMap.getNeighbors(dst)); 
 
 		double initialDensity= this.getMaximalDensity(nodeMap);
-
-
+		
 		SnowBall temp = null;
 		if (srcDegree < maximalDensity && dstDegree < maximalDensity) {
 			return;
@@ -133,15 +132,17 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 		} else {
 			SnowBall srcSnowBall = addNode(src,nodeMap);
-			SnowBall dstSnowBall = addNode(dst, nodeMap);
 			if(!this.verifyMainCore(src, nodeMap,srcSnowBall)) {
 				this.fixMainCore(src, nodeMap, srcSnowBall);
 			}
+			SnowBall dstSnowBall = addNode(dst, nodeMap);
+			
 			if(!this.verifyMainCore(dst, nodeMap,dstSnowBall)) {
 				this.fixMainCore(dst, nodeMap, dstSnowBall);
 			}
+			
 			addEdgeKCore(edge);
-
+			
 			if(srcSnowBall.equals(dstSnowBall)) {
 				srcSnowBall.addEdge(edge);
 				ensureInvariant(srcSnowBall,nodeMap);	
@@ -157,6 +158,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		}
 		cleanup(nodeMap);
 		//System.out.println("+bag graph" + bagGraph+ " " + maximalDensity);
+		//System.out.println(kCore.kCore);
 		//this.print();
 	}
 
@@ -325,13 +327,13 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 			if(prevSrcDegree >= maximalDensity ) {
 				if(srcDegree < maximalDensity || srcDegree == 0) {
-					SnowBall temp = null;
+					//SnowBall temp = null;
 					for(SnowBall s: bag) {
 						if(s.containsNode(src)) {
 							s.removeNode(src);
 							//stats.removeNode(s, src);
 							ensureInvariant(s,nodeMap);
-							temp = s;
+							//temp = s;
 							flag = true;
 							break;
 						}	
@@ -349,7 +351,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 			if( prevDstDegree >= maximalDensity) {
 				if(dstDegree < maximalDensity || dstDegree == 0) {
-					SnowBall temp = null;
+					//SnowBall temp = null;
 					for(SnowBall s: bag) {
 
 						if(s.containsNode(dst)) {
@@ -359,7 +361,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 							ensureInvariant(s,nodeMap);
 							//System.out.println(s.getNodes());
 							
-							temp = s;
+							//temp = s;
 
 							flag = true;
 							break;
@@ -555,7 +557,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		public ArrayList<Output> getDensest(DegreeMap degreeMap, NodeMap nodeMap) {
 			ArrayList<Output> outputArray = new ArrayList<Output>();
 			Output returnOutput = new Output();
-			ArrayList<String> maxCore = new ArrayList<String>();
+			//ArrayList<String> maxCore = new ArrayList<String>();
 			int maxCoreNum = 0;
 			SnowBall max = null;
 			for(SnowBall s: this.bag) {
