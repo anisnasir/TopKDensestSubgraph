@@ -122,23 +122,30 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 		if (srcDegree >= maximalDensity && dstDegree < maximalDensity ) {
 			temp = addNode(src,nodeMap);
-			if(!this.verifyMainCore(src, nodeMap, temp)) 
-				this.fixMainCore(src, nodeMap, temp);
+			if(!this.verifyMainCore(src, nodeMap, temp)) {
+				this.fixMainCore(src, nodeMap,temp);
+			}
 		} else if (srcDegree < maximalDensity && (double)dstDegree >= maximalDensity ) {
 			temp = addNode(dst,nodeMap);
-			if(!this.verifyMainCore(dst, nodeMap, temp)) 
+			if(!this.verifyMainCore(dst, nodeMap, temp)) {
 				this.fixMainCore(dst, nodeMap, temp);
+			}
 		} else {
 			SnowBall srcSnowBall = addNode(src,nodeMap);
+			if(!this.verifyMainCore(src, nodeMap,srcSnowBall)) {
+				this.fixMainCore(src, nodeMap, srcSnowBall);
+			}
 			SnowBall dstSnowBall = addNode(dst, nodeMap);
+			
+			if(!this.verifyMainCore(dst, nodeMap,dstSnowBall)) {
+				this.fixMainCore(dst, nodeMap, dstSnowBall);
+			}
 			
 			addEdgeKCore(edge);
 			
 			if(srcSnowBall.equals(dstSnowBall)) {
 				srcSnowBall.addEdge(edge);
-				ensureInvariant(srcSnowBall,nodeMap);
-				if(!this.verifyMainCore(src, nodeMap, srcSnowBall)) 
-					this.fixMainCore(src, nodeMap, srcSnowBall);
+				ensureInvariant(srcSnowBall,nodeMap);	
 			}
 			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
