@@ -3,9 +3,14 @@ package kcore;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+
 public class KCore implements DensestSubgraph{
 	
-	KCore() {
+	public KCore() {
 	}
 	public ArrayList<Output> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {
 		ArrayList<String> core = new ArrayList<String>();

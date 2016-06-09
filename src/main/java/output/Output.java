@@ -1,13 +1,14 @@
-package kcore;
+package output;
 
 import java.util.ArrayList;
 
 public class Output {
-	double density;
-	int coreNum;
-	int size;
-	double timeTaken;
-	ArrayList<String> nodes;
+	public double density;
+	public int coreNum;
+	public int size;
+	public double timeTaken;
+	public ArrayList<String> nodes;
+	
 	
 	public double getTimeTaken() {
 		return timeTaken;
@@ -17,7 +18,7 @@ public class Output {
 		this.timeTaken = timeTaken;
 	}
 
-	Output() {
+	public Output() {
 		
 	}
 	
@@ -48,7 +49,7 @@ public class Output {
 		return this.size;
 	}
 	
-	void printOutput() {
+	public void printOutput() {
 		System.out.println("#main core\tDensity\tsize\tdensest\ttime taken");
 		System.out.println(coreNum+"\t"+density+"\t"+size+"\t"+nodes+"\t"+timeTaken);
 	}

@@ -1,7 +1,11 @@
-package kcore;
+package utility;
+
+import struct.DegreeMap;
+import struct.NodeMap;
+import input.StreamEdge;
 
 public class EdgeHandler {
-	EdgeHandler() {
+	public EdgeHandler() {
 		
 	}
 	public void handleEdgeAddition(StreamEdge item, NodeMap nodeMap, DegreeMap degreeMap ) {

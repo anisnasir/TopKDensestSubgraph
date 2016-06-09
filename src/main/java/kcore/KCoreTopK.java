@@ -1,12 +1,20 @@
 package kcore;
 
 
+import input.StreamEdge;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+import utility.EdgeHandler;
+
 public class KCoreTopK implements DensestSubgraph{
 	int k ;
-	KCoreTopK(int k ) {
+	public KCoreTopK(int k ) {
 		this.k = k;
 	}
 	@Override

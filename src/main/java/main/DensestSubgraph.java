@@ -1,6 +1,10 @@
-package kcore;
+package main;
 
 import java.util.ArrayList;
+
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
 
 
 public interface DensestSubgraph {

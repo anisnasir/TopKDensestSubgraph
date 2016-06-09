@@ -1,4 +1,11 @@
-package kcore;
+package main;
+
+import epasto.EpastoFullyDyn;
+import epasto.EpastoOp;
+import epasto.EpastoTopK;
+import greedy.BagOfSnowballs;
+import input.StreamEdge;
+import input.StreamEdgeReader;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -7,6 +14,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import output.Output;
+import output.OutputWriter;
+import slidingwindow.FixedSizeSlidingWindow;
+import struct.DegreeMap;
+import struct.NodeMap;
+import utility.EdgeHandler;
+import charikar.Bahmani;
+import charikar.BahmaniTopK;
+import charikar.Charikar;
+import charikar.CharikarTopK;
+import kcore.KCore;
+import kcore.KCoreDecomposition;
+import kcore.KCoreDecompositionTopK;
+import kcore.KCoreTopK;
 
 
 
@@ -41,7 +63,7 @@ public class Main {
 		System.out.println("Top-k KCore Evolving\t7\t\t2\t\t\tk" ) ;
 		System.out.println("Epasto Fully Dynamic\t8\t\t2(1+epsilon)^6\t\t1" ) ;
 		System.out.println("Our Algorithm\tt\t9\t\t2\t\t\tk" ) ;
-		System.out.println("Epasto Top-k\t10\t\t2(1+epsilon)^6\t\t1" ) ;
+		System.out.println("Epasto Top-k\t\t10\t\t2(1+epsilon)^6\t\tk" ) ;
 		System.out.println("-------------Densest Subgraph Simulator----------------");
 	}
 	public static void main(String[] args) throws IOException {
@@ -60,16 +82,16 @@ public class Main {
 		int k = 1;
 		boolean degreeMapFlag = true;
 		
-		if(simulatorType == 3 || simulatorType == 7 || simulatorType == 8 ) {
+		if(simulatorType == 3 || simulatorType == 7 || simulatorType == 8 || simulatorType == 10) {
 			degreeMapFlag = false;
 		}
-		if(simulatorType == 2 || simulatorType == 8) {
+		if(simulatorType == 2) {
 			epsilon = Double.parseDouble(args[3]);
 		}
-		else if(simulatorType == 4) {
+		else if(simulatorType == 4 || simulatorType == 8 || simulatorType == 10) {
 			epsilon = Double.parseDouble(args[3]);
 			k = Integer.parseInt(args[5]);
-		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 7) {
+		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 7 || simulatorType == 9) {
 			k = Integer.parseInt(args[5]);
 		}
 		
@@ -229,7 +251,6 @@ public class Main {
 				output=densest.getDensest(degreeMap, nodeMap);
  			}
 			
-			
 			double endTime = System.currentTimeMillis();
 			//if(edgeCounter%1000 == 0 ) 
 			{
@@ -237,10 +258,10 @@ public class Main {
 					if( i<output.size()) {
 						output.get(i).setTimeTaken((endTime-startTime)/1000.0);
 						//output.get(i).printOutput(); 
-						//ow.get(i).writeOutput(output.get(i));
+						ow.get(i).writeOutput(output.get(i));
 					}else {
 						output = getDummy();
-						//ow.get(i).writeOutput(output.get(0));
+						ow.get(i).writeOutput(output.get(0));
 					}
 					
 				}

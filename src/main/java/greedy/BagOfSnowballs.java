@@ -1,4 +1,6 @@
-package kcore;
+package greedy;
+import input.StreamEdge;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,9 +9,15 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+import kcore.KCoreDecomposition;
+
 
 public class BagOfSnowballs implements DensestSubgraph{
-	ArrayList<SnowBall> bag;
+	public ArrayList<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
 	KCoreDecomposition kCore;
 	double maximalDensity = 0;
@@ -26,7 +34,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		bag = new ArrayList<SnowBall>();
 		this.k = k;
 	}
-	void addNodeKCore(String node, NodeMap nodeMap) {
+	public void addNodeKCore(String node, NodeMap nodeMap) {
 		kCore.addNode(node);
 		HashSet<String> neighbors = nodeMap.getNeighbors(node);
 		HashSet<String> localNeighbors = intersectionSet(neighbors, bagGraph.keySet());
@@ -162,7 +170,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		//this.print();
 	}
 
-	SnowBall addNode(String src, NodeMap nodeMap) {
+	public SnowBall addNode(String src, NodeMap nodeMap) {
 		if(!bagGraph.containsKey(src))
 			addNodeKCore(src,nodeMap);
 		int maxIntersection = 0;
@@ -308,7 +316,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			i++;
 		}
 	}
-	void removeEdge(StreamEdge edge, NodeMap nodeMap, DegreeMap degreeMap) {
+	public void removeEdge(StreamEdge edge, NodeMap nodeMap, DegreeMap degreeMap) {
 		String src = edge.getSource();
 		String dst = edge.getDestination();
 

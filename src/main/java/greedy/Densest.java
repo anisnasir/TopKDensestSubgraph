@@ -1,4 +1,4 @@
-package kcore;
+package greedy;
 import java.util.HashMap;
 import java.util.HashSet;
 

@@ -1,12 +1,20 @@
-package kcore;
+package charikar;
 
+
+import input.StreamEdge;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+import utility.EdgeHandler;
+
 public class CharikarTopK implements DensestSubgraph{
 	int k ;
-	CharikarTopK(int k) {
+	public CharikarTopK(int k) {
 		this.k = k;
 	}
 	@Override

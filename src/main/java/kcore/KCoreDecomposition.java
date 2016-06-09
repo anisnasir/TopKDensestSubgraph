@@ -3,30 +3,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+
 
 public class KCoreDecomposition implements DensestSubgraph{
 	HashMap<String,HashSet<String>> graph;
 	HashMap<String,Integer> kCore;
 	int maxCore = 0;
 	
-	KCoreDecomposition(HashMap<String,HashSet<String>> graph) {
+	public KCoreDecomposition(HashMap<String,HashSet<String>> graph) {
 		kCore = new HashMap<String,Integer>();
 		this.graph = graph;
 	}
 	
-	void addNode(String src) {
+	public void addNode(String src) {
 		kCore.put(src, 0);
 	}
 	
-	void removeNode(String src) {
+	public void removeNode(String src) {
 		kCore.remove(src);
 	}
 	
-	int getKCore(String src) {
+	public int getKCore(String src) {
 		return this.kCore.get(src);
 	}
 	
-	void addEdge(String src, String dst) {
+	public void addEdge(String src, String dst) {
 		if(!kCore.containsKey(src))
 			addNode(src);
 		
@@ -35,7 +40,7 @@ public class KCoreDecomposition implements DensestSubgraph{
 		updateKCoreafterAddition(src,dst);
 	}
 	
-	void removeEdge(String src, String dst) {
+	public void removeEdge(String src, String dst) {
 		updateKCoreafterDeletion(src,dst);
 	}
 	
@@ -59,7 +64,7 @@ public class KCoreDecomposition implements DensestSubgraph{
 		
 	}
 	
-	void color(String dst, int c, HashSet<String> visited, HashSet<String> color) {
+	public void color(String dst, int c, HashSet<String> visited, HashSet<String> color) {
 		visited.add(dst);
 		if(!color.contains(dst))
 			color.add(dst);

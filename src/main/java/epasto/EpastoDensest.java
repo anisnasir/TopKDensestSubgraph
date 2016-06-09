@@ -1,4 +1,6 @@
-package kcore;
+package epasto;
+import input.StreamEdge;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -10,7 +12,7 @@ public class EpastoDensest implements Comparable<EpastoDensest>{
 	HashMap<String, Integer> sk ;
 	double beta;
 	
-	EpastoDensest() {
+	public EpastoDensest() {
 		densest = new HashMap<String,HashSet<String>>();
 		sk = new HashMap<String,Integer>();
 		beta = 0.0;

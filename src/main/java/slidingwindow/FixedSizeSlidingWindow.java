@@ -1,4 +1,6 @@
-package kcore;
+package slidingwindow;
+import input.StreamEdge;
+
 import java.util.LinkedList;
 
 
@@ -10,12 +12,12 @@ public class FixedSizeSlidingWindow {
 		windowSize = 0;
 		fifo = new LinkedList<StreamEdge>();
 	}
-	FixedSizeSlidingWindow(int wSize) {
+	public FixedSizeSlidingWindow(int wSize) {
 		windowSize = wSize;
 		fifo = new LinkedList<StreamEdge>();
 	}
 	
-	StreamEdge add(StreamEdge newEdge) {
+	public StreamEdge add(StreamEdge newEdge) {
 		fifo.add(newEdge);
 		if(fifo.size() >=windowSize) {
 			StreamEdge returnEdge = fifo.removeFirst();

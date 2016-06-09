@@ -1,4 +1,4 @@
-package kcore;
+package input;
 import java.io.Serializable;
 
 

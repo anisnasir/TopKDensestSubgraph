@@ -1,11 +1,16 @@
-package kcore;
+package charikar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+
 public class Bahmani implements DensestSubgraph {
 	double epsilon;
-	Bahmani(double epsilon) {
+	public Bahmani(double epsilon) {
 		this.epsilon = epsilon;
 	}
 	public ArrayList<Output> getDensest(DegreeMap degreeMap,NodeMap nodeMap) {

@@ -1,10 +1,15 @@
-package kcore;
+package greedy;
+import input.StreamEdge;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import struct.NodeMap;
+import kcore.KCoreDecomposition;
 
 
 public class SnowBall implements Serializable, Comparable<SnowBall>{

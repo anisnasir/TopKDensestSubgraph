@@ -1,4 +1,6 @@
-package kcore;
+package epasto;
+import input.StreamEdge;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayDeque;
@@ -8,6 +10,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
 
 
 
@@ -24,7 +31,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 	Integer bound;
 	double R_star;
 	
-	EpastoFullyDyn(double epsilon) {
+	public EpastoFullyDyn(double epsilon) {
 		sk = new HashMap<String, Integer>();
 		densest = null;
 		this.epsilon = epsilon;
@@ -44,7 +51,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		
 	}
 	
-	void MainFullyDynamic(StreamEdge edge, NodeMap nodeMap, EpastoOp op) {
+	public void MainFullyDynamic(StreamEdge edge, NodeMap nodeMap, EpastoOp op) {
 		if(densest ==null) {
 			s=1;
 			R_tilda=0;

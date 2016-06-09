@@ -1,8 +1,15 @@
 package kcore;
 
 
+import input.StreamEdge;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
 
 public class KCoreDecompositionTopK implements DensestSubgraph{
 	int k ;
@@ -12,7 +19,7 @@ public class KCoreDecompositionTopK implements DensestSubgraph{
 		this.densest = densest;
 	}
 
-	KCoreDecompositionTopK(int k, NodeMap nodeMap) {
+	public KCoreDecompositionTopK(int k, NodeMap nodeMap) {
 		this.k = k;
 		densest = new KCoreDecomposition(nodeMap.map);
 	}

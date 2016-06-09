@@ -1,13 +1,21 @@
-package kcore;
+package charikar;
 
+
+import input.StreamEdge;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import main.DensestSubgraph;
+import output.Output;
+import struct.DegreeMap;
+import struct.NodeMap;
+import utility.EdgeHandler;
+
 public class BahmaniTopK implements DensestSubgraph{
 	double epsilon;
 	int k ;
-	BahmaniTopK(double epsilon, int k ) {
+	public BahmaniTopK(double epsilon, int k ) {
 		this.epsilon = epsilon;
 		this.k = k;
 	}
