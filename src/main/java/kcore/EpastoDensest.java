@@ -39,10 +39,6 @@ public class EpastoDensest implements Comparable<EpastoDensest>{
 					if(densest.get(dst).contains(src) ) {
 						densest.get(src).remove(dst);
 						densest.get(dst).remove(src);
-						if(densest.get(src).size() == 0)
-							densest.remove(src);
-						if(densest.get(dst).size() == 0)
-							densest.remove(dst);
 						numEdges--;
 						if(densest.size() == 0)
 							density = 0;

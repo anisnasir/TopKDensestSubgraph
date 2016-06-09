@@ -207,5 +207,22 @@ public class KCoreDecomposition implements DensestSubgraph{
 		outputArray.add(returnOutput);
 		return outputArray;
 	}
+	public int mainCore() {
+		// TODO Auto-generated method stub
+		ArrayList<String> maxCore = new ArrayList<String>();
+		int maxCoreNum = 0;
+		for(String str: kCore.keySet()) {
+			int core = kCore.get(str);
+			if(core > maxCoreNum)  {
+				maxCoreNum = core;
+				maxCore = new ArrayList<String>();
+			}
+			if(core == maxCoreNum) {
+				maxCore.add(str);
+			}
+		}
+		
+		return maxCoreNum;
+	}
 	
 }

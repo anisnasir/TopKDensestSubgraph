@@ -1,4 +1,14 @@
 Different algorithm for finding the densest subgraph in a graph.
-1. An implementation of Batagelj, Vladimir, and Matjaz Zaversnik. "An O (m) algorithm for cores decomposition of networks." arXiv preprint cs/0310049 (2003). The main core of the graph represents the 2-approximation of the densest subgraph.
-2. Charikar, Moses. "Greedy approximation algorithms for finding dense components in a graph." Approximation Algorithms for Combinatorial Optimization. Springer Berlin Heidelberg, 2000. 84-95.
-3. Bahmani, Bahman, Ravi Kumar, and Sergei Vassilvitskii. "Densest subgraph in streaming and mapreduce." Proceedings of the VLDB Endowment 5.5 (2012): 454-465.
+-------------Densest Subgraph Simulator----------------
+Algorithm		SimulatorType	Approx-Guarantees
+KCore			0		2 
+Charikar		1		2
+Bahmani			2		2(1+epsilon)
+Dynamic K core		3		2
+Top-k Bahman		4		2(1+epsilon)
+Top-k KCore		5		2
+Top-k Charikar		6		2
+Top-k KCore Evolving	7		2
+Epasto Fully Dynamic	8		2(1+epsilon)^6
+Our Algorithm	t	9		2
+-------------Densest Subgraph Simulator----------------

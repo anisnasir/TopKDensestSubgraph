@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
+
 public class Main {
 	private static void ErrorMessage() {
 		System.err.println("Choose the type of simulator using:");
@@ -21,11 +22,28 @@ public class Main {
 		System.err.println("Top-k Charikar: 6 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		System.err.println("Top-k KCoreDecomposition: 7 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		System.err.println("Epasto Fully Dynamic: 8 inputFile <sliding_window> epsilon outFile [k] outDir " ) ;
-		System.err.println("Epasto Top-k: 9 inputFile <sliding_window> epsilon outFile k outDir " ) ;
+		System.err.println("Our Algorithm: 9 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
+		
 		System.exit(1);
 	}
+	
+	static void display() {
+		System.out.println("-------------Densest Subgraph Simulator----------------");
+		System.out.println("Algorithm\t\tSimulatorType\tApprox-Guarantees\tk");
+		System.out.println("KCore\t\t\t0\t\t2\t\t\t1 ");
+		System.out.println("Charikar\t\t1\t\t2\t\t\t1" ) ; 
+		System.out.println("Bahmani\t\t\t2\t\t2(1+epsilon)\t\t1" ) ;
+		System.out.println("Dynamic K core\t\t3\t\t2\t\t\t1" ) ;
+		System.out.println("Top-k Bahmani\t\t4\t\t2(1+epsilon)\t\tk" ) ;
+		System.out.println("Top-k KCore\t\t5\t\t2\t\t\tk" ) ;
+		System.out.println("Top-k Charikar\t\t6\t\t2\t\t\tk" ) ;
+		System.out.println("Top-k KCore Evolving\t7\t\t2\t\t\tk" ) ;
+		System.out.println("Epasto Fully Dynamic\t8\t\t2(1+epsilon)^6\t\t1" ) ;
+		System.out.println("Our Algorithm\tt\t9\t\t2\t\t\tk" ) ;
+		System.out.println("-------------Densest Subgraph Simulator----------------");
+	}
 	public static void main(String[] args) throws IOException {
-		
+		display();
 		if(args.length < 7 ) {
 			ErrorMessage();
 		}
@@ -40,13 +58,13 @@ public class Main {
 		int k = 1;
 		boolean degreeMapFlag = true;
 		
-		if(simulatorType == 3 || simulatorType == 7 || simulatorType == 8 || simulatorType == 9 ) {
+		if(simulatorType == 3 || simulatorType == 7 || simulatorType == 8 ) {
 			degreeMapFlag = false;
 		}
 		if(simulatorType == 2 || simulatorType == 8) {
 			epsilon = Double.parseDouble(args[3]);
 		}
-		else if(simulatorType == 4  || simulatorType == 9) {
+		else if(simulatorType == 4) {
 			epsilon = Double.parseDouble(args[3]);
 			k = Integer.parseInt(args[5]);
 		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 7) {
@@ -110,9 +128,8 @@ public class Main {
 		} else if (simulatorType == 8) {
 			densest = new EpastoFullyDyn(epsilon);
 		} else if (simulatorType == 9) {
-			densest = new EpastoTopK(k,epsilon);
+			densest = new BagOfSnowballs(k);
 		}
-		
 		
 		
 		//Start reading the input
@@ -128,12 +145,13 @@ public class Main {
 				
 			}
 	
+			//new edge
 			if(degreeMapFlag)
 				utility.handleEdgeAddition(item,nodeMap,degreeMap);
 			else 
 				utility.handleEdgeAddition(item, nodeMap);
 
-			
+			//moving sliding window
 			StreamEdge oldestEdge = sw.add(item);
 
 			if(simulatorType != 8 && simulatorType != 9) {
@@ -184,21 +202,24 @@ public class Main {
 					epasto.MainFullyDynamic(oldestEdge, nodeMap, EpastoOp.REMOVE);
 				}
 				output=densest.getDensest(degreeMap, nodeMap);
- 			} else if ( simulatorType == 9) {
- 				EpastoTopK epasto = (EpastoTopK)densest;
-				epasto.addEdge(item);
-				
-				if(oldestEdge != null) {
-					epasto.removeEdge(oldestEdge);
-				}
-				output=densest.getDensest(degreeMap, nodeMap);
+ 			} else if (simulatorType == 9) { 
+ 				BagOfSnowballs bag = (BagOfSnowballs) densest;
+ 				bag.addEdge(item, nodeMap);
+ 				
+ 				if(oldestEdge != null) {
+ 					utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
+ 					bag.removeEdge(oldestEdge,nodeMap, degreeMap);
+ 				}
+ 				output = bag.getDensest(degreeMap, nodeMap);
+ 				//bag.print();
+ 				
  			}
 			
 			for(int i =0; i< k;i++) {
 				if( i<output.size()) {
-				output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
-				output.get(i).printOutput(); 
-				ow.get(i).writeOutput(output.get(i));
+					output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
+					//output.get(i).printOutput(); 
+					ow.get(i).writeOutput(output.get(i));
 				}else {
 					output = getDummy();
 					ow.get(i).writeOutput(output.get(0));
