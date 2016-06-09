@@ -23,6 +23,7 @@ public class Main {
 		System.err.println("Top-k KCoreDecomposition: 7 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		System.err.println("Epasto Fully Dynamic: 8 inputFile <sliding_window> epsilon outFile [k] outDir " ) ;
 		System.err.println("Our Algorithm: 9 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
+		System.err.println("Epasto Top-k: 10 inputFile <sliding_window> epsilon outFile k outDir " ) ;
 		
 		System.exit(1);
 	}
@@ -40,6 +41,7 @@ public class Main {
 		System.out.println("Top-k KCore Evolving\t7\t\t2\t\t\tk" ) ;
 		System.out.println("Epasto Fully Dynamic\t8\t\t2(1+epsilon)^6\t\t1" ) ;
 		System.out.println("Our Algorithm\tt\t9\t\t2\t\t\tk" ) ;
+		System.out.println("Epasto Top-k\t10\t\t2(1+epsilon)^6\t\t1" ) ;
 		System.out.println("-------------Densest Subgraph Simulator----------------");
 	}
 	public static void main(String[] args) throws IOException {
@@ -129,6 +131,8 @@ public class Main {
 			densest = new EpastoFullyDyn(epsilon);
 		} else if (simulatorType == 9) {
 			densest = new BagOfSnowballs(k);
+		} else if (simulatorType == 10 ) {
+			densest = new EpastoTopK(k,epsilon);
 		}
 		
 		
@@ -146,15 +150,17 @@ public class Main {
 			}
 			long startTime = System.currentTimeMillis();
 			//new edge
-			if(degreeMapFlag)
-				utility.handleEdgeAddition(item,nodeMap,degreeMap);
-			else 
-				utility.handleEdgeAddition(item, nodeMap);
+			if(simulatorType != 10) {
+				if(degreeMapFlag)
+					utility.handleEdgeAddition(item,nodeMap,degreeMap);
+				else 
+					utility.handleEdgeAddition(item, nodeMap);
+			}
 
 			//moving sliding window
 			StreamEdge oldestEdge = sw.add(item);
 
-			if(simulatorType != 8 && simulatorType != 9) {
+			if(simulatorType != 8 && simulatorType != 9 && simulatorType != 10) {
 				if(oldestEdge != null) {
 					if(degreeMapFlag)
 						utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
@@ -213,17 +219,28 @@ public class Main {
  				output = bag.getDensest(degreeMap, nodeMap);
  				//bag.print();
  				
+ 			} else if (simulatorType == 10) {
+				EpastoTopK epasto = (EpastoTopK)densest;
+				epasto.addEdge(item);
+				
+				if(oldestEdge != null) {
+					epasto.removeEdge(item);
+				}
+				output=densest.getDensest(degreeMap, nodeMap);
  			}
+			
+			
+			double endTime = System.currentTimeMillis();
 			//if(edgeCounter%1000 == 0 ) 
 			{
 				for(int i =0; i< k;i++) {
 					if( i<output.size()) {
-						output.get(i).setTimeTaken((System.currentTimeMillis()-startTime)/1000.0);
+						output.get(i).setTimeTaken((endTime-startTime)/1000.0);
 						//output.get(i).printOutput(); 
-						//ow.get(i).writeOutput(output.get(i));
+						ow.get(i).writeOutput(output.get(i));
 					}else {
 						output = getDummy();
-						//ow.get(i).writeOutput(output.get(0));
+						ow.get(i).writeOutput(output.get(0));
 					}
 					
 				}

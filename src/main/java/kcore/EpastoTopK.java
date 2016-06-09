@@ -1,14 +1,10 @@
 package kcore;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 
-public class EpastoTopK {
+public class EpastoTopK implements DensestSubgraph{
 	int k; 
 	double epsilon;
 	EpastoFullyDyn [] epastoK;
@@ -37,78 +33,17 @@ public class EpastoTopK {
 	}
 	
 	boolean addEdge(StreamEdge edge) {
-		String src  = edge.getSource();
-		String dst = edge.getDestination();
-		
-		System.out.println("+"+ src+ "  " + dst);
-		
-		HashSet<String> added = new HashSet<String>();
-		HashSet<String> removed = new HashSet<String>();
 		
 		if(nodeMap[0].contains(edge))
 			return false;
  		
-		int i =0;
- 		
-		while (i < k) {
-			if(!removed.contains(src) && !removed.contains(dst)) {
-				utility.handleEdgeAddition(edge, nodeMap[i]);
-				epastoK[i].MainFullyDynamic(edge, nodeMap[i], EpastoOp.ADD);
-				added.add(src);
-				added.add(dst);
-			}else if (!removed.contains(src)) {
-				nodeMap[i].map.put(src, new HashSet<String>());
-				added.add(src);
-			}else if (!removed.contains(dst)) {
-				nodeMap[i].map.put(dst, new HashSet<String>());
-				added.add(dst);
-			}else {
-				return true;
-			}
-			
-			if(i != 0 ) {
-				for(String str: added) {
-					if(!removed.contains(str)) {
-						HashSet<String> neighbors = nodeMap[i].getNeighbors(str);
-						if(neighbors!= null)
-							for(String neighbor:neighbors) {
-								utility.handleEdgeAddition(new StreamEdge(str,neighbor), nodeMap[i]);
-								epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i], EpastoOp.ADD);
-							}
-					}
-				}
-			}
-			
-			for(String str:removed) {
-				HashSet<String> neighbors = nodeMap[i].getNeighbors(str);
-				if(neighbors!=null) {
-					neighbors = new HashSet<String>(neighbors);
-					for(String neighbor:neighbors) { 
-						utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap[i]);
-						epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i], EpastoOp.REMOVE);
-					}
-				}
-			}
-		
-			EpastoDensest tempDensest = epastoK[i].getDensest();
-			if(tempDensest == null)
-				return true;
-			if(densestK[i].densest.size() != 0) {
-				HashSet<String> common = this.intersectionSet(tempDensest.densest.keySet(), densestK[i].densest.keySet());
-				removed.addAll(tempDensest.densest.keySet());
-				
-				added.addAll(densestK[i].densest.keySet());
-				added.removeAll(common); 
-			}else {
-				densestK[i] = tempDensest;
-				removed.addAll(tempDensest.densest.keySet());
-			}
-			
-			densestK[i] = tempDensest;
-			i++;
-		}
 		return true;
 		
+	}
+	
+	boolean removeEdge(StreamEdge edge) {
+		
+		return true;
 	}
 	public HashSet<String> intersectionSet (Set<String> set1, Set<String> set2) {
 		if(set1 == null)
@@ -133,67 +68,46 @@ public class EpastoTopK {
 		}
 		return returnSet;
 	}
-	boolean removeEdge(StreamEdge edge) {
-		HashSet<String> added = new HashSet<String>();
-		HashSet<String> removed = new HashSet<String>();
-		System.out.println("-" + edge.getSource() + " " + edge.getDestination());
- 		
-		if(!nodeMap[0].contains(edge))
-			return false;
-		
- 		int i =0;
-		while (i < k) {
-			utility.handleEdgeDeletion(edge, nodeMap[i]);
-			epastoK[i].MainFullyDynamic(edge, nodeMap[i], EpastoOp.REMOVE);
-			removed.add(edge.getSource());
-			removed.add(edge.getDestination());
-			
-			for(String str: added) {
-				if(!removed.contains(str)) {
-					HashSet<String> neighbors = nodeMap[i].getNeighbors(str);
-					if(neighbors != null) 
-						for(String neighbor:neighbors) {
-							utility.handleEdgeAddition(new StreamEdge(str,neighbor), nodeMap[i]);
-							epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i], EpastoOp.ADD);
-						}
-				}
-			}
-			if(i != 0) {
-				for(String str:removed) {
-					HashSet<String> neighbors = nodeMap[i].getNeighbors(str);
-					if(neighbors!=null) {
-						neighbors = new HashSet<String>(neighbors);
-						for(String neighbor:neighbors) { 
-							utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap[i]);
-							epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i], EpastoOp.REMOVE);
-						}
-					}
-				}
-			}
-			
-			EpastoDensest tempDensest = epastoK[i].getDensest();
-			
-			if(densestK[i].densest.size() != 0) {
-				HashSet<String> common = this.intersectionSet(tempDensest.densest.keySet(), densestK[i].densest.keySet());
-				removed.addAll(tempDensest.densest.keySet());
-				
-				added.addAll(densestK[i].densest.keySet());
-				added.removeAll(common); 
-			}else {
-				densestK[i] = tempDensest;
-				removed.addAll(tempDensest.densest.keySet());
-			}
-			
-			i++;
-		}
-		return true;
-	}
 	
 	EpastoDensest getDensest() { 
 		return this.densestK[0];
 	}
 	EpastoDensest[] getTopK(){
 		return densestK;
+	}
+
+	@Override
+	public ArrayList<Output> getDensest(DegreeMap degreeMap, NodeMap nodeMap) {
+		// TODO Auto-generated method stub
+		
+		ArrayList<Output> outputArray = new ArrayList<Output>();
+		if(nodeMap.map.isEmpty()) {
+			for(int i =0 ;i< k;i++)
+				outputArray.add(getDummy().get(0));
+			return outputArray;
+		}
+		
+		for(int i = 0 ; i < k ;i ++ ) {
+			Output output = new Output();
+			output.coreNum = 0;
+			output.density = this.densestK[i].getDensity();
+			output.size = this.densestK[i].densest.size();
+			output.nodes = new ArrayList<String>(this.densestK[i].densest.keySet());
+			outputArray.add(output);
+		}
+		return outputArray;
+	}
+	
+	 ArrayList<Output> getDummy() { 
+		ArrayList<Output> arr = new ArrayList<Output>();
+		Output returnOut = new Output();
+		returnOut.setCoreNum(0);
+		returnOut.setDensity(0.0);
+		returnOut.setSize(0);
+		returnOut.setTimeTaken(0);
+		returnOut.setNodes(new ArrayList<String>());
+		arr.add(returnOut);
+		return arr;
 	}
 
 }
