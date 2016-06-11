@@ -239,7 +239,7 @@ public class Main {
 				output=densest.getDensest(degreeMap, nodeMap);
  			} else if (simulatorType == 10) { 
  				BagOfSnowballs bag = (BagOfSnowballs) densest;
- 				bag.addEdge(item, nodeMap);
+ 				bag.addEdge(item, nodeMap,degreeMap);
  				
  				if(oldestEdge != null) {
  					utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);

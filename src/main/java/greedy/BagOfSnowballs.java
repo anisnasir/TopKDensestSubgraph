@@ -113,7 +113,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 		}
 	}
-	public void addEdge(StreamEdge edge, NodeMap nodeMap) {
+	public void addEdge(StreamEdge edge, NodeMap nodeMap,DegreeMap degreeMap) {
 		String src = edge.getSource();
 		String dst = edge.getDestination();
 
@@ -161,9 +161,20 @@ public class BagOfSnowballs implements DensestSubgraph{
 				}
 			}
 		}
+		if(this.getMaximalDensity(nodeMap) < initialDensity) {
+			HashSet<String> addNodes = degreeMap.getNodesBetween(initialDensity, this.getMaximalDensity(nodeMap));
+			if(addNodes == null){
+				return;
+			}
+
+			for(String str: addNodes) {
+				addNode(str,nodeMap);
+			}
+		}
 		if(this.getMaximalDensity(nodeMap) != initialDensity) {
 			synchronizeSnowBalls(nodeMap);
 		}
+		
 		cleanup(nodeMap);
 		//System.out.println("+bag graph" + bagGraph+ " " + maximalDensity);
 		//System.out.println(kCore.kCore);

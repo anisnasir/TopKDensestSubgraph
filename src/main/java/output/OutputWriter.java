@@ -10,7 +10,7 @@ public class OutputWriter {
 	BufferedWriter ow;
 	ArrayList<Output> list;
 
-	public int flushInterval = 1000;
+	public int flushInterval = 10000;
 	int flushCounter ;
 
 	public OutputWriter(String fileName) {
