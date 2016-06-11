@@ -21,8 +21,8 @@ public class KCoreTopK implements DensestSubgraph{
 	public ArrayList<Output> getDensest(DegreeMap degreeMap, NodeMap nodeMap) {
 		ArrayList<Output> list = new ArrayList<Output>();
 		ArrayList<Output> out = null;
-		DegreeMap degreeMapLocal = degreeMap.getCopy();
 		NodeMap nodeMapLocal = nodeMap.getCopy();
+		DegreeMap degreeMapLocal = degreeMap.getCopy();
 		DensestSubgraph densest = new KCore();
 		
 		for(int i =0 ; i< k; i++) {
@@ -36,7 +36,7 @@ public class KCoreTopK implements DensestSubgraph{
 	}
 	
 	void removeBulk(DegreeMap degreeMap, NodeMap nodeMap, Output out) {
-		ArrayList<String> nodes = out.getNodes();
+		ArrayList<String> nodes = new ArrayList<String>(out.getNodes());
 		EdgeHandler helper = new EdgeHandler();
 		for(String node:nodes) {
 			HashSet<String > temp = nodeMap.getNeighbors(node);
@@ -46,7 +46,7 @@ public class KCoreTopK implements DensestSubgraph{
 			else 
 				neighbors = new ArrayList<String>();
 			for(String neighbor: neighbors) {
-				helper.handleEdgeDeletion(new StreamEdge(node,neighbor), nodeMap, degreeMap);
+				helper.handleEdgeDeletion(new StreamEdge(node,neighbor), nodeMap,degreeMap);
 			}
 		}
 	}

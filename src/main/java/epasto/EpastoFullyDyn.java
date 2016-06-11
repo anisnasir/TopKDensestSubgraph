@@ -15,6 +15,7 @@ import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
+import utility.EdgeHandler;
 
 
 
@@ -24,20 +25,18 @@ public class EpastoFullyDyn implements DensestSubgraph{
 	double epsilon_tilda;
 	EpastoDensest densest;
 	double beta;
-	//NodeMap G_tilda;
+	NodeMap nodeMap_tilda;
+	DegreeMap degreeMap_tilda;
 	boolean LOGGING;
 	int R_tilda;
 	int s;
-	Integer bound;
 	double R_star;
 	
 	public EpastoFullyDyn(double epsilon) {
 		sk = new HashMap<String, Integer>();
 		densest = null;
 		this.epsilon = epsilon;
-		//G_tilda = new NodeMap();
 		epsilon_tilda = 2*epsilon + Math.pow(epsilon, 2);
-		bound = 0;
 		Properties prop = new Properties();
 		try {
 
@@ -51,69 +50,67 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		
 	}
 	
-	public void MainFullyDynamic(StreamEdge edge, NodeMap nodeMap, EpastoOp op) {
+	public void MainFullyDynamic(StreamEdge edge, NodeMap nodeMap,DegreeMap degreeMap, EpastoOp op) {
 		if(densest ==null) {
 			s=1;
 			R_tilda=0;
-			densest = findDensest(nodeMap.map, nodeMap.getNumEdges(), nodeMap.getNumNodes(), 0, epsilon_tilda);
+			densest = findDensest(nodeMap,degreeMap, 0, epsilon_tilda);
 			sk = densest.getSk();
 		
-			//G_tilda.map = deepCopy(nodeMap.map);
-			//G_tilda.numEdges = nodeMap.numEdges;
+			nodeMap_tilda = nodeMap.getCopy();
+			degreeMap_tilda = degreeMap.getCopy();
+			
 			double m0 = nodeMap.getNumEdges();
 			double a = 6*Math.pow((1+epsilon),2);
 			double b = logb(nodeMap.getNumNodes(),(1+epsilon));
-			R_star = m0*epsilon/(a*b);
+			R_star = m0*epsilon/(a*b)-1;
 			
 		} else {
 			boolean rebuild= false;
+			
 			if(op == EpastoOp.ADD) {
 				if (R_tilda < R_star) {
-					//G_tilda.addEdge(edge.getSource(), edge.getDestination());
-					//G_tilda.addEdge(edge.getDestination(), edge.getSource());
-					//G_tilda.incrementEdges();
+					EdgeHandler helper = new EdgeHandler();
+					helper.handleEdgeAddition(edge, nodeMap_tilda, degreeMap_tilda);
 				}
 				rebuild = addEdge(edge, nodeMap, densest.beta, epsilon_tilda);
 			}else {
+
 				rebuild = removeEdge(edge, nodeMap, densest, epsilon_tilda);
 				R_tilda++;
 			}
 			if(rebuild) {
 				if(R_tilda < R_star ) { 
-					//Densest h = this.find(G_tilda.map, G_tilda.numEdges, G_tilda.getNumNodes(), densest.beta, epsilon_tilda);	
-					EpastoDensest h = this.find(nodeMap.map, nodeMap.getNumEdges(), nodeMap.getNumNodes(), densest.beta, epsilon_tilda);	
-					sk = h.getSk();
+					EpastoDensest h = this.find(nodeMap_tilda, degreeMap_tilda, densest.beta, epsilon_tilda);	
 					if(h.getDensity() >= densest.getDensity()) {
 						densest = h;
-						//sk = h.getSk();
-						
+						sk = h.getSk();
 					}
 				} else {
 					s= s+1;
-					
-					EpastoDensest h = findDensest(nodeMap.map, nodeMap.getNumEdges(), nodeMap.getNumNodes(), densest.density, epsilon_tilda);
-					sk= h.getSk();	
-					//G_tilda.map = deepCopy(nodeMap.map);
-					//G_tilda.numEdges = nodeMap.numEdges;
+					EpastoDensest h = findDensest(nodeMap, degreeMap, 0, epsilon_tilda);
+					sk= h.getSk();
+					nodeMap_tilda = nodeMap.getCopy();
+					degreeMap_tilda = degreeMap.getCopy();
+	
 					if(h.getDensity() >= densest.getDensity()) {
 						densest = h;
-						
+								
 					}
 					double m0 = nodeMap.getNumEdges();
 					double a = 6*Math.pow((1+epsilon),2);
 					double b = logb(nodeMap.getNumNodes(),(1+epsilon));
-					R_star = m0*epsilon/(a*b);
+					R_star = m0*epsilon/(a*b)-1;
 					R_tilda = 0;
 				}
 			}
 		} 
-		
 	}
 	
 	boolean removeEdge(StreamEdge edge, NodeMap nodeMap, EpastoDensest densest, double epsilon_tilda) {
 		double new_density = densest.removeEdge(edge);
 		double b = Math.pow((1+epsilon_tilda),2);
-		
+	
 		String src = edge.getSource();
 		String dst = edge.getDestination();
 		
@@ -141,6 +138,9 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		stack.push(src);
 		stack.push(dst);
 		
+		double threshold = 2*(1+epsilon)*beta;
+		double bound= (int)Math.ceil(logb(nodeMap.getNumNodes(), 1+epsilon));
+		
 		while(!stack.isEmpty()) {
 			String node = stack.pop();
 			
@@ -149,7 +149,9 @@ public class EpastoFullyDyn implements DensestSubgraph{
 			
 			int st = sk.get(node);
 		
+			
 			HashSet<String> neighbors = nodeMap.getNeighbors(node);
+
 			int inDegree = 0;
 			for(String neighbor:neighbors) {
 				int neighborst;
@@ -161,11 +163,11 @@ public class EpastoFullyDyn implements DensestSubgraph{
 				if(neighborst >= st) 
 					inDegree++;
 			}
-			double threshold = 2*(1+epsilon)*beta;
 			if(inDegree < threshold) {
 				continue;
 			}
-		
+			
+			
 			int t_tilda = st;
 			while( inDegree >= threshold && t_tilda < bound) {
 				t_tilda++;
@@ -180,7 +182,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 						inDegree++;
 				}
 			}
-			if(t_tilda == bound)
+			if(t_tilda >= bound)
 				return true;
 			
 			sk.put(node, t_tilda);
@@ -188,6 +190,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 			for(String neighbor:neighbors) 
 				stack.push(neighbor);
 		}
+		
 		return false;
 		
 	}
@@ -201,11 +204,13 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		
 	}
 	
-	EpastoDensest findDensest(HashMap<String,HashSet<String>> graph, int numEdges, int numNodes, double density, double epsilon) {
+	EpastoDensest findDensest(NodeMap nodeMap,DegreeMap degreeMap, double density, double epsilon) {
 		EpastoDensest returnResult = null;
 		double beta = Math.max(1/(4*(1+epsilon)), (1+epsilon)*density);
+		
 		while(true) {
-			EpastoDensest temp = find(graph,numEdges,numNodes,beta, this.epsilon);
+			EpastoDensest temp = find(nodeMap.getCopy(),degreeMap.getCopy(),beta, this.epsilon);
+			
 			if(returnResult == null )
 				returnResult = temp;
 			
@@ -220,69 +225,65 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		}
 	}
 	
-	EpastoDensest find(HashMap<String,HashSet<String>> graph, int numEdges, int numNodes, double beta, double epsilon) {
+	EpastoDensest find(NodeMap nodeMap,DegreeMap degreeMap, double beta, double epsilon) {
 		//output parameters
 		EpastoDensest returnResult = new EpastoDensest();
 		HashMap<String, Integer> dSk = new HashMap<String, Integer>();
-		HashMap<String,HashSet<String>> densest_subgraph = deepCopy(graph);
-		double density = numEdges/(double)numNodes;
+		NodeMap densest_subgraph = nodeMap.getCopy();
+		double density = nodeMap.getNumEdges()/(double)nodeMap.getNumNodes();
 		double max_density = density;
-		int edgeCount = numEdges;
 		
 		//algorithm parameters
-		bound= (int)Math.ceil(logb(numNodes, 1+epsilon));
-		graph = deepCopy(graph); 
+		double bound= (int)Math.ceil(logb(nodeMap.getNumNodes(), 1+epsilon));
 		
 		//algorithm variables
-		int new_edges = numEdges;
 		int t = 0 ;
 		
-		while(!graph.isEmpty() && t < bound) {
-			for(String str: graph.keySet()) {
+		while(nodeMap.getNumNodes() > 0 && t < bound) {
+			for(String str: nodeMap.map.keySet()) {
 				dSk.put(str, t);
 			}
-			new_edges = removeNode(graph, new_edges, beta, epsilon);
+			removeNode(nodeMap,degreeMap, beta, epsilon);
 			
-			
-			density = (graph.size()==0) ? 0  : (new_edges/(double)graph.size());
+			density = (nodeMap.getNumNodes() == 0 ) ? 0  : (nodeMap.getNumEdges()/(double)nodeMap.getNumNodes());
 			
 			if(density > max_density) {
 				max_density = density;
-				densest_subgraph =deepCopy(graph);
-				edgeCount = new_edges;
+				densest_subgraph = nodeMap.getCopy();
 			}
 			++t;
 		}
-		/*if(!graph.isEmpty()) {
-			for(String str: graph.keySet()) {
-				dSk.put(str, t);
-			}
-		}*/
 		returnResult.setDensity(max_density);
-		returnResult.setDensest(densest_subgraph,edgeCount);
+		returnResult.setDensest(densest_subgraph);
 		returnResult.setBeta(beta);
 		returnResult.setSk(dSk);
 		return returnResult;
 	}
 	
 	
-	int removeNode(HashMap<String,HashSet<String>> graph,int numEdges, double beta, double epsilon) {
+	void removeNode(NodeMap nodeMap, DegreeMap degreeMap, double beta, double epsilon) {
 		double threshold = 2*(1+epsilon)*beta;
 		HashSet<String> nodesRemove = new HashSet<String>();
-		for(String str: graph.keySet()) {
-			if(graph.get(str).size() <= threshold) {
-				nodesRemove.add(str);
+		for(int i =0; i< degreeMap.capacity;i++) {
+			if(i>threshold)
+				break;
+			else {
+				nodesRemove.addAll(new HashSet<String>(degreeMap.getNodes(i)));
 			}
 		}
+		EdgeHandler utility = new EdgeHandler();
 		for(String str: nodesRemove) {
-			HashSet<String> neighbors = new HashSet<String>(graph.get(str)); 
+			HashSet<String> temp = nodeMap.getNeighbors(str);
+			HashSet<String> neighbors;
+			if(temp == null )
+				neighbors = new HashSet<String>();
+			else 
+				neighbors = new HashSet<String>(temp);
+			
 			for(String neighbor: neighbors) {
-				graph.get(neighbor).remove(str);
-				numEdges--;
+				utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap,degreeMap);
 			}
-			graph.remove(str);
 		}
-		return numEdges;
 	}
 	
 	double logb(int num,  double base) {
@@ -336,8 +337,8 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		Output output = new Output();
 		output.coreNum = 0;
 		output.density = this.densest.getDensity();
-		output.size = this.densest.densest.size();
-		output.nodes = new ArrayList<String>(this.densest.densest.keySet());
+		output.size = this.densest.densest.getNumNodes();
+		output.nodes = new ArrayList<String>(this.densest.densest.map.keySet());
 		outputArray.add(output);
 		return outputArray;
 	}

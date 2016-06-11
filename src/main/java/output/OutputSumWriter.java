@@ -5,49 +5,44 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class OutputWriter {
+public class OutputSumWriter {
 	String fileName;
 	BufferedWriter ow;
-	ArrayList<Output> list;
+	Output output;
 
-	public int flushInterval = 1000;
-	int flushCounter ;
+	public int flushInterval = 10000;
+	ArrayList<Double> list;
+	int flushCounter;
 
-	public OutputWriter(String fileName) {
-		list = new ArrayList<Output>();
-		flushCounter = 0;
+	public OutputSumWriter(String fileName) {
+		list = new ArrayList<Double>();
 		this.fileName = fileName;
+		flushCounter = 0;
 		try {
 			ow = new BufferedWriter(new FileWriter(fileName));
-			ow.write("#main core\tDensity\tsize\tnodes\ttime taken\n");
+			ow.write("#sum_densities\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public void addOutput(Output output) {
+	public void addOutput(double value) {
 		if(++flushCounter %flushInterval == 0) {
 			flush();
 		}else 
-			list.add(output);
+			list.add(value);
 	}
-	
-	public void flush() { 
-		for(Output out: list) {
-			writeOutput(out);
-		}
-		list = new ArrayList<Output>();
-	}
-	public void writeOutput(Output output) {
+	public void flush() {
 		try {
-			ow.write((output.getCoreNum())+"\t"+(output.getDensity())+"\t"+(output.getSize())+"\t"+output.getNodes()+"\t"+(output.getTimeTaken())+"\n");
+			for(double d: list)
+				ow.write(d+"\n");
+			list = new ArrayList<Double>();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
 	
 	public void close() {
 		try {

@@ -102,4 +102,11 @@ public class NodeMap {
 		return returnMap;
 	}
 	
+	public double getDensity() {
+		if (this.getNumNodes() == 0)
+			return 0;
+		else 
+			return (this.getNumEdges()/(double)this.getNumNodes());
+	}
+	
 }

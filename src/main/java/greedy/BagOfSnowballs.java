@@ -306,7 +306,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			//stats.removeSnowBall(S2);
 		}
 	}
-	void print() {
+	public void print() {
 		int i =0;
 		for(SnowBall s: bag) {
 			System.out.println("Density: " +s.getDensity());
@@ -564,22 +564,22 @@ public class BagOfSnowballs implements DensestSubgraph{
 		@Override
 		public ArrayList<Output> getDensest(DegreeMap degreeMap, NodeMap nodeMap) {
 			ArrayList<Output> outputArray = new ArrayList<Output>();
-			Output returnOutput = new Output();
-			//ArrayList<String> maxCore = new ArrayList<String>();
-			int maxCoreNum = 0;
-			SnowBall max = null;
-			for(SnowBall s: this.bag) {
-				int core = s.getMainCore();
-				if(core > maxCoreNum)  {
-					maxCoreNum = core;
-					max = s;
-				}
+			
+			PriorityQueue<SnowBall> queue = new PriorityQueue<SnowBall>(k,Collections.reverseOrder());
+			for(int i =0;i<bag.size();i++) {
+				SnowBall temp = bag.get(i);
+				queue.offer(temp);
 			}
-			returnOutput.setCoreNum(maxCoreNum);
-			returnOutput.setDensity(max.getDensity());
-			returnOutput.setNodes(new ArrayList<String>(max.getNodes()));
-			returnOutput.setSize(max.getNumNodes());
-			outputArray.add(returnOutput);
+			
+			while(!queue.isEmpty()) {
+				SnowBall s = queue.poll();
+				Output returnOutput = new Output();
+				returnOutput.setCoreNum(s.getMainCore());
+				returnOutput.setDensity(s.getDensity());
+				returnOutput.setNodes(new ArrayList<String>(s.getNodes()));
+				returnOutput.setSize(s.getNumNodes());
+				outputArray.add(returnOutput);
+			}
 			return outputArray;
 		}
 	}

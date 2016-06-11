@@ -32,7 +32,7 @@ public class KCoreDecompositionTopK implements DensestSubgraph{
 		ArrayList<Output> out = null;
 		
 		for(int i =0 ; i< k; i++) {
-			out = densest.getDensest(degreeMap, nodeMap);
+			out = densest.getDensest(null, nodeMap);
 			list.add(out.get(0));
 			removeBulk(nodeMap, out.get(0), removedEdges);
 			if(nodeMap.getNumNodes() == 0) {

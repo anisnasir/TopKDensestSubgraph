@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import output.Output;
+import output.OutputSumWriter;
 import output.OutputWriter;
 import slidingwindow.FixedSizeSlidingWindow;
 import struct.DegreeMap;
@@ -39,13 +40,13 @@ public class Main {
 		System.err.println("Charikar: 1 inputFile <sliding_window> [epsilon] outFile [k] outDir " ) ; 
 		System.err.println("Bahmani: 2 inputFile <sliding_window> <epsilon> outFile [k] outDir " ) ;
 		System.err.println("Dynamic K core: 3 inputFile <sliding_window> [epsilon] outFile [k] outDir " ) ;
-		System.err.println("Top-k Bahmani: 4 inputFile <sliding_window> epsilon outFile k outDir " ) ;
+		System.err.println("Epasto Fully Dynamic: 4 inputFile <sliding_window> epsilon outFile [k] outDir " ) ;
 		System.err.println("Top-k KCore: 5 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		System.err.println("Top-k Charikar: 6 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
-		System.err.println("Top-k KCoreDecomposition: 7 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
-		System.err.println("Epasto Fully Dynamic: 8 inputFile <sliding_window> epsilon outFile [k] outDir " ) ;
-		System.err.println("Our Algorithm: 9 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
-		System.err.println("Epasto Top-k: 10 inputFile <sliding_window> epsilon outFile k outDir " ) ;
+		System.err.println("Top-k Bahmani: 7 inputFile <sliding_window> epsilon outFile k outDir " ) ;
+		System.err.println("Top-k KCoreDecomposition: 8 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
+		System.err.println("Epasto Top-k: 9 inputFile <sliding_window> epsilon outFile k outDir " ) ;
+		System.err.println("Greedy Algorithm: 10 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		
 		System.exit(1);
 	}
@@ -57,13 +58,13 @@ public class Main {
 		System.out.println("Charikar\t\t1\t\t2\t\t\t1" ) ; 
 		System.out.println("Bahmani\t\t\t2\t\t2(1+epsilon)\t\t1" ) ;
 		System.out.println("Dynamic K core\t\t3\t\t2\t\t\t1" ) ;
-		System.out.println("Top-k Bahmani\t\t4\t\t2(1+epsilon)\t\tk" ) ;
+		System.out.println("Epasto Fully Dynamic\t4\t\t2(1+epsilon)^6\t\t1" ) ;
 		System.out.println("Top-k KCore\t\t5\t\t2\t\t\tk" ) ;
 		System.out.println("Top-k Charikar\t\t6\t\t2\t\t\tk" ) ;
-		System.out.println("Top-k KCore Evolving\t7\t\t2\t\t\tk" ) ;
-		System.out.println("Epasto Fully Dynamic\t8\t\t2(1+epsilon)^6\t\t1" ) ;
-		System.out.println("Our Algorithm\tt\t9\t\t2\t\t\tk" ) ;
-		System.out.println("Epasto Top-k\t\t10\t\t2(1+epsilon)^6\t\tk" ) ;
+		System.out.println("Top-k Bahmani\t\t7\t\t2(1+epsilon)\t\tk" ) ;
+		System.out.println("Top-k KCore Evolving\t8\t\t2\t\t\tk" ) ;
+		System.out.println("Epasto Top-k\t\t9\t\t2(1+epsilon)^6\t\tk" ) ;
+		System.out.println("Greedy Algorithm\t10\t\t2\t\t\tk" ) ;
 		System.out.println("-------------Densest Subgraph Simulator----------------");
 	}
 	public static void main(String[] args) throws IOException {
@@ -82,16 +83,16 @@ public class Main {
 		int k = 1;
 		boolean degreeMapFlag = true;
 		
-		if(simulatorType == 3 || simulatorType == 7 || simulatorType == 8 || simulatorType == 10) {
+		if(simulatorType == 3 || simulatorType == 8 ) {
 			degreeMapFlag = false;
 		}
 		if(simulatorType == 2) {
 			epsilon = Double.parseDouble(args[3]);
 		}
-		else if(simulatorType == 4 || simulatorType == 8 || simulatorType == 10) {
+		else if(simulatorType == 7 || simulatorType == 4 || simulatorType == 9) {
 			epsilon = Double.parseDouble(args[3]);
 			k = Integer.parseInt(args[5]);
-		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 7 || simulatorType == 9) {
+		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 10 || simulatorType == 8) {
 			k = Integer.parseInt(args[5]);
 		}
 		
@@ -114,7 +115,7 @@ public class Main {
 		StreamEdge item = reader.nextItem();
 		
 		//Declare outprint interval variables
-		int PRINT_INTERVAL=10000;
+		int PRINT_INTERVAL=100000;
 		long simulationStartTime = System.currentTimeMillis();
 		
 		//outputWriter
@@ -122,6 +123,7 @@ public class Main {
 		for(int i =0 ;i < k;i++) {
 			ow.add(new OutputWriter(outDir+"/"+outFileName+"_"+i+".out"));
 		}
+		OutputSumWriter sumWriter = new OutputSumWriter(outDir+"/"+outFileName+"_sum.out");
 	
 		ArrayList<Output> output = null;
 		
@@ -141,20 +143,20 @@ public class Main {
 			densest = new Bahmani(epsilon);
 		} else if (simulatorType == 3) {
 			densest = new KCoreDecomposition(nodeMap.map);
-		} else if (simulatorType == 4) {
-			densest = new BahmaniTopK(epsilon, k);
-		} else if (simulatorType == 5) {
+		}  else if (simulatorType == 5) {
 			densest = new KCoreTopK(k);	
 		} else if (simulatorType == 6) {
 			densest = new CharikarTopK(k);
 		} else if (simulatorType == 7) {
-			densest = new KCoreDecompositionTopK(k, nodeMap);
+			densest = new BahmaniTopK(epsilon, k);
 		} else if (simulatorType == 8) {
+			densest = new KCoreDecompositionTopK(k, nodeMap);
+		} else if (simulatorType == 4) {
 			densest = new EpastoFullyDyn(epsilon);
-		} else if (simulatorType == 9) {
-			densest = new BagOfSnowballs(k);
-		} else if (simulatorType == 10 ) {
+		}  else if (simulatorType == 9 ) {
 			densest = new EpastoTopK(k,epsilon);
+		}else if (simulatorType == 10) {
+			densest = new BagOfSnowballs(k);
 		}
 		
 		
@@ -172,25 +174,20 @@ public class Main {
 			}
 			long startTime = System.currentTimeMillis();
 			//new edge
-			if(simulatorType != 10) {
+			if(simulatorType != 9) {
 				if(degreeMapFlag)
-					utility.handleEdgeAddition(item,nodeMap,degreeMap);
-				else 
-					utility.handleEdgeAddition(item, nodeMap);
-			}
-
-			//moving sliding window
-			StreamEdge oldestEdge = sw.add(item);
-
-			if(simulatorType != 8 && simulatorType != 9 && simulatorType != 10) {
-				if(oldestEdge != null) {
-					if(degreeMapFlag)
-						utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
-					else
-						utility.handleEdgeDeletion(oldestEdge, nodeMap); 
-				}
+						utility.handleEdgeAddition(item,nodeMap,degreeMap);
+					else 
+						utility.handleEdgeAddition(item, nodeMap);
 			}
 			
+			//moving sliding window
+			StreamEdge oldestEdge = sw.add(item);
+			
+			if(simulatorType == 0 || simulatorType == 1 || simulatorType == 2 || simulatorType == 4 || simulatorType == 5 || simulatorType == 6 ) { 
+				if(oldestEdge!=null)
+					utility.handleEdgeDeletion(oldestEdge,nodeMap,degreeMap);
+			}
 			
 			if(simulatorType == 0) { 
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
@@ -202,35 +199,45 @@ public class Main {
 				KCoreDecomposition kCore = (KCoreDecomposition) densest;
 				
 				kCore.addEdge(item.getSource(), item.getDestination());
-				if(oldestEdge != null) 
+				if(oldestEdge != null)  {
+					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
+				}
 				
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-			} else if ( simulatorType == 4) {
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-			} else if ( simulatorType == 5) {
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+			} else if (simulatorType == 4) {
+				EpastoFullyDyn epasto = (EpastoFullyDyn)densest;
+				epasto.MainFullyDynamic(item, nodeMap, degreeMap, EpastoOp.ADD);
+				if(oldestEdge != null) {
+					utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
+					epasto.MainFullyDynamic(oldestEdge, nodeMap,degreeMap, EpastoOp.REMOVE);
+				}
+				output=densest.getDensest(degreeMap, nodeMap);
+ 			}  else if ( simulatorType == 5) {
+ 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if ( simulatorType == 6) {
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
-			} else if (simulatorType == 7) {
+			} else if ( simulatorType == 7) {
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+			}  else if (simulatorType == 8) {
 				KCoreDecompositionTopK kCoreTopK = (KCoreDecompositionTopK) densest;
 				KCoreDecomposition kCore = kCoreTopK.densest;
 				
 				kCore.addEdge(item.getSource(), item.getDestination());
-				if(oldestEdge != null) 
-					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
-				
-				output = densest.getDensest(degreeMap,nodeMap);
-			} else if (simulatorType == 8) {
-				EpastoFullyDyn epasto = (EpastoFullyDyn)densest;
-				epasto.MainFullyDynamic(item, nodeMap, EpastoOp.ADD);
-				
 				if(oldestEdge != null) {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
-					epasto.MainFullyDynamic(oldestEdge, nodeMap, EpastoOp.REMOVE);
+					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
+				}
+				output = densest.getDensest(degreeMap,nodeMap);
+			}  else if (simulatorType == 9) {
+				EpastoTopK epasto = (EpastoTopK)densest;
+				epasto.addEdge(item);
+				
+				if(oldestEdge != null) {
+					epasto.removeEdge(oldestEdge);
 				}
 				output=densest.getDensest(degreeMap, nodeMap);
- 			} else if (simulatorType == 9) { 
+ 			} else if (simulatorType == 10) { 
  				BagOfSnowballs bag = (BagOfSnowballs) densest;
  				bag.addEdge(item, nodeMap);
  				
@@ -241,30 +248,23 @@ public class Main {
  				output = bag.getDensest(degreeMap, nodeMap);
  				//bag.print();
  				
- 			} else if (simulatorType == 10) {
-				EpastoTopK epasto = (EpastoTopK)densest;
-				epasto.addEdge(item);
-				
-				if(oldestEdge != null) {
-					epasto.removeEdge(item);
-				}
-				output=densest.getDensest(degreeMap, nodeMap);
  			}
 			
 			double endTime = System.currentTimeMillis();
 			//if(edgeCounter%1000 == 0 ) 
-			{
+			{	double sumDensities = 0.0;
 				for(int i =0; i< k;i++) {
 					if( i<output.size()) {
 						output.get(i).setTimeTaken((endTime-startTime)/1000.0);
 						//output.get(i).printOutput(); 
+						sumDensities+= output.get(i).density;
 						ow.get(i).writeOutput(output.get(i));
 					}else {
 						output = getDummy();
 						ow.get(i).writeOutput(output.get(0));
-					}
-					
+					}	
 				}
+				sumWriter.addOutput(sumDensities);
 			} 
 			item = reader.nextItem();
 			if(item !=null)
@@ -282,7 +282,7 @@ public class Main {
 	in.close();
 	for(int i = 0; i< ow.size();i++)
 		ow.get(i).close();
-		
+	sumWriter.close();
 	}
 	
 	static ArrayList<Output> getDummy() { 
