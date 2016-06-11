@@ -236,7 +236,8 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
-				output = densest.getDensest(degreeMap,nodeMap);
+				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap,nodeMap);
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
 				epasto.addEdge(item);
@@ -259,6 +260,7 @@ public class Main {
  			}
 			
 			double endTime = System.currentTimeMillis();
+			System.out.println(output.size());
 			//if(edgeCounter%1000 == 0 ) 
 			{	double sumDensities = 0.0;
 				for(int i =0; i< k;i++) {
@@ -268,12 +270,12 @@ public class Main {
 						sumDensities+= output.get(i).density;
 						ow.get(i).writeOutput(output.get(i));
 					}else {
-						output = getDummy();
-						ow.get(i).writeOutput(output.get(0));
+						ow.get(i).writeOutput(getDummy().get(0));
 					}	
 				}
 				sumWriter.addOutput(sumDensities);
-			} 
+			}
+			
 			item = reader.nextItem();
 			if(item !=null)
 				while(nodeMap.contains(item)) {

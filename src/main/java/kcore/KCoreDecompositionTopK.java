@@ -41,6 +41,7 @@ public class KCoreDecompositionTopK implements DensestSubgraph{
 			}
 		}
 		addRemovedEdges(removedEdges, nodeMap);
+		
 		return list;
 	}
 	
