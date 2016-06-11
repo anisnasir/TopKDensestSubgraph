@@ -163,6 +163,8 @@ public class Main {
 		//Start reading the input
 		System.out.println("Reading the input");
 		
+		int executeCounter = 0;
+		int EXECUTE_INTERVAL = 1000;
 		int edgeCounter = 0;
 		while (item != null) {
 			if (++edgeCounter % PRINT_INTERVAL == 0) {
@@ -190,11 +192,14 @@ public class Main {
 			}
 			
 			if(simulatorType == 0) { 
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}else if (simulatorType == 1) {
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if (simulatorType == 2) {
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if (simulatorType == 3) {
 				KCoreDecomposition kCore = (KCoreDecomposition) densest;
 				
@@ -214,11 +219,14 @@ public class Main {
 				}
 				output=densest.getDensest(degreeMap, nodeMap);
  			}  else if ( simulatorType == 5) {
- 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+ 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+ 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if ( simulatorType == 6) {
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if ( simulatorType == 7) {
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}  else if (simulatorType == 8) {
 				KCoreDecompositionTopK kCoreTopK = (KCoreDecompositionTopK) densest;
 				KCoreDecomposition kCore = kCoreTopK.densest;
