@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
+import utility.SetFunctions;
 import kcore.KCoreDecomposition;
 
 
@@ -24,10 +23,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 	int count = 0; 
 	int k ;
 
-	public int bagGraphSize() { 
-		return bagGraph.size();
-	}
-
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreDecomposition(bagGraph);
@@ -37,34 +32,13 @@ public class BagOfSnowballs implements DensestSubgraph{
 	public void addNodeKCore(String node, NodeMap nodeMap) {
 		kCore.addNode(node);
 		HashSet<String> neighbors = nodeMap.getNeighbors(node);
-		HashSet<String> localNeighbors = intersectionSet(neighbors, bagGraph.keySet());
+		SetFunctions helper = new SetFunctions();
+		HashSet<String> localNeighbors = helper.intersectionSet(neighbors, bagGraph.keySet());
 		for(String neighbor: localNeighbors) {
 			addEdgeKCore(new StreamEdge(node,neighbor));
 		}
-		//System.out.println(node + " " + kCore.getKCore(node));
 	}
-	public HashSet<String> intersectionSet (Set<String> set1, Set<String> set2) {
-		if(set1 == null)
-			return new HashSet<String>();
-		else if (set2 == null)
-			return new HashSet<String>();
-		Set<String> a;
-		Set<String> b;
-		HashSet<String> returnSet = new HashSet<String>();
-		if (set1.size() <= set2.size()) {
-			a = set1;
-			b = set2; 
-		} else {
-			a = set2;
-			b = set1;
-		}
-		for (String e : a) {
-			if (b.contains(e)) {
-				returnSet.add(e);
-			} 
-		}
-		return returnSet;
-	}
+	
 	void removeNodekCore(String node) {
 		HashSet<String > temp = bagGraph.get(node);
 		if(temp!= null) {
@@ -99,7 +73,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		}
 
 		kCore.addEdge(src, dst);
-
 	}
 
 	public void removeEdgeKCore(StreamEdge edge) {
@@ -119,14 +92,14 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 		int srcDegree = nodeMap.getDegree(src);
 		int dstDegree = nodeMap.getDegree(dst);
-		//System.out.println(src + " " + srcDegree + " " + dst + "  " + dstDegree + " " + nodeMap.getNeighbors(dst)); 
-
-		double initialDensity= this.getMaximalDensity(nodeMap);
-
+		
+		
 		SnowBall temp = null;
 		if (srcDegree < maximalDensity && dstDegree < maximalDensity) {
 			return;
 		} 
+		
+		double initialDensity= this.getMaximalDensity(nodeMap);
 
 		if (srcDegree >= maximalDensity && dstDegree < maximalDensity ) {
 			temp = addNode(src,nodeMap);
@@ -161,6 +134,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 				}
 			}
 		}
+		
 		if(this.getMaximalDensity(nodeMap) < initialDensity) {
 			HashSet<String> addNodes = degreeMap.getNodesBetween(initialDensity, this.getMaximalDensity(nodeMap));
 			if(addNodes == null){
@@ -171,6 +145,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 				addNode(str,nodeMap);
 			}
 		}
+		
 		if(this.getMaximalDensity(nodeMap) != initialDensity) {
 			synchronizeSnowBalls(nodeMap);
 		}
@@ -184,6 +159,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	public SnowBall addNode(String src, NodeMap nodeMap) {
 		if(!bagGraph.containsKey(src))
 			addNodeKCore(src,nodeMap);
+		
 		int maxIntersection = 0;
 		SnowBall max = null;
 		ArrayList<SnowBall> allMax = new ArrayList<SnowBall>();
@@ -193,7 +169,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 			if(s.contains(src)) {
 				return s;
 			}
-			int internalDegree = s.getIntersection(neighbors);
+			SetFunctions helper = new SetFunctions();
+			int internalDegree = helper.intersection(s.getNodes(), neighbors);
 			if(internalDegree != 0 && internalDegree >= s.getDensity() 
 					&& internalDegree >= maxIntersection && internalDegree >= s.getMainCore()) {
 				if(internalDegree == maxIntersection) {
@@ -296,25 +273,13 @@ public class BagOfSnowballs implements DensestSubgraph{
 		else 
 			return getMaximalDensityGreater(nodeMap);
 	}
-	public int getNumOfSnowBalls() {
-		return bag.size();
-	}
-	int getNumSnowBalls() {
-		return bag.size();
-	}
-	SnowBall getSnowBall(int i) {
-		return bag.get(i);
-	}
+	
 	void merge(SnowBall S1, SnowBall S2, NodeMap nodeMap) {
 		if(S1.id == S2.id)  {
 			return;
 		} else {
-			// merge S2 to S1
 			S1.merge(S2, nodeMap);
-			//for(String node:S2.getNodes())
-			//updateStats(S1,node,nodeMap);
 			bag.remove(S2);
-			//stats.removeSnowBall(S2);
 		}
 	}
 	public void print() {
@@ -346,56 +311,29 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 		if(prevSrcDegree >= maximalDensity ) {
 			if(srcDegree < maximalDensity || srcDegree == 0) {
-				//SnowBall temp = null;
 				for(SnowBall s: bag) {
 					if(s.containsNode(src)) {
 						s.removeNode(src);
-						//stats.removeNode(s, src);
 						ensureInvariant(s,nodeMap);
-						//temp = s;
 						flag = true;
 						break;
 					}	
 				}
-				/*if(temp !=null) {
-						ArrayList<String> nodes = new ArrayList<String>(temp.getNodes());
-						bag.remove(temp);
-						//stats.removeSnowBall(temp);
-						for(String node: nodes) { 
-							this.addNode(node, nodeMap);
-						}
-					}*/
 				this.removeNodekCore(src);
 			}
 		}
 		if( prevDstDegree >= maximalDensity) {
 			if(dstDegree < maximalDensity || dstDegree == 0) {
-				//SnowBall temp = null;
 				for(SnowBall s: bag) {
 
 					if(s.containsNode(dst)) {
 						s.removeNode(dst);
-						//stats.removeNode(s, dst);
-						//System.out.println(s.getNodes());
 						ensureInvariant(s,nodeMap);
-						//System.out.println(s.getNodes());
-
-						//temp = s;
-
+			
 						flag = true;
 						break;
 					}	
 				}
-				/*if(temp !=null) {
-
-						ArrayList<String> nodes = new ArrayList<String>(temp.getNodes());
-						bag.remove(temp);
-						//stats.removeSnowBall(temp);
-						for(String node: nodes) { 
-							SnowBall sTemp = this.addNode(node, nodeMap);
-
-						}
-					}*/
 				this.removeNodekCore(dst);
 			}
 		} 
@@ -439,11 +377,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 				}
 			}
 		}
-
-		if(currentMaximalDensity != this.getMaximalDensity(nodeMap)) {
-			synchronizeSnowBalls(nodeMap);
-		}
-		cleanup(nodeMap);
 
 		//System.out.println("-bag graph" + bagGraph+ " " + maximalDensity);
 		//this.print();
@@ -507,33 +440,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		return false;
 
 	}
-	Densest getApproximation() {
-		Densest returnResults = new Densest();
-		double maxDensity = 0;
-		for(SnowBall s: bag) {
-			if(s.density > maxDensity) {
-				maxDensity = s.getDensity();
-				returnResults.setDensity(maxDensity);
-				returnResults.setDensest(s.graph);
-			}
-		}
-		return returnResults;
-	}
-
-	LinkedList<Densest> getTopK(int k) {
-		LinkedList<Densest> returnList = new LinkedList<Densest>();
-		Collections.sort(bag, Collections.reverseOrder());
-		int i =0;
-		while(i< k && i<bag.size()) {
-			SnowBall b = bag.get(i);
-			Densest d = new Densest();
-			d.setDensest(b.graph);
-			d.setDensity(b.getDensity());
-			returnList.add(d);
-			i++;
-		}
-		return returnList;
-	}
 
 	boolean verifyMainCore(String src, NodeMap nodeMap, SnowBall srcSnowBall) { 
 		if(!bagGraph.containsKey(src))
@@ -560,8 +466,9 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<SnowBall> remove = new HashSet<SnowBall>();
 
 		kCore.color(src, kCore.getKCore(src), visited, neighbors);
-		for(SnowBall s:bag) {			
-			if(s.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
+		for(SnowBall s:bag) {
+			SetFunctions helper = new SetFunctions();
+			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
 				srcSnowBall.merge(s, nodeMap);
 				remove.add(s);
 			}

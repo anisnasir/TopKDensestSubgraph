@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import struct.DegreeMap;
 import struct.NodeMap;
 import kcore.KCoreDecomposition;
 
@@ -19,7 +20,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	int numEdges;
 	int numNodes;
 	String id;
-	
+
 	public int getNumNodes() {
 		return this.numNodes;
 	}
@@ -34,7 +35,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		this.graph = new HashMap<String,HashSet<String>>();
 		this.kCore = new KCoreDecomposition(graph);
 	}
-	
+
 	boolean containsNode (String src ) {
 		return this.graph.containsKey(src);
 	}
@@ -59,27 +60,27 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	void setMaximalDensity(double externalDensity, NodeMap nodeMap) {
 		this.maximalDensity = Math.max(density,externalDensity);
 	}
-	
+
 	Set<String> getNodes() {
 		return graph.keySet();
 	}
 	public double getDensity() {
 		if(numNodes == 0)
 			return 0;
-		
+
 		this.density = numEdges/(double)numNodes;
 		//density = approximator.getApproximation((HashMap<String,HashSet<String>>)graph.clone(), numEdges, numNodes);
 		return this.density;
 	}
-	
+
 	int getIntersection (HashSet<String> nodes) {
 		if(nodes == null)
 			return 0;
-		
+
 		//return Sets.intersection(this.graph.keySet(),nodes).size();
 		return intersection(this.graph.keySet(),nodes);
 	}
-	
+
 	public int intersection (Set<String> set1, Set<String> set2) {
 		Set<String> a;
 		Set<String> b;
@@ -116,14 +117,14 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		}
 		return returnSet;
 	}
-	
+
 	public void addNode(String src, NodeMap nodeMap) {
 		HashSet<String> tempNeighbors = nodeMap.getNeighbors(src);
 		if(tempNeighbors == null)
 			return;
-		
+
 		HashSet<String> neighbors = new HashSet<String>(intersectionSet(tempNeighbors,graph.keySet()));
-		
+
 		graph.put(src, neighbors);
 		kCore.addNode(src);
 		for(String neighbor:neighbors) {
@@ -135,7 +136,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		return;
 	}
 	public void ensureFirstInVariant(NodeMap nodeMap, HashSet<String> temp, BagOfSnowballs bag) {
-		
+
 		while(!verifyFirstInVariant(nodeMap, temp,bag)) {
 			/* 1. remove all the node with degrees lower than the density
 			 * 2. remove all the nodes with degree less than the maximal density
@@ -144,16 +145,95 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 			getDensity();
 		}
 	}
-	
-	boolean verifyFirstInVariant(NodeMap nodeMap, HashSet<String> temp, BagOfSnowballs bag) {
-		/*apply Charikar in bulk
-		 * removing all the nodes with degree 
-		 * lower than the density
-		 */
+
+boolean verifyFirstInVariant(NodeMap nodeMap, HashSet<String> temp, BagOfSnowballs bag) {
+		
+		DegreeMap degreeMap = new DegreeMap();
+		for(String str:graph.keySet()) {
+			degreeMap.addNode(graph.get(str).size(), str);
+		}
+		double newDensity = getDensity();
+		int mainCore = this.getMainCore();
+		
+		int i =0 ;
+		while( i< degreeMap.capacity && i< mainCore) {
+			HashSet<String> nodes = degreeMap.map.get(i);
+			
+			if(nodes.size() == 0) {
+				i++;
+			}
+			else { 
+				String element= "";
+				for(String str:nodes) {
+					element = str;
+					break;
+				}
+				nodes.remove(element);
+				
+				int globalDegree = nodeMap.getDegree(element);
+				if(globalDegree < maximalDensity) {
+					HashSet<String> tempNbr = graph.get(element);
+					HashSet<String> neighbors ;
+					if( tempNbr == null) {
+						neighbors = new HashSet<String>();
+					}else {
+						neighbors = new HashSet<String>(tempNbr);
+					}
+					for( String neighbor:neighbors) {
+						graph.get(neighbor).remove(element);
+						graph.get(element).remove(neighbor);
+							
+						numEdges--;
+						kCore.removeEdge(element, neighbor);
+						degreeMap.decremnetDegree(graph.get(neighbor).size()+1, neighbor);
+						
+						if(graph.get(neighbor).size() < i)
+							i = graph.get(neighbor).size();
+					}
+					graph.remove(element);
+					kCore.removeNode(element);
+					numNodes--;
+					bag.removeNodekCore(element);
+					
+				} else {
+					HashSet<String> tempNbr = graph.get(element);
+					HashSet<String> neighbors ;
+					if( tempNbr == null) {
+						neighbors = new HashSet<String>();
+					}else {
+						neighbors = new HashSet<String>(tempNbr);
+					}
+					for( String neighbor:neighbors) {
+						graph.get(neighbor).remove(element);
+						graph.get(element).remove(neighbor);
+							
+						numEdges--;
+						kCore.removeEdge(element, neighbor);
+						degreeMap.decremnetDegree(graph.get(neighbor).size()+1, neighbor);
+						
+						if(graph.get(neighbor).size() < i)
+							i = graph.get(neighbor).size();
+					}
+					graph.remove(element);
+					kCore.removeNode(element);
+					numNodes--;
+					bag.removeNodekCore(element);
+					bag.removeNodekCore(element);
+					temp.add(element);
+				}
+			}
+		}
+		return true;
+	}
+	boolean contains(String src) {
+		return graph.containsKey(src);
+	}
+	/*boolean verifyFirstInVariant(NodeMap nodeMap, HashSet<String> temp, BagOfSnowballs bag) {
+		
 		boolean flag = true;
 		double newDensity = getDensity();
 		HashSet<String> removeNodes = new HashSet<String>();
-	
+
 		for(String str:graph.keySet()) {
 			int globalDegree = nodeMap.getDegree(str);
 			HashSet<String> neighbors = graph.get(str);
@@ -178,19 +258,19 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	boolean contains(String src) {
 		return graph.containsKey(src);
 	}
-	
+*/
 	int getMainCore() {
 		return kCore.mainCore();
 	}
-	
+
 	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
 		Set<String> nodes = newSnowBall.getNodes();
 		for(String node:nodes) {
 			this.addNode(node, nodeMap);
 		}
-		
+
 	}
-	
+
 	public void addEdge(StreamEdge edge) {
 		String src = edge.getSource();
 		String dst = edge.getDestination();
@@ -205,42 +285,42 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 					}
 			}
 	}
-	
+
 	void print() {
-		
+
 		for (String name: graph.keySet()){
 
-            String key =name;
-            HashSet<String> value = graph.get(key);  
-            System.out.print(key + " ["); 
-            for(String str:value) {
-            	System.out.print("<"+str+","+kCore.getKCore(str)+">");
-            }
-            System.out.println("]");
-            
+			String key =name;
+			HashSet<String> value = graph.get(key);  
+			System.out.print(key + " ["); 
+			for(String str:value) {
+				System.out.print("<"+str+","+kCore.getKCore(str)+">");
+			}
+			System.out.println("]");
+
 		} 
-		
-		
+
+
 	}
-	
+
 	boolean containsEdge(StreamEdge edge) {
 		String src = edge.getSource();
 		String dst = edge.getDestination();
 		if(graph.containsKey(src) && graph.containsKey(dst))
 			if(graph.get(src).contains(dst) && graph.get(dst).contains(src))
 				return true;
-		
+
 		return false;
 	}
-	
+
 	public void removeEdge(StreamEdge edge,NodeMap nodeMap) {
 		String src = edge.getSource();
 		String dst = edge.getDestination();
-		
+
 		graph.get(src).remove(dst);
 		graph.get(dst).remove(src);
 		kCore.removeEdge(src, dst);
-		
+
 		numEdges--;
 	}
 	boolean isEmpty() {
@@ -256,11 +336,11 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		else 
 			return -1;
 	}
-	
+
 	public boolean equals(SnowBall o) {
 		return this.id.equals(o.id);
 	}
-	
+
 	public int  getCoreNumber(String src) {
 		return this.kCore.getKCore(src);
 	}

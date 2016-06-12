@@ -4,13 +4,13 @@ import input.StreamEdge;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 import utility.EdgeHandler;
+import utility.SetFunctions;
 
 
 public class EpastoTopK implements DensestSubgraph{
@@ -95,7 +95,8 @@ public class EpastoTopK implements DensestSubgraph{
 				if(tempDensest.densest.equals(densestK[i].densest)) {
 					
 				}else if(densestK[i].densest.getNumNodes() != 0) {
-					HashSet<String> common = this.intersectionSet(tempDensest.densest.map.keySet(), densestK[i].densest.map.keySet());
+					SetFunctions helper = new SetFunctions();
+					HashSet<String> common = helper.intersectionSet(tempDensest.densest.map.keySet(), densestK[i].densest.map.keySet());
 					prevDensest.addAll(densestK[i].densest.map.keySet());
 					prevDensest.removeAll(common); 
 				}
@@ -159,7 +160,8 @@ public class EpastoTopK implements DensestSubgraph{
 					
 				}
 				else if(densestK[i].densest.getNumNodes() != 0) {
-					HashSet<String> common = this.intersectionSet(tempDensest.densest.map.keySet(), densestK[i].densest.map.keySet());
+					SetFunctions helper = new SetFunctions();
+					HashSet<String> common = helper.intersectionSet(tempDensest.densest.map.keySet(), densestK[i].densest.map.keySet());
 					allDensest.addAll(tempDensest.densest.map.keySet());
 
 					prevDensest.addAll(densestK[i].densest.map.keySet());
@@ -176,29 +178,6 @@ public class EpastoTopK implements DensestSubgraph{
 			i++;
 		}
 		return true;
-	}
-	public HashSet<String> intersectionSet (Set<String> set1, Set<String> set2) {
-		if(set1 == null)
-			return new HashSet<String>();
-		else if (set2 == null)
-			return new HashSet<String>();
-
-		Set<String> a;
-		Set<String> b;
-		HashSet<String> returnSet = new HashSet<String>();
-		if (set1.size() <= set2.size()) {
-			a = set1;
-			b = set2; 
-		} else {
-			a = set2;
-			b = set1;
-		}
-		for (String e : a) {
-			if (b.contains(e)) {
-				returnSet.add(e);
-			} 
-		}
-		return returnSet;
 	}
 
 	EpastoDensest getDensest() { 
