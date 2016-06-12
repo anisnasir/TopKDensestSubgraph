@@ -31,8 +31,6 @@ import kcore.KCoreDecomposition;
 import kcore.KCoreDecompositionTopK;
 import kcore.KCoreTopK;
 
-
-
 public class Main {
 	private static void ErrorMessage() {
 		System.err.println("Choose the type of simulator using:");

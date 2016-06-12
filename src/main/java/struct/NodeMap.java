@@ -19,6 +19,9 @@ public class NodeMap {
 		numEdges= 0;
 	}
 	
+	void addNode(String str) {
+		map.put(str, new HashSet<String>());
+	}
 	public void addEdge(String src, String dest) { 
 		numEdges++;
 		if (map.containsKey(src)) {
