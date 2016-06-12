@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import struct.DegreeMap;
 import struct.NodeMap;
 import utility.SetFunctions;
 import kcore.KCoreDecomposition;
@@ -94,16 +93,17 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		}
 	}
 
-	/*boolean verifyFirstInVariant(NodeMap nodeMap, HashSet<String> temp, BagOfSnowballs bag) {
+/*	boolean verifyFirstInVariant(NodeMap nodeMap, HashSet<String> temp, BagOfSnowballs bag) {
 		DegreeMap degreeMap = new DegreeMap();
 		for(String str:graph.keySet()) {
 			degreeMap.addNode(graph.get(str).size(), str);
 		}
+		System.out.println("start" + degreeMap.map);
 		
 		int mainCore = this.getMainCore();
 
 		int i =0 ;
-		while( i< degreeMap.capacity && i< mainCore) {
+		while( i< degreeMap.capacity && (i< mainCore || i< this.maximalDensity)) {
 			HashSet<String> nodes = degreeMap.map.get(i);
 
 			if(nodes.size() == 0) {
@@ -132,10 +132,11 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 
 						numEdges--;
 						kCore.removeEdge(element, neighbor);
-						degreeMap.decremnetDegree(graph.get(neighbor).size()+1, neighbor);
+						int neighborDegree = graph.get(neighbor).size();
+						degreeMap.decremnetDegree(neighborDegree+1, neighbor);
 
-						if(graph.get(neighbor).size() < i)
-							i = graph.get(neighbor).size();
+						if(neighborDegree < i)
+							i = neighborDegree;
 					}
 					graph.remove(element);
 					kCore.removeNode(element);
@@ -170,6 +171,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 				}
 			}
 		}
+		System.out.println("end" + degreeMap.map);
 		return true;
 	}*/
 	
