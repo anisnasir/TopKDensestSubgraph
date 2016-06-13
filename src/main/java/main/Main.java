@@ -162,7 +162,7 @@ public class Main {
 		System.out.println("Reading the input");
 		
 		int executeCounter = 0;
-		int EXECUTE_INTERVAL = 1000;
+		int EXECUTE_INTERVAL = 10000;
 		int edgeCounter = 0;
 		while (item != null) {
 			if (++edgeCounter % PRINT_INTERVAL == 0) {
@@ -253,7 +253,7 @@ public class Main {
  					bag.removeEdge(oldestEdge,nodeMap, degreeMap);
  				}
  				output = bag.getDensest(degreeMap, nodeMap);
- 				//bag.print();
+ 				bag.print();
  				
  			}
 			
