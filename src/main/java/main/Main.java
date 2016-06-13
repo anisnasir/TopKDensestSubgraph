@@ -253,7 +253,7 @@ public class Main {
  					bag.removeEdge(oldestEdge,nodeMap, degreeMap);
  				}
  				output = bag.getDensest(degreeMap, nodeMap);
- 				bag.print();
+ 				//bag.print();
  				
  			}
 			
