@@ -12,7 +12,7 @@ import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 import utility.SetFunctions;
-import kcore.KCoreDecomposition;
+import kcoredynamic.KCoreDecomposition;
 
 
 public class BagOfSnowballs implements DensestSubgraph{

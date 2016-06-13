@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import struct.NodeMap;
 import utility.SetFunctions;
-import kcore.KCoreDecomposition;
+import kcoredynamic.KCoreDecomposition;
 
 public class SnowBall implements Serializable, Comparable<SnowBall>{
 	private static final long serialVersionUID = 1872315406990468794L;

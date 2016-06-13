@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import bahmani.Bahmani;
+import bahmani.BahmaniTopK;
 import output.Output;
 import output.OutputSumWriter;
 import output.OutputWriter;
@@ -22,14 +24,12 @@ import slidingwindow.FixedSizeSlidingWindow;
 import struct.DegreeMap;
 import struct.NodeMap;
 import utility.EdgeHandler;
-import charikar.Bahmani;
-import charikar.BahmaniTopK;
 import charikar.Charikar;
 import charikar.CharikarTopK;
 import kcore.KCore;
-import kcore.KCoreDecomposition;
-import kcore.KCoreDecompositionTopK;
 import kcore.KCoreTopK;
+import kcoredynamic.KCoreDecomposition;
+import kcoredynamic.KCoreDecompositionTopK;
 
 public class Main {
 	private static void ErrorMessage() {

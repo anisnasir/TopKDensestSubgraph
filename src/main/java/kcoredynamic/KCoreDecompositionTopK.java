@@ -1,4 +1,4 @@
-package kcore;
+package kcoredynamic;
 
 
 import input.StreamEdge;
