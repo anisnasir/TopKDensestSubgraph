@@ -229,8 +229,9 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		EpastoDensest returnResult = new EpastoDensest();
 		HashMap<String, Integer> dSk = new HashMap<String, Integer>();
 		NodeMap densest_subgraph = nodeMap.getCopy();
-		double density = nodeMap.getNumEdges()/(double)nodeMap.getNumNodes();
-		double max_density = density;
+		double density = (nodeMap.getNumNodes() == 0 ) ? 0  : (nodeMap.getNumEdges()/(double)nodeMap.getNumNodes());
+		double max_density = (nodeMap.getNumNodes() == 0 ) ? 0  : (nodeMap.getNumEdges()/(double)nodeMap.getNumNodes());
+		
 		
 		//algorithm parameters
 		double bound= (int)Math.ceil(logb(nodeMap.getNumNodes(), 1+epsilon));
