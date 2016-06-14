@@ -41,7 +41,7 @@ public class OutputWriter {
 	}
 	public void writeOutput(Output output) {
 		try {
-			ow.write((output.getCoreNum())+"\t"+(output.getDensity())+"\t"+(output.getTimeTaken())+"\n");
+			ow.write((output.getCoreNum())+"\t"+(output.getDensity())+"\t"+ output.getSize()+"\t"+(output.getTimeTaken())+"\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

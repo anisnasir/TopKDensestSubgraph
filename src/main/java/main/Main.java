@@ -184,7 +184,7 @@ public class Main {
 			//moving sliding window
 			StreamEdge oldestEdge = sw.add(item);
 			
-			if(simulatorType == 0 || simulatorType == 1 || simulatorType == 2 || simulatorType == 4 || simulatorType == 5 || simulatorType == 6 ) { 
+			if(simulatorType == 0 || simulatorType == 1 || simulatorType == 2 || simulatorType == 4 || simulatorType == 5 || simulatorType == 6 || simulatorType == 7 ) { 
 				if(oldestEdge!=null)
 					utility.handleEdgeDeletion(oldestEdge,nodeMap,degreeMap);
 			}
