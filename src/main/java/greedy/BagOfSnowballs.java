@@ -12,20 +12,21 @@ import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 import utility.SetFunctions;
+import kcorelinear.KCoreLinear;
 import kcorequad.KCoreQuad;
 
 
 public class BagOfSnowballs implements DensestSubgraph{
 	public ArrayList<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
-	KCoreQuad kCore;
+	KCoreLinear kCore;
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
 
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
-		kCore = new KCoreQuad(bagGraph);
+		kCore = new KCoreLinear(bagGraph);
 		bag = new ArrayList<SnowBall>();
 		this.k = k;
 	}
