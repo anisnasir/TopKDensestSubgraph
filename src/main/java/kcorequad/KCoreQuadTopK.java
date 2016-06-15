@@ -1,4 +1,4 @@
-package kcoredynamic;
+package kcorequad;
 
 
 import input.StreamEdge;
@@ -11,17 +11,17 @@ import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 
-public class KCoreDecompositionTopK implements DensestSubgraph{
+public class KCoreQuadTopK implements DensestSubgraph{
 	int k ;
-	public KCoreDecomposition densest;
+	public KCoreQuad densest;
 	
-	public void setDensest(KCoreDecomposition densest) {
+	public void setDensest(KCoreQuad densest) {
 		this.densest = densest;
 	}
 
-	public KCoreDecompositionTopK(int k, NodeMap nodeMap) {
+	public KCoreQuadTopK(int k, NodeMap nodeMap) {
 		this.k = k;
-		densest = new KCoreDecomposition(nodeMap.map);
+		densest = new KCoreQuad(nodeMap.map);
 	}
 
 	

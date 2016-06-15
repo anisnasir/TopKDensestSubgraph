@@ -1,4 +1,4 @@
-package kcoredynamic;
+package kcorelinear;
 
 import java.util.HashMap;
 import java.util.HashSet;

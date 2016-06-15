@@ -1,4 +1,4 @@
-package kcoredynamic;
+package kcorelinear;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,14 +11,14 @@ import struct.NodeMap;
 import utility.SetFunctions;
 
 
-public class KCoreDecomposition implements DensestSubgraph{
+public class KCoreLinear implements DensestSubgraph{
 	HashMap<String,HashSet<String>> graph;
 	public HashMap<String,Integer> kCore;
 	public HashMap<String, Integer> mcd;
 	public HashMap<String, Integer> pcd;
 	int maxCore = 0;
 	
-	public KCoreDecomposition(HashMap<String,HashSet<String>> graph) {
+	public KCoreLinear(HashMap<String,HashSet<String>> graph) {
 		kCore = new HashMap<String,Integer>();
 		mcd  = new HashMap<String,Integer>();
 		this.graph = graph;
@@ -44,7 +44,7 @@ public class KCoreDecomposition implements DensestSubgraph{
 		if(getKCore(src) > getKCore(dst))
 			r= dst;
 		
-		KCoreResult H = findSubCore(r);
+		KCoreResult H = findPureCore(r);
 		int k = getKCore(r);
 		HashMap<Integer,HashSet<String>> sortedcd = new HashMap<Integer,HashSet<String>>();
 		int maxDegree = 0;
@@ -155,6 +155,54 @@ public class KCoreDecomposition implements DensestSubgraph{
 		
 	}
 	
+	public KCoreResult findPureCore(String u) {
+		KCoreResult result = new KCoreResult();
+		LinkedList<String> queue = new LinkedList<String>();
+		HashMap<String,HashSet<String>> localGraph = new HashMap<String,HashSet<String>>();
+		HashSet<String> visited = new HashSet<String>();
+		HashMap<String,Integer> cd = new HashMap<String,Integer>();
+		int k = getKCore(u);
+		queue.add(u);
+		visited.add(u);
+		
+		SetFunctions helper = new SetFunctions();
+		while(!queue.isEmpty()) {
+			String v = queue.getFirst();
+			queue.removeFirst();
+			HashSet<String> temp = graph.get(v);
+			HashSet<String> neighbors;
+			if(temp == null)
+				neighbors = new HashSet<String>();
+			else
+				neighbors = new HashSet<String>(temp);
+			
+			localGraph.put(v, helper.intersectionSet(neighbors,localGraph.keySet()));
+			
+			for(String neighbor:neighbors) {
+				if(getKCore(neighbor) > k || ((getKCore(neighbor) == k) && (MCDDegree(neighbor) > k) )) {
+					if(cd.containsKey(v)) {
+						int prevVal = cd.get(v);
+						cd.put(v, prevVal+1);
+					}else {
+						cd.put(v, 1);
+					}
+					if(getKCore(neighbor) == k && !visited.contains(neighbor)) {
+						queue.add(neighbor);
+						localGraph.get(v).add(neighbor);
+						visited.add(neighbor);
+					}
+					
+				}
+			}
+ 			
+		}
+		result.graph= localGraph;
+		result.cd=cd;
+		return result;
+		
+		
+	}
+	
 	public void removeEdge(String src, String dst) {
 		String r = src;
 		if(getKCore(src) > getKCore(dst)) {
@@ -213,8 +261,7 @@ public class KCoreDecomposition implements DensestSubgraph{
 						HashSet<String> neighbors;
 						if(tempNeighbors == null) 
 							neighbors = new HashSet<String>();
-						else 
-							neighbors = tempNeighbors;
+						neighbors = H.graph.get(element);
 						for(String neighbor:neighbors) {
 							if(H.cd.get(neighbor) > H.cd.get(element)) {
 								int prevCd = H.cd.get(neighbor);
@@ -238,21 +285,27 @@ public class KCoreDecomposition implements DensestSubgraph{
 		
 	}
 	
-	public void color(String dst, HashSet<String> visited, HashSet<String> color) {
-		int c = getKCore(dst);
-		visited.add(dst);
-		if(!color.contains(dst))
-			color.add(dst);
-		
-		HashSet<String> temp = graph.get(dst);
-		HashSet<String> neighbors = null;
-		if(temp == null)
+	
+	public int MCDDegree(String u) {
+		HashSet<String> temp = graph.get(u);
+		HashSet<String> neighbors;
+		if(temp == null) 
 			neighbors = new HashSet<String>();
-		else
-			neighbors = new HashSet<String>(temp);
-		for(String neighbor:neighbors) {
-			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c )
-				color(neighbor,visited,color);
+		else 
+			neighbors = temp;
+		
+		int count=0;
+		for(String neighbor:neighbors ) {
+			if (getKCore(neighbor) >= getKCore(u)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	public void color(String dst, HashSet<String> visited, HashSet<String> color) {
+		KCoreResult H = findSubCore(dst);
+		for(String str: H.graph.keySet()) {
+			color.add(str);
 		}
 	}
 

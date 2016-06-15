@@ -28,8 +28,9 @@ import charikar.Charikar;
 import charikar.CharikarTopK;
 import kcore.KCore;
 import kcore.KCoreTopK;
-import kcoredynamic.KCoreDecomposition;
-import kcoredynamic.KCoreDecompositionTopK;
+import kcorelinear.KCoreLinear;
+import kcorequad.KCoreQuad;
+import kcorequad.KCoreQuadTopK;
 
 public class Main {
 	private static void ErrorMessage() {
@@ -81,7 +82,7 @@ public class Main {
 		int k = 1;
 		boolean degreeMapFlag = true;
 		
-		if(simulatorType == 3 || simulatorType == 8 ) {
+		if(simulatorType == 3 || simulatorType == 8 || simulatorType == 11 ) {
 			degreeMapFlag = false;
 		}
 		if(simulatorType == 2) {
@@ -93,7 +94,6 @@ public class Main {
 		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 10 || simulatorType == 8) {
 			k = Integer.parseInt(args[5]);
 		}
-		
 		
 		//input reader
 		String sep = "\t";
@@ -140,7 +140,7 @@ public class Main {
 		} else if (simulatorType == 2) {
 			densest = new Bahmani(epsilon);
 		} else if (simulatorType == 3) {
-			densest = new KCoreDecomposition(nodeMap.map);
+			densest = new KCoreQuad(nodeMap.map);
 		}  else if (simulatorType == 5) {
 			densest = new KCoreTopK(k);	
 		} else if (simulatorType == 6) {
@@ -148,13 +148,15 @@ public class Main {
 		} else if (simulatorType == 7) {
 			densest = new BahmaniTopK(epsilon, k);
 		} else if (simulatorType == 8) {
-			densest = new KCoreDecompositionTopK(k, nodeMap);
+			densest = new KCoreQuadTopK(k, nodeMap);
 		} else if (simulatorType == 4) {
 			densest = new EpastoFullyDyn(epsilon);
 		}  else if (simulatorType == 9 ) {
 			densest = new EpastoTopK(k,epsilon);
 		}else if (simulatorType == 10) {
 			densest = new BagOfSnowballs(k);
+		} else if (simulatorType == 11) {
+			densest = new KCoreLinear(nodeMap.map);
 		}
 		
 		
@@ -200,7 +202,7 @@ public class Main {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if (simulatorType == 3) {
-				KCoreDecomposition kCore = (KCoreDecomposition) densest;
+				KCoreQuad kCore = (KCoreQuad) densest;
 				
 				kCore.addEdge(item.getSource(), item.getDestination());
 				if(oldestEdge != null)  {
@@ -227,8 +229,8 @@ public class Main {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}  else if (simulatorType == 8) {
-				KCoreDecompositionTopK kCoreTopK = (KCoreDecompositionTopK) densest;
-				KCoreDecomposition kCore = kCoreTopK.densest;
+				KCoreQuadTopK kCoreTopK = (KCoreQuadTopK) densest;
+				KCoreQuad kCore = kCoreTopK.densest;
 				
 				kCore.addEdge(item.getSource(), item.getDestination());
 				if(oldestEdge != null) {
@@ -256,7 +258,18 @@ public class Main {
  				output = bag.getDensest(degreeMap, nodeMap);
  				//bag.print();
  				
- 			}
+ 			} else if (simulatorType == 11) {
+				KCoreLinear kCore = (KCoreLinear) densest;
+				
+				kCore.addEdge(item.getSource(), item.getDestination());
+				if(oldestEdge != null)  {
+					utility.handleEdgeDeletion(oldestEdge, nodeMap);
+					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
+				}
+				
+				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+			}
+			
 			
 			double endTime = System.currentTimeMillis();
 			

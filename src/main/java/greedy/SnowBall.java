@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import struct.NodeMap;
 import utility.SetFunctions;
-import kcoredynamic.KCoreDecomposition;
+import kcorequad.KCoreQuad;
 
 public class SnowBall implements Serializable, Comparable<SnowBall>{
 	private static final long serialVersionUID = 1872315406990468794L;
@@ -19,13 +19,13 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	int numNodes;
 	String id;
 	HashMap<String,HashSet<String>> graph;
-	KCoreDecomposition kCore;
+	KCoreQuad kCore;
 	
 	public SnowBall() {
 		this.id = UUID.randomUUID().toString();
 		this.density = 0;
 		this.graph = new HashMap<String,HashSet<String>>();
-		this.kCore = new KCoreDecomposition(graph);
+		this.kCore = new KCoreQuad(graph);
 	}
 	public int getNumNodes() {
 		return this.numNodes;
