@@ -214,7 +214,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			HashSet<String> visited = new HashSet<String>();
 			HashSet<String> neighbors = new HashSet<String>();
 
-			kCore.color(src, kCore.getKCore(src), visited, neighbors);
+			kCore.color(src, visited, neighbors);
 			return neighbors.contains(dst);
 		}
 	} 
@@ -448,12 +448,12 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<String> visited = new HashSet<String>();
 		HashSet<String> neighbors = new HashSet<String>();
 
-		kCore.color(src, kCore.getKCore(src), visited, neighbors);
+		kCore.color(src, visited, neighbors);
 
 		HashSet<String> visited1 = new HashSet<String>();
 		HashSet<String> neighbors1 = new HashSet<String>();
 
-		srcSnowBall.kCore.color(src, srcSnowBall.kCore.getKCore(src), visited1, neighbors1);
+		srcSnowBall.kCore.color(src, visited1, neighbors1);
 
 		if(neighbors1.equals(neighbors))
 			return false;
@@ -465,7 +465,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<String> neighbors = new HashSet<String>();
 		HashSet<SnowBall> remove = new HashSet<SnowBall>();
 
-		kCore.color(src, kCore.getKCore(src), visited, neighbors);
+		kCore.color(src, visited, neighbors);
 		for(SnowBall s:bag) {
 			SetFunctions helper = new SetFunctions();
 			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {

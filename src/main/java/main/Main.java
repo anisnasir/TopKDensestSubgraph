@@ -181,6 +181,7 @@ public class Main {
 						utility.handleEdgeAddition(item, nodeMap);
 			}
 			
+			//System.out.println(nodeMap.map);
 			//moving sliding window
 			StreamEdge oldestEdge = sw.add(item);
 			
@@ -190,7 +191,7 @@ public class Main {
 			}
 			
 			if(simulatorType == 0) { 
-				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}else if (simulatorType == 1) {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
@@ -223,7 +224,7 @@ public class Main {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if ( simulatorType == 7) {
-				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}  else if (simulatorType == 8) {
 				KCoreDecompositionTopK kCoreTopK = (KCoreDecompositionTopK) densest;
@@ -264,7 +265,7 @@ public class Main {
 				for(int i =0; i< k;i++) {
 					if( i<output.size()) {
 						output.get(i).setTimeTaken((endTime-startTime)/1000.0);
-						//output.get(i).printOutput(); 
+						output.get(i).printOutput(); 
 						sumDensities+= output.get(i).density;
 						ow.get(i).writeOutput(output.get(i));
 					}else {
