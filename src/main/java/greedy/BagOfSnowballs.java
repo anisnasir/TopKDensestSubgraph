@@ -31,7 +31,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		this.k = k;
 	}
 	public void addNodeKCore(String node, NodeMap nodeMap) {
-		kCore.addNode(node);
+		//kCore.addNode(node);
 		HashSet<String> neighbors = nodeMap.getNeighbors(node);
 		SetFunctions helper = new SetFunctions();
 		HashSet<String> localNeighbors = helper.intersectionSet(neighbors, bagGraph.keySet());
@@ -50,7 +50,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 				}
 		}
 		bagGraph.remove(node);
-		kCore.removeNode(node);
+		//kCore.removeNode(node);
 	}
 	void addEdgeKCore(StreamEdge edge) {
 		String src = edge.getSource();
@@ -60,7 +60,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			bagGraph.get(src).add(dst);
 		}else {
 			HashSet<String> neighbors = new HashSet<String>();
-			kCore.addNode(src);
+			//kCore.addNode(src);
 			neighbors.add(dst);
 			bagGraph.put(src, neighbors);
 		}
@@ -68,7 +68,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			bagGraph.get(dst).add(src);
 		}else {
 			HashSet<String> neighbors = new HashSet<String>();
-			kCore.addNode(dst);
+			//kCore.addNode(dst);
 			neighbors.add(src);
 			bagGraph.put(dst, neighbors);
 		}
@@ -83,7 +83,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			if(bagGraph.containsKey(dst)) {
 				bagGraph.get(src).remove(dst);
 				bagGraph.get(dst).remove(src);
-				kCore.removeEdge(src, dst);
+				//kCore.removeEdge(src, dst);
 			}
 		}
 	}
