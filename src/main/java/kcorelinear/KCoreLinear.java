@@ -66,7 +66,7 @@ public class KCoreLinear implements DensestSubgraph{
 					if( i<= k) {
 						HashSet<String> neighbors = H.graph.get(element);
 						for(String neighbor:neighbors) {
-							if(H.cd.get(neighbor) > H.cd.get(element)) {
+							if(wrapperCd(H.cd,neighbor) > wrapperCd(H.cd,element)) {
 								int prevCd = H.cd.get(neighbor);
 								H.cd.put(neighbor, prevCd-1);
 								sortedcd.get(prevCd).remove(neighbor);
@@ -87,6 +87,12 @@ public class KCoreLinear implements DensestSubgraph{
 		}
 	}
 	
+	int wrapperCd(HashMap<String,Integer> cd, String str) {
+		if(cd.containsKey(str))
+			return cd.get(str);
+		else 
+			return 0;
+	}
 	String getFirst(HashSet<String> temp) {
 		String element= "";
 		for(String str:temp) {
