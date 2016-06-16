@@ -193,7 +193,7 @@ public class Main {
 			}
 			
 			if(simulatorType == 0) { 
-				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}else if (simulatorType == 1) {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)

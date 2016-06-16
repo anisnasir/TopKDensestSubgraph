@@ -16,8 +16,6 @@ public class KCore implements DensestSubgraph{
 		ArrayList<String> core = new ArrayList<String>();
 		int coreNumber =0;
 		
-		System.out.println(nodeMap.map);
-		
 		int numEdges = 0;
 		int numNodes = 0;
 		
