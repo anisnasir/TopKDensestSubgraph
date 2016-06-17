@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import struct.NodeMap;
 import utility.SetFunctions;
-import kcorequad.KCoreQuad;
+import kcorelinear.KCoreTraversal;
 
 public class SnowBall implements Serializable, Comparable<SnowBall>{
 	private static final long serialVersionUID = 1872315406990468794L;
@@ -19,13 +19,13 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	int numNodes;
 	String id;
 	HashMap<String,HashSet<String>> graph;
-	KCoreQuad kCore;
+	KCoreTraversal kCore;
 	
 	public SnowBall() {
 		this.id = UUID.randomUUID().toString();
 		this.density = 0;
 		this.graph = new HashMap<String,HashSet<String>>();
-		this.kCore = new KCoreQuad(graph);
+		this.kCore = new KCoreTraversal(graph);
 	}
 	public int getNumNodes() {
 		return this.numNodes;
