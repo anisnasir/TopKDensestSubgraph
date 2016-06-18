@@ -124,6 +124,7 @@ public class Main {
 			ow.add(new OutputWriter(outDir+"/"+outFileName+"_"+i+".out"));
 		}
 		OutputSumWriter sumWriter = new OutputSumWriter(outDir+"/"+outFileName+"_sum.out");
+		OutputSumWriter sizeWriter = new OutputSumWriter(outDir+"/"+outFileName+"_size.out");
 	
 		ArrayList<Output> output = null;
 		
@@ -265,10 +266,12 @@ public class Main {
 				KCoreTraversal kCore =  kCoreTopK.densest;
 				
 				kCore.addEdge(item.getSource(), item.getDestination());
+				
 				if(oldestEdge != null)  {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
+				
 				
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}
@@ -278,17 +281,20 @@ public class Main {
 			
 			//if(edgeCounter%1000 == 0 ) 
 			{	double sumDensities = 0.0;
+				int sumSize = 0;
 				for(int i =0; i< k;i++) {
 					if( i<output.size()) {
 						output.get(i).setTimeTaken((endTime-startTime)/1000.0);
 						//output.get(i).printOutput(); 
 						sumDensities+= output.get(i).density;
+						sumSize += output.get(i).size;
 						ow.get(i).writeOutput(output.get(i));
 					}else {
 						ow.get(i).writeOutput(getDummy().get(0));
 					}	
 				}
 				sumWriter.addOutput(sumDensities);
+				sizeWriter.addOutput(sumSize);
 			}
 			
 			item = reader.nextItem();
@@ -308,6 +314,7 @@ public class Main {
 	for(int i = 0; i< ow.size();i++)
 		ow.get(i).close();
 	sumWriter.close();
+	sizeWriter.close();
 	}
 	
 	static ArrayList<Output> getDummy() { 
