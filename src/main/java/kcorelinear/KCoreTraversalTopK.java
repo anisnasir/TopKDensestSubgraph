@@ -13,15 +13,15 @@ import struct.NodeMap;
 
 public class KCoreTraversalTopK implements DensestSubgraph{
 	int k ;
-	public KCoreLinear densest;
+	public KCoreTraversal densest;
 	
-	public void setDensest(KCoreLinear densest) {
+	public void setDensest(KCoreTraversal densest) {
 		this.densest = densest;
 	}
 
 	public KCoreTraversalTopK(int k, NodeMap nodeMap) {
 		this.k = k;
-		densest = new KCoreLinear(nodeMap.map);
+		densest = new KCoreTraversal(nodeMap.map);
 	}
 
 	

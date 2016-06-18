@@ -29,6 +29,8 @@ import charikar.CharikarTopK;
 import kcore.KCore;
 import kcore.KCoreTopK;
 import kcorelinear.KCoreLinear;
+import kcorelinear.KCoreTraversal;
+import kcorelinear.KCoreTraversalTopK;
 import kcorequad.KCoreQuad;
 import kcorequad.KCoreQuadTopK;
 
@@ -91,7 +93,7 @@ public class Main {
 		else if(simulatorType == 7 || simulatorType == 4 || simulatorType == 9) {
 			epsilon = Double.parseDouble(args[3]);
 			k = Integer.parseInt(args[5]);
-		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 10 || simulatorType == 8) {
+		} else if (simulatorType == 5 || simulatorType == 6 || simulatorType == 10 || simulatorType == 8 || simulatorType == 11) {
 			k = Integer.parseInt(args[5]);
 		}
 		
@@ -156,7 +158,7 @@ public class Main {
 		}else if (simulatorType == 10) {
 			densest = new BagOfSnowballs(k);
 		} else if (simulatorType == 11) {
-			densest = new KCoreLinear(nodeMap.map);
+			densest = new KCoreTraversalTopK(k, nodeMap);
 		}
 		
 		
@@ -259,7 +261,8 @@ public class Main {
  				//bag.print();
  				
  			} else if (simulatorType == 11) {
-				KCoreLinear kCore = (KCoreLinear) densest;
+ 				KCoreTraversalTopK kCoreTopK = (KCoreTraversalTopK) densest;
+				KCoreTraversal kCore =  kCoreTopK.densest;
 				
 				kCore.addEdge(item.getSource(), item.getDestination());
 				if(oldestEdge != null)  {
