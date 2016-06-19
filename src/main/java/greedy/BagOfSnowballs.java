@@ -221,7 +221,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 	void cleanup(NodeMap nodeMap) {
 		HashSet<SnowBall> snowBalls = new HashSet<SnowBall>();
 
-		for(SnowBall s: bag) {
+		HashSet<SnowBall> bagIter = new HashSet<SnowBall>(bag);
+		for(SnowBall s: bagIter) {
 			if(s.getNumEdges()== 0 && s.getNumNodes() == 0)
 				snowBalls.add(s);
 		}
@@ -410,7 +411,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 	}
 	void synchronizeSnowBalls(NodeMap nodeMap) {
 		HashSet<SnowBall> removable = new HashSet<SnowBall> ();
-		for(SnowBall s: bag) {
+		HashSet<SnowBall> bagIter = new HashSet<SnowBall>(bag);
+		for(SnowBall s: bagIter) {
 			if(s.getDensity() < maximalDensity ) {
 				s.setMaximalDensity(maximalDensity, nodeMap);
 				ensureInvariant(s,nodeMap);	
@@ -464,7 +466,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<SnowBall> remove = new HashSet<SnowBall>();
 
 		kCore.color(src, visited, neighbors);
-		for(SnowBall s:bag) {
+		HashSet<SnowBall> bagIter = new HashSet<SnowBall>(bag);
+		for(SnowBall s:bagIter) {
 			SetFunctions helper = new SetFunctions();
 			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
 				srcSnowBall.merge(s, nodeMap);
