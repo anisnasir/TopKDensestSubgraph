@@ -48,6 +48,7 @@ public class Main {
 		System.err.println("Top-k KCoreDecomposition: 8 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		System.err.println("Epasto Top-k: 9 inputFile <sliding_window> epsilon outFile k outDir " ) ;
 		System.err.println("Greedy Algorithm: 10 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
+		System.err.println("Top-k kCore Travelsal: 11 inputFile <sliding_window> [epsilon] outFile k outDir " ) ;
 		
 		System.exit(1);
 	}
@@ -66,6 +67,7 @@ public class Main {
 		System.out.println("Top-k KCore Evolving\t8\t\t2\t\t\tk" ) ;
 		System.out.println("Epasto Top-k\t\t9\t\t2(1+epsilon)^6\t\tk" ) ;
 		System.out.println("Greedy Algorithm\t10\t\t2\t\t\tk" ) ;
+		System.out.println("Top-k KCore Evolving\t11\t\t2\t\t\tk" ) ;
 		System.out.println("-------------Densest Subgraph Simulator----------------");
 	}
 	public static void main(String[] args) throws IOException {
@@ -195,7 +197,7 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge,nodeMap,degreeMap);
 			}
 			
-			if(simulatorType == 0) { 
+			if(simulatorType == 0) {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}else if (simulatorType == 1) {

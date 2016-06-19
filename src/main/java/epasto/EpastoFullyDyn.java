@@ -62,7 +62,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 			double m0 = nodeMap.getNumEdges();
 			double a = 6*Math.pow((1+epsilon),2);
 			double b = logb(nodeMap.getNumNodes(),(1+epsilon));
-			R_star = m0*epsilon/(a*b)-1;
+			R_star = m0*epsilon/(a*b);
 			
 		} else {
 			boolean rebuild= false;
@@ -79,8 +79,8 @@ public class EpastoFullyDyn implements DensestSubgraph{
 				R_tilda++;
 			}
 			if(rebuild) {
-				if(R_tilda < R_star ) { 
-					EpastoDensest h = this.find(nodeMap_tilda, degreeMap_tilda, densest.beta, epsilon_tilda);	
+				if(R_tilda < R_star ) {
+					EpastoDensest h = this.find(nodeMap_tilda.getCopy(), degreeMap_tilda.getCopy(), densest.beta, epsilon_tilda);	
 					if(h.getDensity() >= densest.getDensity()) {
 						densest = h;
 						sk = h.getSk();
@@ -89,17 +89,18 @@ public class EpastoFullyDyn implements DensestSubgraph{
 					s= s+1;
 					EpastoDensest h = findDensest(nodeMap, degreeMap, 0, epsilon_tilda);
 					sk= h.getSk();
-					nodeMap_tilda = nodeMap.getCopy();
-					degreeMap_tilda = degreeMap.getCopy();
 	
 					if(h.getDensity() >= densest.getDensity()) {
 						densest = h;
 								
 					}
+
+					nodeMap_tilda = nodeMap.getCopy();
+					degreeMap_tilda = degreeMap.getCopy();
 					double m0 = nodeMap.getNumEdges();
 					double a = 6*Math.pow((1+epsilon),2);
 					double b = logb(nodeMap.getNumNodes(),(1+epsilon));
-					R_star = m0*epsilon/(a*b)-1;
+					R_star = m0*epsilon/(a*b);
 					R_tilda = 0;
 				}
 			}
