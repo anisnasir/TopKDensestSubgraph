@@ -98,7 +98,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 			if(rebuild) {
 				if(R_tilda < R_star ) {
 					EpastoDensest h = this.find(nodeMap_tilda.getCopy(), degreeMap_tilda.getCopy(), densest.beta, epsilon_tilda);	
-					
+					sk = h.getSk();
 					if(h.getDensity() >= densest.getDensity()) {
 						densest = h;
 					}
@@ -111,7 +111,6 @@ public class EpastoFullyDyn implements DensestSubgraph{
 						densest = h;
 								
 					}
-
 					nodeMap_tilda = nodeMap.getCopy();
 					degreeMap_tilda = degreeMap.getCopy();
 					double m0 = nodeMap.getNumEdges();
@@ -122,6 +121,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 				}
 			}
 		}
+		//System.out.println(sk);
 	}
 	
 	boolean removeEdge(StreamEdge edge, NodeMap nodeMap, EpastoDensest densest, double epsilon_tilda) {
@@ -257,6 +257,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		//algorithm variables
 		int t = 0 ;
 		
+		//System.out.println(nodeMap.map);
 		while(nodeMap.getNumNodes() > 0 && t < bound) {
 			HashSet<String> removed = removeNode(nodeMap,degreeMap, beta, epsilon);
 			for(String str: removed) {
