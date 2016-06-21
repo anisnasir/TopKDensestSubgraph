@@ -198,7 +198,7 @@ public class Main {
 			}
 			
 			if(simulatorType == 0) {
-				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}else if (simulatorType == 1) {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
@@ -218,6 +218,7 @@ public class Main {
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			} else if (simulatorType == 4) {
 				EpastoFullyDyn epasto = (EpastoFullyDyn)densest;
+				//epasto.Main(item, nodeMap, degreeMap);
 				epasto.MainFullyDynamic(item, nodeMap, degreeMap, EpastoOp.ADD);
 				if(oldestEdge != null) {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);

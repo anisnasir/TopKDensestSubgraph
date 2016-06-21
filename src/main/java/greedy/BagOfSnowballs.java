@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 import main.DensestSubgraph;
@@ -16,7 +17,7 @@ import kcorelinear.KCoreTraversal;
 
 
 public class BagOfSnowballs implements DensestSubgraph{
-	public ArrayList<SnowBall> bag;
+	public LinkedList<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
 	KCoreTraversal kCore;
 	double maximalDensity = 0;
@@ -26,7 +27,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreTraversal(bagGraph);
-		bag = new ArrayList<SnowBall>();
+		bag = new LinkedList<SnowBall>();
 		this.k = k;
 	}
 	public void addNodeKCore(String node, NodeMap nodeMap) {
@@ -356,7 +357,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 
 			if(temp!=null) {
-				if(temp.contains(src) && temp.contains(dst)) {
+				if(temp.contains(src) && temp.contains(dst) && temp.getMainCore() == 1) {
 					ArrayList<String> visited = new ArrayList<String>();
 					//checking for disconnected snowBalls
 					if(!isConnected(temp,src,dst,visited)) {

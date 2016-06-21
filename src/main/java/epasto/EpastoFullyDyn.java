@@ -49,6 +49,23 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		
 	}
 	
+	public void Main(StreamEdge edge, NodeMap nodeMap, DegreeMap degreeMap) {
+		if(densest ==null) {
+			densest = findDensest(nodeMap, degreeMap ,0, epsilon);
+			sk = densest.sk;
+		}
+		else {
+			boolean rebuild = addEdge(edge, nodeMap, densest.beta, epsilon);
+			//System.out.println("rebuild " + rebuild);
+			if(rebuild) {
+				densest = findDensest(nodeMap,degreeMap,densest.beta, epsilon);
+				sk = densest.getSk();
+			}
+		}
+		
+		
+	}
+	
 	public void MainFullyDynamic(StreamEdge edge, NodeMap nodeMap,DegreeMap degreeMap, EpastoOp op) {
 		if(densest ==null) {
 			s=1;
@@ -81,9 +98,9 @@ public class EpastoFullyDyn implements DensestSubgraph{
 			if(rebuild) {
 				if(R_tilda < R_star ) {
 					EpastoDensest h = this.find(nodeMap_tilda.getCopy(), degreeMap_tilda.getCopy(), densest.beta, epsilon_tilda);	
+					
 					if(h.getDensity() >= densest.getDensity()) {
 						densest = h;
-						sk = h.getSk();
 					}
 				} else {
 					s= s+1;
@@ -104,7 +121,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 					R_tilda = 0;
 				}
 			}
-		} 
+		}
 	}
 	
 	boolean removeEdge(StreamEdge edge, NodeMap nodeMap, EpastoDensest densest, double epsilon_tilda) {
@@ -241,10 +258,10 @@ public class EpastoFullyDyn implements DensestSubgraph{
 		int t = 0 ;
 		
 		while(nodeMap.getNumNodes() > 0 && t < bound) {
-			for(String str: nodeMap.map.keySet()) {
+			HashSet<String> removed = removeNode(nodeMap,degreeMap, beta, epsilon);
+			for(String str: removed) {
 				dSk.put(str, t);
 			}
-			removeNode(nodeMap,degreeMap, beta, epsilon);
 			
 			density = (nodeMap.getNumNodes() == 0 ) ? 0  : (nodeMap.getNumEdges()/(double)nodeMap.getNumNodes());
 			
@@ -254,6 +271,10 @@ public class EpastoFullyDyn implements DensestSubgraph{
 			}
 			++t;
 		}
+		for(String str: nodeMap.map.keySet()) {
+			dSk.put(str, t-1);
+		}
+		
 		returnResult.setDensity(max_density);
 		returnResult.setDensest(densest_subgraph);
 		returnResult.setBeta(beta);
@@ -262,7 +283,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 	}
 	
 	
-	void removeNode(NodeMap nodeMap, DegreeMap degreeMap, double beta, double epsilon) {
+	HashSet<String> removeNode(NodeMap nodeMap, DegreeMap degreeMap, double beta, double epsilon) {
 		double threshold = 2*(1+epsilon)*beta;
 		HashSet<String> nodesRemove = new HashSet<String>();
 		for(int i =0; i< degreeMap.capacity;i++) {
@@ -285,6 +306,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 				utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap,degreeMap);
 			}
 		}
+		return nodesRemove;
 	}
 	
 	double logb(int num,  double base) {
