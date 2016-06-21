@@ -70,7 +70,7 @@ public class EpastoTopK implements DensestSubgraph{
 						HashSet<String> neighbors = nodeMap[0].getNeighbors(str);
 						if(neighbors!= null)
 							for(String neighbor:neighbors) {
-								if(!allDensest.contains(neighbor)) {
+								if(!allDensest.contains(neighbor) && nodeMap[i].map.containsKey(neighbor)) {
 									utility.handleEdgeAddition(new StreamEdge(str,neighbor), nodeMap[i], degreeMap[i]);
 									epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.ADD);
 								}
@@ -84,8 +84,12 @@ public class EpastoTopK implements DensestSubgraph{
 				if(neighbors!=null) {
 					neighbors = new HashSet<String>(neighbors);
 					for(String neighbor:neighbors) { 
-						utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i]);
-						epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.REMOVE);
+						if(nodeMap[i].map.containsKey(neighbor)) {
+							if(nodeMap[i].map.get(neighbor).contains(str)) {
+								utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i]);
+								epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.REMOVE);
+							}
+						}
 					}
 				}
 			}
@@ -120,34 +124,36 @@ public class EpastoTopK implements DensestSubgraph{
 		
 		int i =0 ;
 		while( i<k) {
-			
 			if(nodeMap[i].contains(edge)) {
 				utility.handleEdgeDeletion(edge, nodeMap[i],degreeMap[i]);
 				epastoK[i].MainFullyDynamic(edge, nodeMap[i],degreeMap[i], EpastoOp.REMOVE);
 			}
 			
-
-			for(String str: prevDensest) {
-				if(!allDensest.contains(str)) {
-					HashSet<String> neighbors = nodeMap[0].getNeighbors(str);
-					if(neighbors != null) 
-						for(String neighbor:neighbors) {
-							if(!allDensest.contains(neighbor)) {
-								utility.handleEdgeAddition(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i]);
-								epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.ADD);
+			if( i != 0 ) {
+				for(String str: prevDensest) {
+					if(!allDensest.contains(str)) {
+						HashSet<String> neighbors = nodeMap[0].getNeighbors(str);
+						if(neighbors != null) 
+							for(String neighbor:neighbors) {
+								if(!allDensest.contains(neighbor) && nodeMap[i].map.containsKey(neighbor)) {
+									utility.handleEdgeAddition(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i]);
+									epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.ADD);
+								}
 							}
-						}
+					}
 				}
 			}
 			if(i != 0) {
 				for(String str:allDensest) {
-					HashSet<String> neighbors = nodeMap[i].getNeighbors(str);
+					HashSet<String> neighbors = nodeMap[0].getNeighbors(str);
 					if(neighbors!=null) {
 						neighbors = new HashSet<String>(neighbors);
 						for(String neighbor:neighbors) {
 							if(nodeMap[i].map.containsKey(neighbor)) {
-								utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i]);
-								epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.REMOVE);
+								if(nodeMap[i].map.get(neighbor).contains(str)) {
+									utility.handleEdgeDeletion(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i]);
+									epastoK[i].MainFullyDynamic(new StreamEdge(str,neighbor), nodeMap[i],degreeMap[i], EpastoOp.REMOVE);
+								}
 							}
 						}
 					}
