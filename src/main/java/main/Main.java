@@ -242,6 +242,7 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
+				//System.out.println(kCore.kCore);
 				output = densest.getDensest(degreeMap,nodeMap);
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
@@ -272,6 +273,7 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
+				//System.out.println(kCore.kCore);
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}
 			
