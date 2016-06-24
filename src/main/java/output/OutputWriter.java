@@ -19,7 +19,7 @@ public class OutputWriter {
 		this.fileName = fileName;
 		try {
 			ow = new BufferedWriter(new FileWriter(fileName));
-			ow.write("#main core\tDensity\tsize\ttime taken\n");
+			ow.write("#main core\tDensity\tsize\tnodes\ttime taken\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,7 +41,7 @@ public class OutputWriter {
 	}
 	public void writeOutput(Output output) {
 		try {
-			ow.write((output.getCoreNum())+"\t"+(output.getDensity())+"\t"+ output.getSize()+"\t"+(output.getTimeTaken())+"\n");
+			ow.write((output.getCoreNum())+"\t"+(output.getDensity())+"\t"+ output.getSize()+"\t"+output.getNodes()+"\t"+(output.getTimeTaken())+"\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

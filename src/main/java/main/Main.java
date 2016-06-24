@@ -28,7 +28,6 @@ import charikar.Charikar;
 import charikar.CharikarTopK;
 import kcore.KCore;
 import kcore.KCoreTopK;
-import kcorelinear.KCoreLinear;
 import kcorelinear.KCoreTraversal;
 import kcorelinear.KCoreTraversalTopK;
 import kcorequad.KCoreQuad;
@@ -169,7 +168,7 @@ public class Main {
 		System.out.println("Reading the input");
 		
 		int executeCounter = 0;
-		int EXECUTE_INTERVAL = 10000;
+		int EXECUTE_INTERVAL = 1000;
 		int edgeCounter = 0;
 		while (item != null) {
 			if (++edgeCounter % PRINT_INTERVAL == 0) {
@@ -243,8 +242,7 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
-				if(executeCounter++ % EXECUTE_INTERVAL == 0)
-					output = densest.getDensest(degreeMap,nodeMap);
+				output = densest.getDensest(degreeMap,nodeMap);
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
 				epasto.addEdge(item);
@@ -274,8 +272,6 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
-				
-				
 				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
 			}
 			

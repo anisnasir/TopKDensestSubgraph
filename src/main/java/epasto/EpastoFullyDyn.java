@@ -104,7 +104,7 @@ public class EpastoFullyDyn implements DensestSubgraph{
 					}
 				} else {
 					s= s+1;
-					EpastoDensest h = findDensest(nodeMap, degreeMap, 0, epsilon_tilda);
+					EpastoDensest h = findDensest(nodeMap, degreeMap, densest.getDensity(), epsilon_tilda);
 					sk= h.getSk();
 	
 					if(h.getDensity() >= densest.getDensity()) {

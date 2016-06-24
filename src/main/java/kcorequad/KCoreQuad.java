@@ -19,24 +19,18 @@ public class KCoreQuad implements DensestSubgraph{
 		this.graph = graph;
 	}
 	
-	public void addNode(String src) {
-		kCore.put(src, 0);
-	}
-	
 	public void removeNode(String src) {
 		kCore.remove(src);
 	}
 	
 	public int getKCore(String src) {
-		return this.kCore.get(src);
+		if(kCore.containsKey(src))
+			return this.kCore.get(src);
+		else 
+			return 0;
 	}
 	
 	public void addEdge(String src, String dst) {
-		if(!kCore.containsKey(src))
-			addNode(src);
-		
-		if(!kCore.containsKey(dst))
-			addNode(dst);
 		updateKCoreafterAddition(src,dst);
 	}
 	
@@ -48,8 +42,8 @@ public class KCoreQuad implements DensestSubgraph{
 		HashSet<String> visited = new HashSet<String>();
 		HashSet<String> color = new HashSet<String>();
 		
-		int C_u = kCore.get(src);
-		int C_v = kCore.get(dst);
+		int C_u = getKCore(src);
+		int C_v = getKCore(dst);
 		if (C_u > C_v) {
 			int c = C_v;
 			xcolor(dst,c, visited,color);
@@ -253,6 +247,8 @@ public class KCoreQuad implements DensestSubgraph{
 	void updateDelete(int c, HashSet<String> color) {
 		for(String str: color) {
 			kCore.put(str, c-1);
+			if(getKCore(str) == 0)
+				kCore.remove(str);
 		}
 	}
 
