@@ -242,8 +242,8 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
-				//System.out.println(kCore.kCore);
-				output = densest.getDensest(degreeMap,nodeMap);
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap,nodeMap);
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
 				epasto.addEdge(item);
@@ -266,15 +266,15 @@ public class Main {
  			} else if (simulatorType == 11) {
  				KCoreTraversalTopK kCoreTopK = (KCoreTraversalTopK) densest;
 				KCoreTraversal kCore =  kCoreTopK.densest;
-				
 				kCore.addEdge(item.getSource(), item.getDestination());
 				
 				if(oldestEdge != null)  {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
+					
 				}
-				//System.out.println(kCore.kCore);
-				output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+					output = densest.getDensest(degreeMap,nodeMap);
 			}
 			
 			

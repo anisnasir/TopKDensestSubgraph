@@ -10,6 +10,7 @@ import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
+import utility.EdgeHandler;
 
 public class KCoreQuadTopK implements DensestSubgraph{
 	int k ;
@@ -35,39 +36,41 @@ public class KCoreQuadTopK implements DensestSubgraph{
 			out = densest.getDensest(null, nodeMap);
 			list.add(out.get(0));
 			removeBulk(nodeMap, out.get(0), removedEdges);
+
 			if(nodeMap.getNumNodes() == 0) {
 				addRemovedEdges(removedEdges, nodeMap);
 				return list;
 			}
 		}
 		addRemovedEdges(removedEdges, nodeMap);
-		
 		return list;
 	}
 	
 	void addRemovedEdges(ArrayList<StreamEdge> removedEdges, NodeMap nodeMap) {
+		//System.out.println(removedEdges);
+		EdgeHandler helper = new EdgeHandler();
 		for(StreamEdge edge: removedEdges) {
-			nodeMap.addEdge(edge.getSource(), edge.getDestination());
-			nodeMap.addEdge(edge.getDestination(), edge.getSource());
+			helper.handleEdgeAddition(edge, nodeMap);
 			densest.addEdge(edge.getSource(), edge.getDestination());
 		}
 	}
  	void removeBulk(NodeMap nodeMap, Output out, ArrayList<StreamEdge> removedEdges) {
  		ArrayList<String> nodes = out.getNodes();
-		for(String node:nodes) {
-			HashSet<String > temp = nodeMap.getNeighbors(node);
-			ArrayList<String> neighbors;
-			if( temp != null)
-				neighbors = new ArrayList<String>(nodeMap.getNeighbors(node));
-			else 
-				neighbors = new ArrayList<String>();
-			for(String neighbor: neighbors) {
-				removedEdges.add(new StreamEdge(node,neighbor));
-				nodeMap.removeEdge(node, neighbor);
-				nodeMap.removeEdge(neighbor, node);
-				densest.removeEdge(node, neighbor);
+ 		for(String node:nodes) {
+			HashSet<String > temp = densest.graph.get(node);
+			if( temp != null) { 
+				HashSet<String> neighbors =  new HashSet<String>(temp);
+				EdgeHandler helper = new EdgeHandler();
+				for(String neighbor: neighbors) {
+					StreamEdge edge = new StreamEdge(node,neighbor);
+					helper.handleEdgeDeletion(edge, nodeMap);
+					removedEdges.add(edge);
+					densest.removeEdge(edge.getSource(), edge.getDestination());
+				}
 			}
+			
 		}
+		
 	}
 	
 	

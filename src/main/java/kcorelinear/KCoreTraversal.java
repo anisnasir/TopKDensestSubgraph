@@ -38,7 +38,6 @@ public class KCoreTraversal implements DensestSubgraph{
 		if(getKCore(src) > getKCore(dst)) {
 			r= dst;
 		}
-
 		//prepare RCDs;
 		if(getKCore(src) == getKCore(dst)) {
 			mcd.put(src, getmcd(src)+1);
@@ -105,8 +104,10 @@ public class KCoreTraversal implements DensestSubgraph{
 			pcd.put(r,count);
 
 		}
+		//System.out.println("lallala mcd " + mcd);
+		//System.out.println("lalal pcd " + pcd );
+		
 		//finished preparing rcds
-
 		HashSet<String> temp = graph.get(r);
 		HashSet<String> neighbors;
 		if(temp == null) {
@@ -228,90 +229,83 @@ public class KCoreTraversal implements DensestSubgraph{
 	}
 
 
-
+	void decrementpcd(String node) {
+		pcd.put(node, getpcd(node)-1);
+		if(pcd.get(node) == 0)
+			pcd.remove(node);
+	}
+	
+	void decrementmcd(String node) {
+		mcd.put(node, getmcd(node)-1);
+		if(mcd.get(node) == 0)
+			mcd.remove(node);
+	}
 	public void removeEdge(String src, String dst) {
 		String r = src;
 		if(getKCore(src) > getKCore(dst))
 			r= dst;
 
 		//prepare RCDs;
-		if(getKCore(src) == getKCore(dst)) { 
-			mcd.put(src, getmcd(src)-1);
-			mcd.put(dst, getmcd(dst)-1);
+		if(getKCore(src) == getKCore(dst)) {
+			decrementmcd(src);
+			decrementmcd(dst);
 			
-			if(getmcd(src)+1 > getKCore(dst) && getmcd(src) == getKCore(dst))
-				pcd.put(dst, getpcd(dst)-1);
-			
-			if(getmcd(dst)+1 > getKCore(src) && getmcd(dst) == getKCore(src))
-				pcd.put(src, getpcd(src)-1);
-			
-			HashSet<String> neighbors= graph.get(src);;
-			
-			if(neighbors != null)
-				for(String neighbor: neighbors) {
-					if(getKCore(neighbor) == getKCore(src)) {
-						if(getmcd(src)+1 > getKCore(neighbor) && getmcd(src) <=getKCore(neighbor)) {
-							pcd.put(neighbor, getpcd(neighbor)-1);
-						}
-							
-					}
-				}
-			
-			neighbors= graph.get(dst);;
-			
-			if(neighbors != null)
-				for(String neighbor: neighbors) {
-					if(getKCore(neighbor) == getKCore(dst)) {
-						if(getmcd(dst)+1 > getKCore(neighbor) && getmcd(dst) ==getKCore(neighbor)) {
-							pcd.put(neighbor, getpcd(neighbor)-1);
-						}
-							
-					}
-				}
-			
-		}
-		else if(getKCore(src) < getKCore(dst)) {
-			mcd.put(src, getmcd(src)-1);
+			if(getmcd(src)+1 > getKCore(dst)) {
+				decrementpcd(dst);
+			}
+			if(getmcd(dst)+1 > getKCore(src)) {
+				decrementpcd(src);	
+			}
 			
 			HashSet<String> neighbors= graph.get(src);;
 			
 			if(neighbors != null)
 				for(String neighbor: neighbors) {
 					if(getKCore(neighbor) == getKCore(src)) {
-						if(getmcd(src)+1 > getKCore(neighbor) && getmcd(src) <=getKCore(neighbor)) {
-							pcd.put(neighbor, getpcd(neighbor)-1);
+						if(getmcd(src)+1 > getKCore(neighbor) && getmcd(src) == getKCore(neighbor)) {
+							decrementpcd(neighbor);
 						}
 							
 					}
 				}
 			
-		}
-		else if(getKCore(dst) < getKCore(src)) {
-			mcd.put(dst, getmcd(dst)-1);
-			
-			HashSet<String> neighbors= graph.get(dst);;
+			neighbors= graph.get(dst);
 			
 			if(neighbors != null)
 				for(String neighbor: neighbors) {
 					if(getKCore(neighbor) == getKCore(dst)) {
-						if(getmcd(dst)+1 > getKCore(neighbor) && getmcd(dst) ==getKCore(neighbor)) {
-							pcd.put(neighbor, getpcd(neighbor)-1);
-						}
-							
+						if(getmcd(dst)+1 > getKCore(neighbor) && getmcd(dst) == getKCore(neighbor)) {
+							decrementpcd(neighbor);
+						}			
+					}
+				}
+		}
+		else {
+			decrementmcd(r);
+			decrementpcd(r);
+			
+			HashSet<String> neighbors= graph.get(r);;
+			
+			if(neighbors != null)
+				for(String neighbor: neighbors) {
+					if(getKCore(neighbor) == getKCore(r)) {
+						if(getmcd(r)+1 > getKCore(neighbor) && getmcd(r) == getKCore(neighbor)) {
+							decrementpcd(neighbor);
+						}	
 					}
 				}
 		}
 
 		HashSet<String> neighbors;
 		//finished preparing rcds
-
+		
 		HashMap<String,Integer> cd = new HashMap<String,Integer>();
 		HashSet<String> dismissed = new HashSet<String>();
 		HashSet<String> visited = new HashSet<String>();
 
 
 		int k  = getKCore(r);
-		cd.put(r, getpcd(r));
+		//cd.put(r, getpcd(r));
 
 		if(getKCore(src) != getKCore(dst)) {
 			visited.add(r);
@@ -374,7 +368,7 @@ public class KCoreTraversal implements DensestSubgraph{
 				if(getKCore(neighbor) == k) {
 					if(!visited.contains(neighbor)) {
 						cd.put(neighbor,(getcd(cd,neighbor)+getmcd(neighbor)));
-						visited.add(v);
+						visited.add(neighbor);
 					}
 					cd.put(neighbor,(getcd(cd,neighbor)-1));
 
