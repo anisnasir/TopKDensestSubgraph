@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import kcorelinear.KCoreTraversal;
 import struct.NodeMap;
 import utility.SetFunctions;
-import kcorelinear.KCoreTraversal;
 
 public class SnowBall implements Serializable, Comparable<SnowBall>{
 	private static final long serialVersionUID = 1872315406990468794L;

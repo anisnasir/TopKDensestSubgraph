@@ -1,5 +1,6 @@
 package greedy;
 import input.StreamEdge;
+import interfaces.DensestSubgraph;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,12 +9,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
-import main.DensestSubgraph;
+import kcorelinear.KCoreTraversal;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 import utility.SetFunctions;
-import kcorelinear.KCoreTraversal;
 
 
 public class BagOfSnowballs implements DensestSubgraph{

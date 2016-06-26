@@ -1,12 +1,13 @@
 package bahmani;
 
+import interfaces.DensestSubgraph;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
-import main.DensestSubgraph;
 
 public class Bahmani implements DensestSubgraph {
 	double epsilon;

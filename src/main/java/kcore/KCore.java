@@ -1,9 +1,10 @@
 package kcore;
 
+import interfaces.DensestSubgraph;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;

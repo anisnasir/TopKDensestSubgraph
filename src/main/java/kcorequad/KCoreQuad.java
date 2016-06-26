@@ -1,15 +1,17 @@
 package kcorequad;
+import interfaces.DensestSubgraph;
+import interfaces.IncrementalKCore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 
 
-public class KCoreQuad implements DensestSubgraph{
+public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 	HashMap<String,HashSet<String>> graph;
 	public HashMap<String,Integer> kCore;
 	int maxCore = 0;

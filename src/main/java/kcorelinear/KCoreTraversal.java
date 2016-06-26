@@ -1,18 +1,20 @@
 package kcorelinear;
+import interfaces.DensestSubgraph;
+import interfaces.IncrementalKCore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
 import utility.SetFunctions;
 
 
-public class KCoreTraversal implements DensestSubgraph{
+public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 	HashMap<String,HashSet<String>> graph;
 	public HashMap<String,Integer> kCore;
 	public HashMap<String, Integer> mcd;

@@ -6,6 +6,7 @@ import epasto.EpastoTopK;
 import greedy.BagOfSnowballs;
 import input.StreamEdge;
 import input.StreamEdgeReader;
+import interfaces.DensestSubgraph;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

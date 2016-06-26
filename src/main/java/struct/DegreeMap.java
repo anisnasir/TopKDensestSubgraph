@@ -48,7 +48,6 @@ public class DegreeMap {
 	
 	public void decremnetDegree(int degree, String nodeId) {
 		removeNode(degree,nodeId);
-		addNode(degree-1,nodeId);
 	}
 	public void decremnetDegreeExpire(int degree, String nodeId) {
 		removeNode(degree,nodeId);

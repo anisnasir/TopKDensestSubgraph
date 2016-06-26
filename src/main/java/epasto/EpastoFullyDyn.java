@@ -1,5 +1,6 @@
 package epasto;
 import input.StreamEdge;
+import interfaces.DensestSubgraph;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -10,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 
-import main.DensestSubgraph;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
