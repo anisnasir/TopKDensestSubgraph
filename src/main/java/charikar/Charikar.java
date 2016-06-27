@@ -1,5 +1,6 @@
 package charikar;
 
+import input.StreamEdge;
 import interfaces.DensestSubgraph;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.HashSet;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
+import utility.EdgeHandler;
 
 public class Charikar implements DensestSubgraph{
 	
@@ -50,20 +52,19 @@ public class Charikar implements DensestSubgraph{
 					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
 				
 				if(neighbors.size() > 0 ) {
-					for(String neighbor:neighbors) {
-						//System.out.println(element+ " " + neighbor);
-						nodeMap.removeEdge(element, neighbor);
-						nodeMap.removeEdge(neighbor, element);
-						numEdges--;
-					
-						int nodeDegree = nodeMap.getDegree(neighbor);
-						degreeMap.decremnetDegree(nodeDegree+1, neighbor);
-						if(nodeDegree < i) {
-							i=nodeDegree;
-						}	
+					EdgeHandler helper = new EdgeHandler();
+					if(neighbors.size() > 0 ) {
+						for(String neighbor:neighbors) {
+							//System.out.println(element+ " " + neighbor);
+							helper.handleEdgeDeletion(new StreamEdge(element,neighbor), nodeMap,degreeMap);
+							
+							int nodeDegree = nodeMap.getDegree(neighbor);
+							if(nodeDegree < i) {
+								i=nodeDegree;
+							}	
+						}
 					}
 				}
-				numNodes--;
 				if(numNodes == 0) {
 					ArrayList<Output> outputArray = new ArrayList<Output>();
 					Output output = new Output();
@@ -74,7 +75,7 @@ public class Charikar implements DensestSubgraph{
 					return outputArray;
 				}
 				
-				double newDensity = numEdges/(double)numNodes;
+				double newDensity = nodeMap.getNumEdges()/(double)nodeMap.getNumNodes();
 				if(newDensity >= density) {
 					density = newDensity;
 					densest = new ArrayList<String>();
