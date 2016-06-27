@@ -94,7 +94,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		int srcDegree = nodeMap.getDegree(src);
 		int dstDegree = nodeMap.getDegree(dst);
 		
-		
 		SnowBall temp = null;
 		if (srcDegree < maximalDensity && dstDegree < maximalDensity) {
 			return;
@@ -104,36 +103,39 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 		if (srcDegree >= maximalDensity && dstDegree < maximalDensity ) {
 			temp = addNode(src,nodeMap);
-			if(!this.verifyMainCore(src, nodeMap, temp)) {
+			if(this.verifyMainCore(src, nodeMap, temp)) {
 				this.fixMainCore(src, nodeMap,temp);
 			}
 		} else if (srcDegree < maximalDensity && (double)dstDegree >= maximalDensity ) {
 			temp = addNode(dst,nodeMap);
-			if(!this.verifyMainCore(dst, nodeMap, temp)) {
+			if(this.verifyMainCore(dst, nodeMap, temp)) {
 				this.fixMainCore(dst, nodeMap, temp);
 			}
 		} else {
-			SnowBall srcSnowBall = addNode(src,nodeMap);
-			if(!this.verifyMainCore(src, nodeMap,srcSnowBall)) {
-				this.fixMainCore(src, nodeMap, srcSnowBall);
-			}
-			SnowBall dstSnowBall = addNode(dst, nodeMap);
-
-			if(!this.verifyMainCore(dst, nodeMap,dstSnowBall)) {
-				this.fixMainCore(dst, nodeMap, dstSnowBall);
-			}
-
 			addEdgeKCore(edge);
 
+			SnowBall srcSnowBall = addNode(src,nodeMap);
+			SnowBall dstSnowBall = addNode(dst, nodeMap);
+			
+			if(this.verifyMainCore(src, nodeMap,srcSnowBall)) {
+				this.fixMainCore(src, nodeMap, srcSnowBall);
+			}
+			
+			if(!srcSnowBall.contains(dst))
+				if(this.verifyMainCore(dst, nodeMap,dstSnowBall)) {
+					this.fixMainCore(dst, nodeMap, dstSnowBall);
+				}
+
+			
 			if(srcSnowBall.equals(dstSnowBall)) {
 				srcSnowBall.addEdge(edge);
 				ensureInvariant(srcSnowBall,nodeMap);	
 			}
-			else {
+			/*else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
 					this.fixMainCore(src, nodeMap, srcSnowBall);
 				}
-			}
+			}*/
 		}
 		
 		if(this.getMaximalDensity(nodeMap) < initialDensity) {
@@ -212,11 +214,12 @@ public class BagOfSnowballs implements DensestSubgraph{
 		if(s1.id == s2.id) 
 			return false;
 		else {
-			HashSet<String> visited = new HashSet<String>();
+			return (verifyMainCore(src,nodeMap,s1) || verifyMainCore(dst,nodeMap,s2));
+			/*HashSet<String> visited = new HashSet<String>();
 			HashSet<String> neighbors = new HashSet<String>();
 
 			kCore.color(src, visited, neighbors);
-			return neighbors.contains(dst);
+			return neighbors.contains(dst);*/
 		}
 	} 
 
@@ -445,21 +448,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	boolean verifyMainCore(String src, NodeMap nodeMap, SnowBall srcSnowBall) { 
 		if(!bagGraph.containsKey(src))
 			return true;
-
-		HashSet<String> visited = new HashSet<String>();
-		HashSet<String> neighbors = new HashSet<String>();
-
-		kCore.color(src, visited, neighbors);
-
-		HashSet<String> visited1 = new HashSet<String>();
-		HashSet<String> neighbors1 = new HashSet<String>();
-
-		srcSnowBall.kCore.color(src, visited1, neighbors1);
-
-		if(neighbors1.equals(neighbors))
-			return false;
-		else
-			return true;
+		return (kCore.getKCore(src) > srcSnowBall.kCore.getKCore(src));
 	}
 	void fixMainCore(String src, NodeMap nodeMap, SnowBall srcSnowBall) {
 		HashSet<String> visited = new HashSet<String>();
