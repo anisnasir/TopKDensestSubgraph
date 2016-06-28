@@ -441,18 +441,14 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<SnowBall> remove = new HashSet<SnowBall>();
 
 		kCore.color(src, visited, neighbors);
-		for(SnowBall s:bag) {
-			SetFunctions helper = new SetFunctions();
-			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
-				srcSnowBall.merge(s, nodeMap);
-				remove.add(s);
-			}
-		}
 		Iterator<SnowBall> iter = bag.iterator();
 		while(iter.hasNext()) {
 			SnowBall s = iter.next();
-			if(remove.contains(s))
+			SetFunctions helper = new SetFunctions();
+			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
+				srcSnowBall.merge(s, nodeMap);
 				iter.remove();
+			}
 		}
 		this.ensureInvariant(srcSnowBall, nodeMap);
 	}
