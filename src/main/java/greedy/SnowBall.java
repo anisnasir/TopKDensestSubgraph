@@ -165,8 +165,6 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 			System.out.println("]");
 
 		} 
-
-
 	}
 
 	boolean containsEdge(StreamEdge edge) {
