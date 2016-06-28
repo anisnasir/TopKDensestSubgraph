@@ -112,30 +112,27 @@ public class BagOfSnowballs implements DensestSubgraph{
 				this.fixMainCore(dst, nodeMap, temp);
 			}
 		} else {
-			addEdgeKCore(edge);
-
 			SnowBall srcSnowBall = addNode(src,nodeMap);
-			SnowBall dstSnowBall = addNode(dst, nodeMap);
-			
 			if(this.verifyMainCore(src, nodeMap,srcSnowBall)) {
 				this.fixMainCore(src, nodeMap, srcSnowBall);
 			}
-			
-			if(!srcSnowBall.contains(dst))
-				if(this.verifyMainCore(dst, nodeMap,dstSnowBall)) {
-					this.fixMainCore(dst, nodeMap, dstSnowBall);
-				}
+			SnowBall dstSnowBall = addNode(dst, nodeMap);
 
-			
+			if(this.verifyMainCore(dst, nodeMap,dstSnowBall)) {
+				this.fixMainCore(dst, nodeMap, dstSnowBall);
+			}
+
+			addEdgeKCore(edge);
+
 			if(srcSnowBall.equals(dstSnowBall)) {
 				srcSnowBall.addEdge(edge);
 				ensureInvariant(srcSnowBall,nodeMap);	
 			}
-			/*else {
+			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
 					this.fixMainCore(src, nodeMap, srcSnowBall);
 				}
-			}*/
+			}
 		}
 		
 		if(this.getMaximalDensity(nodeMap) < initialDensity) {
