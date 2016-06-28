@@ -16,18 +16,18 @@ import struct.NodeMap;
 import utility.SetFunctions;
 
 
-public class BagOfSnowballs implements DensestSubgraph{
-	public HashSet<SnowBall> bag;
+public class CopyOfBagOfSnowballsLinkedList implements DensestSubgraph{
+	public LinkedList<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
 	KCoreTraversal kCore;
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
 
-	public BagOfSnowballs(int k ) {
+	public CopyOfBagOfSnowballsLinkedList(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreTraversal(bagGraph);
-		bag = new HashSet<SnowBall>();
+		bag = new LinkedList<SnowBall>();
 		this.k = k;
 	}
 	public void addNodeKCore(String node, NodeMap nodeMap) {
@@ -164,7 +164,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 		SnowBall max = null;
 		ArrayList<SnowBall> allMax = new ArrayList<SnowBall>();
 		HashSet<String> neighbors = nodeMap.getNeighbors(src);
-		for(SnowBall s : bag) {
+		for(int i =0;i<bag.size();i++) {
+			SnowBall s = bag.get(i);
 			if(s.contains(src)) {
 				return s;
 			}
@@ -235,8 +236,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 	}
 	double getMaximalDensity1(NodeMap nodeMap) {
 		double max = 0.0;
-		for(SnowBall s : bag) {
-			double tempDensity = s.getDensity();
+		for(int i =0;i<bag.size();i++) {
+			double tempDensity = bag.get(i).getDensity();
 			if(tempDensity > max) 
 				max = tempDensity;
 		}
@@ -250,8 +251,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 		}
 		int count = 0;
 		PriorityQueue<Double> queue = new PriorityQueue<Double>(k);
-		for(SnowBall s: bag) {
-			double tempDensity = s.getDensity();
+		for(int i =0;i<bag.size();i++) {
+			double tempDensity = bag.get(i).getDensity();
 			if(count < k) {
 				queue.offer(tempDensity);
 				count++;
@@ -345,7 +346,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 		if(!flag) {
 			this.removeEdgeKCore(edge);
 			SnowBall temp = null;
-			for(SnowBall s: bag) {
+			for(int i =0 ;i< bag.size();i++) {
+				SnowBall s = bag.get(i);
 				if(s.containsEdge(edge)){
 					s.removeEdge(edge,nodeMap);
 					temp =s;
@@ -402,7 +404,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 	void ensureInvariant(SnowBall s, NodeMap nodeMap) {
 		HashSet<String> nodes = new HashSet<String>();
-		s.ensureFirstInVariant(nodeMap,nodes,this);
+		//s.ensureFirstInVariant(nodeMap,nodes,this);
 		for(String node: nodes) {
 			addNode(node,nodeMap);
 			//System.out.println("adding node "+ node);
@@ -410,7 +412,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 	}
 	void synchronizeSnowBalls(NodeMap nodeMap) {
 		ArrayList<SnowBall> removable = new ArrayList<SnowBall> ();
-		for(SnowBall s: bag) {
+		for(int i = 0;i<bag.size();i++) {
+			SnowBall s = bag.get(i);
 			if(s.getDensity() < maximalDensity ) {
 				s.setMaximalDensity(maximalDensity, nodeMap);
 				ensureInvariant(s,nodeMap);	
@@ -468,7 +471,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 		ArrayList<Output> outputArray = new ArrayList<Output>();
 
 		PriorityQueue<SnowBall> queue = new PriorityQueue<SnowBall>(k,Collections.reverseOrder());
-		for(SnowBall temp: bag) {
+		for(int i =0;i<bag.size();i++) {
+			SnowBall temp = bag.get(i);
 			queue.offer(temp);
 		}
 
