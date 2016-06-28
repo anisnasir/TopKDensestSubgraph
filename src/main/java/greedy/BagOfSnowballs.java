@@ -127,8 +127,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 			if(srcSnowBall.equals(dstSnowBall)) {
 				srcSnowBall.addEdge(edge);
 				ensureInvariant(srcSnowBall,nodeMap);	
-			}
-			/*else {
+			}/*
+			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
 					this.fixMainCore(src, nodeMap, srcSnowBall);
 				}
@@ -146,9 +146,9 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 		}
 		
-		if(this.getMaximalDensity(nodeMap) != initialDensity) {
+		/*if(this.getMaximalDensity(nodeMap) != initialDensity) {
 			synchronizeSnowBalls(nodeMap);
-		}
+		}*/
 		
 		cleanup(nodeMap);
 		//System.out.println("+bag graph" + bagGraph+ " " + maximalDensity);
@@ -210,7 +210,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		if(s1.id == s2.id) 
 			return false;
 		else {
-			return (verifyMainCore(src,nodeMap,s1) || verifyMainCore(dst,nodeMap,s2));
+			return (s1.kCore.getKCore(src) == s2.kCore.getKCore(src));
 			/*HashSet<String> visited = new HashSet<String>();
 			HashSet<String> neighbors = new HashSet<String>();
 

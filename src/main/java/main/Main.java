@@ -262,6 +262,7 @@ public class Main {
  					bag.removeEdge(oldestEdge,nodeMap, degreeMap);
  				}
  				output = bag.getDensest(degreeMap, nodeMap);
+ 				//System.out.println(bag.bag.size());
  				//bag.print();
  				
  			} else if (simulatorType == 11) {
