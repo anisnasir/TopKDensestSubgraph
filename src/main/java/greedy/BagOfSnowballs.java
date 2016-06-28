@@ -162,7 +162,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		
 		int maxIntersection = 0;
 		SnowBall max = null;
-		ArrayList<SnowBall> allMax = new ArrayList<SnowBall>();
 		HashSet<String> neighbors = nodeMap.getNeighbors(src);
 		for(SnowBall s : bag) {
 			if(s.contains(src)) {
@@ -171,13 +170,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			SetFunctions helper = new SetFunctions();
 			int internalDegree = helper.intersection(s.getNodes(), neighbors);
 			if(internalDegree != 0 && internalDegree >= s.getDensity() 
-					&& internalDegree >= maxIntersection && internalDegree >= s.getMainCore()) {
-				if(internalDegree == maxIntersection) {
-					allMax.add(s);
-				}else {
-					allMax = new ArrayList<SnowBall>();
-					allMax.add(s);
-				}
+					&& internalDegree > maxIntersection && internalDegree >= s.getMainCore()) {
 				max = s;
 				maxIntersection = internalDegree;
 			}
@@ -192,14 +185,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 			return newBall;
 		}else {
 			max.addNode(src, nodeMap);
-			if(allMax.size() > 1) {
-				for(SnowBall s: allMax) {
-					if(!max.equals(s)) {
-						max.merge(s, nodeMap);
-						bag.remove(s);
-					}
-				}
-			}
 			ensureInvariant(max,nodeMap);
 			//updateStats(max,src,nodeMap);
 			return max;
