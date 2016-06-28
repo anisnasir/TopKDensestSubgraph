@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 import kcorelinear.KCoreTraversal;
@@ -160,6 +159,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 		if(!bagGraph.containsKey(src))
 			addNodeKCore(src,nodeMap);
 		
+		int mainCore = kCore.mainCore();
+		
 		int maxIntersection = 0;
 		SnowBall max = null;
 		HashSet<String> neighbors = nodeMap.getNeighbors(src);
@@ -173,6 +174,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 					&& internalDegree > maxIntersection && internalDegree >= s.getMainCore()) {
 				max = s;
 				maxIntersection = internalDegree;
+				if(s.getMainCore() == mainCore)
+					break;
 			}
 		}
 

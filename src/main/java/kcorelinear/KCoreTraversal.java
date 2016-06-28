@@ -3,6 +3,7 @@ import interfaces.DensestSubgraph;
 import interfaces.IncrementalKCore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -502,7 +503,6 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 	}
 	@Override
 	public ArrayList<Output> getDensest(DegreeMap degreeMap, NodeMap nodeMap) {
-		// TODO Auto-generated method stub
 		ArrayList<Output> outputArray = new ArrayList<Output>();
 		Output returnOutput = new Output();
 		ArrayList<String> maxCore = new ArrayList<String>();
@@ -526,20 +526,13 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 		return outputArray;
 	}
 	public int mainCore() {
-		// TODO Auto-generated method stub
-		ArrayList<String> maxCore = new ArrayList<String>();
 		int maxCoreNum = 0;
 		for(String str: kCore.keySet()) {
 			int core = kCore.get(str);
 			if(core > maxCoreNum)  {
 				maxCoreNum = core;
-				maxCore = new ArrayList<String>();
-			}
-			if(core == maxCoreNum) {
-				maxCore.add(str);
 			}
 		}
-
 		return maxCoreNum;
 	}
 
