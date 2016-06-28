@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import kcorelinear.KCoreTraversal;
@@ -17,7 +16,7 @@ import utility.SetFunctions;
 
 
 public class BagOfSnowballs implements DensestSubgraph{
-	public ArrayList<SnowBall> bag;
+	public HashSet<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
 	KCoreTraversal kCore;
 	double maximalDensity = 0;
@@ -27,7 +26,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreTraversal(bagGraph);
-		bag = new ArrayList<SnowBall>();
+		bag = new HashSet<SnowBall>();
 		this.k = k;
 	}
 	public void addNodeKCore(String node, NodeMap nodeMap) {
@@ -213,11 +212,16 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 	void cleanup(NodeMap nodeMap) {
 		ArrayList<SnowBall> snowBalls = new ArrayList<SnowBall>();
-		Iterator<SnowBall> iterator = bag.iterator();
-		while(iterator.hasNext()) {
-			SnowBall s = iterator.next();
+
+		for(SnowBall s: bag) {
 			if(s.getNumEdges()== 0 && s.getNumNodes() == 0)
-				iterator.remove();
+				snowBalls.add(s);
+		}
+
+		for(SnowBall s: snowBalls)
+		{
+			bag.remove(s);
+			//stats.removeSnowBall(s);
 		}
 	}
 	double getMaximalDensity1(NodeMap nodeMap) {
@@ -441,14 +445,15 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<SnowBall> remove = new HashSet<SnowBall>();
 
 		kCore.color(src, visited, neighbors);
-		Iterator<SnowBall> iter = bag.iterator();
-		while(iter.hasNext()) {
-			SnowBall s = iter.next();
+		for(SnowBall s:bag) {
 			SetFunctions helper = new SetFunctions();
 			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
 				srcSnowBall.merge(s, nodeMap);
-				iter.remove();
+				remove.add(s);
 			}
+		}
+		for(SnowBall s:remove) {
+			bag.remove(s);
 		}
 		this.ensureInvariant(srcSnowBall, nodeMap);
 	}
