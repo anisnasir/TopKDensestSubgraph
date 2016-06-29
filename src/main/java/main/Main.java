@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import bahmani.Bahmani;
 import bahmani.BahmaniTopK;
@@ -244,7 +245,7 @@ public class Main {
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
-					output = densest.getDensest(degreeMap,nodeMap);
+					output = densest.getDensest(degreeMap,nodeMap.getCopy());
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
 				epasto.addEdge(item);
@@ -264,6 +265,9 @@ public class Main {
  				output = bag.getDensest(degreeMap, nodeMap);
  				//System.out.println(bag.bag.size());
  				//bag.print();
+ 				
+
+ 				
  				
  			} else if (simulatorType == 11) {
  				KCoreTraversalTopK kCoreTopK = (KCoreTraversalTopK) densest;
@@ -309,6 +313,8 @@ public class Main {
 				}
 		}
 	
+		
+		
 	System.out.println("Finished Processing! Read " + edgeCounter/PRINT_INTERVAL
 			+ "M edges.\tSimulation time: "
 			+ (System.currentTimeMillis() - simulationStartTime)

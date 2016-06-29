@@ -130,12 +130,46 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	}
 
 	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
+		//System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
+		
+		//System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
+		Set<String> nodes = newSnowBall.getNodes();
+		HashSet<String> localNodes = new HashSet<String>(this.getNodes());
+		this.numEdges+=newSnowBall.numEdges;
+		this.numNodes+=newSnowBall.numNodes;
+		
+		for(String node:nodes) {
+			this.graph.put(node, new HashSet<String>(newSnowBall.graph.get(node)));
+			this.kCore.kCore.put(node, newSnowBall.getCoreNumber(node));
+			this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
+			this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
+		}
+		
+		for(String node:nodes) {
+			HashSet<String> neighbors = nodeMap.getNeighbors(node);
+			if(neighbors!=null) {
+				for(String neighbor:neighbors) {
+					if(localNodes.contains(neighbor))
+						addEdge(new StreamEdge(node,neighbor));
+				}
+
+			}
+		}
+		//System.out.println(this.getNodes());
+		//System.out.println(this.numEdges + " " + this.numNodes);
+		
+		
+		
+
+	}
+	/*
+	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
 		Set<String> nodes = newSnowBall.getNodes();
 		for(String node:nodes) {
 			this.addNode(node, nodeMap);
 		}
 
-	}
+	}*/
 
 	public void addEdge(StreamEdge edge) {
 		String src = edge.getSource();

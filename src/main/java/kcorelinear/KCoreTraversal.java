@@ -434,23 +434,33 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 		else 
 			return 0;
 	}
-	int getmcd(String u) {
+	public int getmcd(String u) {
 		if(mcd.containsKey(u))
 			return mcd.get(u);
 		else 
 			return 0;
 	}
 
-	int getpcd(String u) {
+	public int getpcd(String u) {
 		if(pcd.containsKey(u))
 			return pcd.get(u);
 		else 
 			return 0;
 	}
-	public void color(String dst, HashSet<String> visited, HashSet<String> color) {
-		KCoreResult H = findSubCore(dst);
-		for(String str: H.graph.keySet()) {
-			color.add(str);
+	public void color(String dst, int c, HashSet<String> visited, HashSet<String> color) {
+		visited.add(dst);
+		if(!color.contains(dst))
+			color.add(dst);
+		
+		HashSet<String> temp = graph.get(dst);
+		HashSet<String> neighbors = null;
+		if(temp == null)
+			neighbors = new HashSet<String>();
+		else
+			neighbors = new HashSet<String>(temp);
+		for(String neighbor:neighbors) {
+			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c )
+				color(neighbor,c,visited,color);
 		}
 	}
 

@@ -128,11 +128,11 @@ public class CopyOfBagOfSnowballsLinkedList implements DensestSubgraph{
 				srcSnowBall.addEdge(edge);
 				ensureInvariant(srcSnowBall,nodeMap);	
 			}
-			/*else {
+			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
 					this.fixMainCore(src, nodeMap, srcSnowBall);
 				}
-			}*/
+			}
 		}
 		
 		if(this.getMaximalDensity(nodeMap) < initialDensity) {
@@ -211,12 +211,11 @@ public class CopyOfBagOfSnowballsLinkedList implements DensestSubgraph{
 		if(s1.id == s2.id) 
 			return false;
 		else {
-			return (verifyMainCore(src,nodeMap,s1) || verifyMainCore(dst,nodeMap,s2));
-			/*HashSet<String> visited = new HashSet<String>();
+			HashSet<String> visited = new HashSet<String>();
 			HashSet<String> neighbors = new HashSet<String>();
 
-			kCore.color(src, visited, neighbors);
-			return neighbors.contains(dst);*/
+			kCore.color(src,kCore.getKCore(src), visited, neighbors);
+			return neighbors.contains(dst);
 		}
 	} 
 
@@ -452,7 +451,7 @@ public class CopyOfBagOfSnowballsLinkedList implements DensestSubgraph{
 		HashSet<String> neighbors = new HashSet<String>();
 		HashSet<SnowBall> remove = new HashSet<SnowBall>();
 
-		kCore.color(src, visited, neighbors);
+		kCore.color(src,kCore.getKCore(src), visited, neighbors);
 		for(SnowBall s:bag) {
 			SetFunctions helper = new SetFunctions();
 			if(helper.intersection(s.getNodes(), neighbors) > 0  && !srcSnowBall.equals(s)) {
