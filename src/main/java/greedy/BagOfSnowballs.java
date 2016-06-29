@@ -394,17 +394,20 @@ public class BagOfSnowballs implements DensestSubgraph{
 		}
 	}
 	void synchronizeSnowBalls(NodeMap nodeMap) {
-		ArrayList<SnowBall> removable = new ArrayList<SnowBall> ();
 		for(SnowBall s: bag) {
 			if(s.getDensity() < maximalDensity ) {
 				s.setMaximalDensity(maximalDensity, nodeMap);
-				ensureInvariant(s,nodeMap);	
-				if(s.isEmpty())
-					removable.add(s);
 			}
 		}
-		for(SnowBall s: removable) {
-			bag.remove(s);
+		ArrayList<String> addNodes= new ArrayList<String>();
+		for(SnowBall s :bag) {
+			HashSet<String> nodes = new HashSet<String>();
+			s.ensureFirstInVariant(nodeMap,nodes,this);
+			addNodes.addAll(nodes);
+		}
+		
+		for(String node: addNodes) {
+			addNode(node,nodeMap);
 		}
 	}
 	boolean isConnected(SnowBall snowBall, String src, String dst, ArrayList<String> visited) {
