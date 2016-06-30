@@ -37,8 +37,9 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		return this.graph.containsKey(src);
 	}
 	void removeNode(String src) {
-		HashSet<String> neighbors = new HashSet<String>(graph.get(src));
-		if(neighbors != null ) {
+		HashSet<String> temp = graph.get(src);
+		if(temp != null ) {
+			HashSet<String> neighbors = new HashSet<String>(temp);
 			for(String neighbor:neighbors) {
 				graph.get(neighbor).remove(src);
 				graph.get(src).remove(neighbor);
