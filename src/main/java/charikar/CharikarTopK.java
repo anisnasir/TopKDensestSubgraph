@@ -28,7 +28,8 @@ public class CharikarTopK implements DensestSubgraph{
 		for(int i =0 ; i< k; i++) {
 			out = densest.getDensest(degreeMapLocal.getCopy(),nodeMapLocal.getCopy());
 			list.add(out.get(0));
-			removeBulk(degreeMapLocal, nodeMapLocal, out.get(0));
+			if(i+1 < k )
+				removeBulk(degreeMapLocal, nodeMapLocal, out.get(0));
 			if(nodeMapLocal.getNumNodes() == 0)
 				return list;
 		}

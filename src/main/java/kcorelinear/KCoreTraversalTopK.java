@@ -35,7 +35,8 @@ public class KCoreTraversalTopK implements DensestSubgraph{
 		for(int i =0 ; i< k; i++) {
 			out = densest.getDensest(null, nodeMap);
 			list.add(out.get(0));
-			removeBulk(nodeMap, out.get(0), removedEdges);
+			if(i+1 < k )
+				removeBulk(nodeMap, out.get(0), removedEdges);
 
 			if(nodeMap.getNumNodes() == 0) {
 				addRemovedEdges(removedEdges, nodeMap);

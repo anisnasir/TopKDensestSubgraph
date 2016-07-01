@@ -60,8 +60,7 @@ public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 		
 	}
 	
-	public void color(String dst, HashSet<String> visited, HashSet<String> color) {
-		int c = kCore.get(dst);
+	public void color(String dst, int c , HashSet<String> visited, HashSet<String> color) {
 		visited.add(dst);
 		if(!color.contains(dst))
 			color.add(dst);
@@ -74,7 +73,7 @@ public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 			neighbors = new HashSet<String>(temp);
 		for(String neighbor:neighbors) {
 			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c )
-				color(neighbor,visited,color);
+				color(neighbor,c, visited,color);
 		}
 	}
 	
@@ -170,7 +169,7 @@ public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 		if (C_u > C_v) {
 			int c = C_v;
 			if(Xv < c) {
-				color(v, visited,color);
+				color(v, c, visited,color);
 				HashSet<String> V_c = new HashSet<String>();
 				reColorDelete(c,V_c,color);
 				updateDelete(c,V_c);
@@ -179,7 +178,7 @@ public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 		} else if (C_u < C_v) {
 			int c = C_u;
 			if(Xu < c) {
-				color(u, visited,color);
+				color(u,c,  visited,color);
 				HashSet<String> V_c = new HashSet<String>();
 				reColorDelete(c,V_c,color);
 				updateDelete(c,V_c);
@@ -187,10 +186,10 @@ public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 		} else {
 			int c = C_u;
 			if( Xu < c && Xv < c ) {
-				color(u,visited,color);
+				color(u,c, visited,color);
 				if(!color.contains(v)) {
 					visited = new HashSet<String>();
-					color(v,visited,color);
+					color(v,c, visited,color);
 					HashSet<String> V_c = new HashSet<String>();
 					reColorDelete(c,V_c,color);
 					updateDelete(c,V_c);
@@ -202,13 +201,13 @@ public class KCoreQuad implements DensestSubgraph,IncrementalKCore{
 				}
 			}
 			if(Xu < c && Xv >= c) {
-				color(u,visited,color);
+				color(u,c, visited,color);
 				HashSet<String> V_c = new HashSet<String>();
 				reColorDelete(c,V_c,color);
 				updateDelete(c,V_c);
 			}
 			if(Xu>= c  && Xv < c ) {
-				color(v,visited,color);
+				color(v,c, visited,color);
 				HashSet<String> V_c = new HashSet<String>();
 				reColorDelete(c,V_c,color);
 				updateDelete(c,V_c);

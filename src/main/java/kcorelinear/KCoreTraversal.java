@@ -107,9 +107,6 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 			pcd.put(r,count);
 
 		}
-		//System.out.println("lallala mcd " + mcd);
-		//System.out.println("lalal pcd " + pcd );
-		
 		//finished preparing rcds
 		HashSet<String> temp = graph.get(r);
 		HashSet<String> neighbors;
@@ -459,8 +456,9 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 		else
 			neighbors = new HashSet<String>(temp);
 		for(String neighbor:neighbors) {
-			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c )
+			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c && getmcd(neighbor) >= c) {
 				color(neighbor,c,visited,color);
+			}
 		}
 	}
 

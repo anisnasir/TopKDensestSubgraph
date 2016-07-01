@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import kcorelinear.KCoreTraversal;
+import kcorequad.KCoreQuad;
 import struct.NodeMap;
 import utility.SetFunctions;
 
@@ -67,7 +68,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		return this.density;
 	}
 	public void addNode(String src, NodeMap nodeMap) {
-		kCore.addNode(src);
+		//kCore.addNode(src);
 		HashSet<String> tempNeighbors = nodeMap.getNeighbors(src);
 		if(tempNeighbors == null)
 			return;
@@ -158,17 +159,19 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		}
 		//System.out.println(this.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes);
-		
-		
-		
-
 	}
-	/*
-	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
+	
+	/*void merge(SnowBall newSnowBall, NodeMap nodeMap) {
+		System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
+		
+		System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
+		
 		Set<String> nodes = newSnowBall.getNodes();
 		for(String node:nodes) {
 			this.addNode(node, nodeMap);
 		}
+		System.out.println(this.getNodes());
+		System.out.println(this.numEdges + " " + this.numNodes);
 
 	}*/
 
