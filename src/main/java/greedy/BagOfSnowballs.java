@@ -19,14 +19,14 @@ import utility.SetFunctions;
 public class BagOfSnowballs implements DensestSubgraph{
 	public HashSet<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
-	public KCoreTraversal kCore;
+	public KCoreQuad kCore;
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
 
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
-		kCore = new KCoreTraversal(bagGraph);
+		kCore = new KCoreQuad(bagGraph);
 		bag = new HashSet<SnowBall>();
 		this.k = k;
 	}
@@ -332,6 +332,13 @@ public class BagOfSnowballs implements DensestSubgraph{
 		int prevSrcDegree = srcDegree+1;
 		int prevDstDegree = dstDegree+1;
 		
+		
+		//System.out.println(bagGraph);
+		//System.out.println(kCore.kCore);
+		//System.out.println(src +  " " + srcDegree + " " + dst + " " + dstDegree);
+		if(prevSrcDegree < maximalDensity && prevDstDegree < maximalDensity)
+			return;
+
 		if(bagGraph.containsKey(src)) {
 			if(bagGraph.containsKey(dst)) {
 				if(bagGraph.get(src).contains(dst)) 
@@ -339,12 +346,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 						removeEdgeKCore(edge);
 			}
 		}
-		//System.out.println(bagGraph);
-		//System.out.println(kCore.kCore);
-		//System.out.println(src +  " " + srcDegree + " " + dst + " " + dstDegree);
-		if(prevSrcDegree < maximalDensity && prevDstDegree < maximalDensity)
-			return;
-
+		
 		double currentMaximalDensity = this.getMaximalDensity(nodeMap);
 		boolean flag = false;
 
@@ -391,7 +393,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 				}
 
 			}
-
 			if(temp!=null) {
 				ensureInvariant(temp,nodeMap);
 				if(temp.contains(src) && temp.contains(dst) && temp.getMainCore() == 1) {

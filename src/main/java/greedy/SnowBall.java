@@ -20,13 +20,13 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	int numNodes;
 	String id;
 	HashMap<String,HashSet<String>> graph;
-	KCoreTraversal kCore;
+	KCoreQuad kCore;
 
 	public SnowBall() {
 		this.id = UUID.randomUUID().toString();
 		this.density = 0;
 		this.graph = new HashMap<String,HashSet<String>>();
-		this.kCore = new KCoreTraversal(graph);
+		this.kCore = new KCoreQuad(graph);
 	}
 	public int getNumNodes() {
 		return this.numNodes;
@@ -143,8 +143,8 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		for(String node:nodes) {
 			this.graph.put(node, new HashSet<String>(newSnowBall.graph.get(node)));
 			this.kCore.kCore.put(node, newSnowBall.getCoreNumber(node));
-			this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
-			this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
+			//this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
+			//this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
 		}
 		
 		for(String node:nodes) {

@@ -456,7 +456,7 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 		else
 			neighbors = new HashSet<String>(temp);
 		for(String neighbor:neighbors) {
-			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c && getmcd(neighbor) >= c) {
+			if(!visited.contains(neighbor) && this.getKCore(neighbor) == c ) {
 				color(neighbor,c,visited,color);
 			}
 		}

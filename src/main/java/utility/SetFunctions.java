@@ -31,6 +31,8 @@ public class SetFunctions {
 		Set<String> a;
 		Set<String> b;
 		int counter = 0;
+		if(set1 == null || set2 == null)
+			return 0;
 		if (set1.size() <= set2.size()) {
 			a = set1;
 			b = set2; 
