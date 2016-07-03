@@ -22,15 +22,20 @@ public class Bahmani implements DensestSubgraph {
 		
 		double threshold = 2*(1+epsilon)*density;
 		
+		//System.out.println(nodeMap.map);
+		//System.out.println(degreeMap.map);
+		
 		int nextMin = 0 ;
 		int prevNumNodes = nodeMap.getNumNodes();
-		while(nodeMap.getNumNodes() > 0){
+		
+		while(nextMin <= threshold && nextMin < degreeMap.capacity){
 			int i = nextMin ;
 			HashSet<String> temp = new HashSet<String>();
 			while( i <= threshold && i < degreeMap.capacity ) { 
 				temp.addAll(new HashSet<String>(degreeMap.map.get(i)));
 				i++;
 			}
+			nextMin = i;
 
 			for(String element: temp) {
 				densest.add(element);
@@ -44,22 +49,24 @@ public class Bahmani implements DensestSubgraph {
 					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
 
 				if(neighbors.size() > 0 ) {
-					EdgeHandler helper = new EdgeHandler();
 					if(neighbors.size() > 0 ) {
+						EdgeHandler helper = new EdgeHandler();
 						for(String neighbor:neighbors) {
 							//System.out.println(element+ " " + neighbor);
 							helper.handleEdgeDeletion(new StreamEdge(element,neighbor), nodeMap,degreeMap);
-
+							
 							int nodeDegree = nodeMap.getDegree(neighbor);
-							if(nodeDegree < nextMin) {
+							if(nodeDegree == 0 && !temp.contains(neighbor))
+								densest.add(neighbor);
+							if(nodeDegree < nextMin && nodeDegree != 0 ) {
 								nextMin=nodeDegree;
 							}	
 						}
 					}
 				}
 			}
-			
-			if(nodeMap.getNumNodes() == 0) { 
+			//System.out.println("degree map " + degreeMap.map);
+			if(nodeMap.getNumNodes() == 0 ) { 
 				ArrayList<Output> outputArray = new ArrayList<Output>();
 				Output output = new Output();
 				output.density = density;

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 
 import kcorelinear.KCoreTraversal;
-import kcorequad.KCoreQuad;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
@@ -19,14 +18,14 @@ import utility.SetFunctions;
 public class BagOfSnowballs implements DensestSubgraph{
 	public HashSet<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
-	public KCoreQuad kCore;
+	public KCoreTraversal kCore;
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
 
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
-		kCore = new KCoreQuad(bagGraph);
+		kCore = new KCoreTraversal(bagGraph);
 		bag = new HashSet<SnowBall>();
 		this.k = k;
 	}
@@ -85,7 +84,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 			neighbors.add(src);
 			bagGraph.put(dst, neighbors);
 		}
-
 		kCore.addEdge(src, dst);
 	}
 
@@ -94,9 +92,14 @@ public class BagOfSnowballs implements DensestSubgraph{
 		String dst = edge.getDestination();
 		if( bagGraph.containsKey(src)) { 
 			if(bagGraph.containsKey(dst)) {
-				bagGraph.get(src).remove(dst);
-				bagGraph.get(dst).remove(src);
-				kCore.removeEdge(src, dst);
+				if(bagGraph.get(src).contains(dst)) {
+					if(bagGraph.get(dst).contains(src)) {
+						bagGraph.get(src).remove(dst);
+						bagGraph.get(dst).remove(src);
+						kCore.removeEdge(src, dst);
+					}
+				}
+				
 			}
 		}
 	}
@@ -104,8 +107,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		String src = edge.getSource();
 		String dst = edge.getDestination();
 		
-		
-
 		int srcDegree = nodeMap.getDegree(src);
 		int dstDegree = nodeMap.getDegree(dst);
 		
@@ -113,8 +114,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		if (srcDegree < maximalDensity && dstDegree < maximalDensity) {
 			return;
 		} 
-		
-		
 		
 		double initialDensity= this.getMaximalDensity(nodeMap);
 
@@ -150,9 +149,9 @@ public class BagOfSnowballs implements DensestSubgraph{
 			SnowBall srcSnowBall = addNode(src,nodeMap);
 			SnowBall dstSnowBall = addNode(dst, nodeMap);
 	
-			if(srcSnowBall.equals(dstSnowBall)) {
-				srcSnowBall.addEdge(edge);
-				ensureInvariant(srcSnowBall,nodeMap);	
+			if(dstSnowBall.contains(src)) {
+				dstSnowBall.addEdge(edge);
+				ensureInvariant(dstSnowBall,nodeMap);	
 			}
 			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
@@ -206,7 +205,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 				if(internalDegree == maxIntersection) {
 					allMax.add(s);
 					max = s;
-					maxIntersection = internalDegree;
 				}else {
 					allMax = new ArrayList<SnowBall>();
 					allMax.add(s);
@@ -227,7 +225,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			max.addNode(src, nodeMap);
 			if(allMax.size() > 1) {
 				for(SnowBall s: allMax) {
-					if(!max.equals(s)) {
+					if(!s.contains(src)) {
 						max.merge(s, nodeMap);
 						bag.remove(s);
 					}
@@ -241,15 +239,11 @@ public class BagOfSnowballs implements DensestSubgraph{
 	}
 
 	boolean canMerge(String src, String dst, SnowBall s1, SnowBall s2, NodeMap nodeMap) {
-		if(s1.id == s2.id) 
-			return false;
-		else {
-			HashSet<String> visited = new HashSet<String>();
-			HashSet<String> neighbors = new HashSet<String>();
+		HashSet<String> visited = new HashSet<String>();
+		HashSet<String> neighbors = new HashSet<String>();
 
-			kCore.color(src,kCore.getKCore(src), visited, neighbors);
-			return neighbors.contains(dst);
-		}
+		kCore.color(src,kCore.getKCore(src), visited, neighbors);
+		return neighbors.contains(dst);
 	} 
 
 	void cleanup(NodeMap nodeMap) {
@@ -491,20 +485,22 @@ public class BagOfSnowballs implements DensestSubgraph{
 	void fixMainCore(String src, NodeMap nodeMap, SnowBall srcSnowBall) {
 		HashSet<String> visited = new HashSet<String>();
 		HashSet<String> neighbors = new HashSet<String>();
-		HashSet<SnowBall> remove = new HashSet<SnowBall>();
-
-		kCore.color(src,kCore.getKCore(src), visited, neighbors);
-		for(SnowBall s:bag) {
+		
+		HashSet<SnowBall> merge = new HashSet<SnowBall>();
+ 		kCore.color(src,kCore.getKCore(src), visited, neighbors);
+ 		neighbors.removeAll(srcSnowBall.getNodes());
+ 		for(SnowBall s:bag) {
 			SetFunctions helper = new SetFunctions();
 			HashSet<String> common = helper.intersectionSet(s.getNodes(), neighbors) ;
-			if(common.size() > 0  && !srcSnowBall.equals(s)) {
-				srcSnowBall.merge(s, nodeMap);
-				remove.add(s);
+			if(common.size() > 0) {
+				merge.add(s);
 			}
 		}
-		for(SnowBall s:remove) {
+		for(SnowBall s:merge) {
+			srcSnowBall.merge(s, nodeMap);
 			bag.remove(s);
 		}
+		
 		this.ensureInvariant(srcSnowBall, nodeMap);
 	}
 

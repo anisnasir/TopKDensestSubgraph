@@ -52,11 +52,15 @@ public class Charikar implements DensestSubgraph{
 					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
 				
 				if(neighbors.size() > 0 ) {
-					EdgeHandler helper = new EdgeHandler();
 					if(neighbors.size() > 0 ) {
 						for(String neighbor:neighbors) {
 							//System.out.println(element+ " " + neighbor);
-							helper.handleEdgeDeletion(new StreamEdge(element,neighbor), nodeMap,degreeMap);
+							int neighborDegree = nodeMap.getDegree(neighbor);
+							degreeMap.decremnetDegree(neighborDegree, neighbor);
+										
+							//removes from each others neighbor table
+							nodeMap.removeEdge(element, neighbor);
+							nodeMap.removeEdge(neighbor, element);
 							
 							int nodeDegree = nodeMap.getDegree(neighbor);
 							if(nodeDegree < i) {

@@ -20,6 +20,7 @@ public class KCore implements DensestSubgraph{
 		int coreNumber =0;
 		double density = 0;
 		
+		//System.out.println(degreeMap.map);
 		//System.out.println(degreeMap.capacity);
 		int i = 0 ;
 		while(i < degreeMap.capacity){
@@ -54,13 +55,18 @@ public class KCore implements DensestSubgraph{
 				else 
 					neighbors = new HashSet<String>(nodeMap.getNeighbors(element));
 				
-				EdgeHandler helper = new EdgeHandler();
 				if(neighbors.size() > 0 ) {
 					for(String neighbor:neighbors) {
 						//System.out.println(element+ " " + neighbor);
-						helper.handleEdgeDeletion(new StreamEdge(element,neighbor), nodeMap,degreeMap);
+						int neighborDegree = nodeMap.getDegree(neighbor);
+						degreeMap.decremnetDegree(neighborDegree, neighbor);
+									
+						//removes from each others neighbor table
+						nodeMap.removeEdge(element, neighbor);
+						nodeMap.removeEdge(neighbor, element);
 						
 						int nodeDegree = nodeMap.getDegree(neighbor);
+						
 						if(nodeDegree < i) {
 							i=nodeDegree;
 						}	
