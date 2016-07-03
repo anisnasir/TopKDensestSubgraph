@@ -150,8 +150,8 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		for(String node:nodes) {
 			this.graph.put(node, new HashSet<String>(newSnowBall.graph.get(node)));
 			this.kCore.kCore.put(node, newSnowBall.getCoreNumber(node));
-			//this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
-			//this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
+			this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
+			this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
 		}
 		
 		for(String node:nodes) {
