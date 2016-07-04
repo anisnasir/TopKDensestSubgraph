@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 import kcorelinear.KCoreTraversal;
@@ -17,7 +16,7 @@ import utility.SetFunctions;
 
 
 public class BagOfSnowballs implements DensestSubgraph{
-	public HashSet<SnowBall> bag;
+	public ArrayList<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
 	public KCoreTraversal kCore;
 	double maximalDensity = 0;
@@ -27,7 +26,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreTraversal(bagGraph);
-		bag = new HashSet<SnowBall>();
+		bag = new ArrayList<SnowBall>();
 		this.k = k;
 	}
 	public void addNodeKCore(String node, NodeMap nodeMap) {
