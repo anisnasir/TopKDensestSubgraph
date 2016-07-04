@@ -16,7 +16,7 @@ import utility.SetFunctions;
 
 
 public class BagOfSnowballs implements DensestSubgraph{
-	public ArrayList<SnowBall> bag;
+	public Bag<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
 	public KCoreTraversal kCore;
 	double maximalDensity = 0;
@@ -26,7 +26,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreTraversal(bagGraph);
-		bag = new ArrayList<SnowBall>();
+		bag = new Bag<SnowBall>();
 		this.k = k;
 	}
 	public void addNodeKCore(String node, NodeMap nodeMap) {
@@ -249,7 +249,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 	void cleanup(NodeMap nodeMap) {
 		ArrayList<SnowBall> snowBalls = new ArrayList<SnowBall>();
-
+		
 		for(SnowBall s: bag) {
 			if(s.getNumEdges()== 0 && s.getNumNodes() == 0)
 				snowBalls.add(s);
