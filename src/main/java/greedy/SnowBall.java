@@ -143,7 +143,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		SetFunctions helper = new SetFunctions();
 		int intersection = helper.intersection(nodes, localNodes);
 		if(intersection > 0)
-			System.exit(1);
+			return; //System.exit(1);
 		this.numEdges+=newSnowBall.numEdges;
 		this.numNodes+=newSnowBall.numNodes;
 		
