@@ -9,7 +9,7 @@ public class EdgeHandler {
 		
 	}
 	public void handleEdgeAddition(StreamEdge item, NodeMap nodeMap, DegreeMap degreeMap ) {
-		//System.out.println("+ " + item.toString());
+		System.out.println("+ " + item.toString());
 		String src = item.getSource();
 		String dest = item.getDestination();
 		
@@ -38,7 +38,7 @@ public class EdgeHandler {
 	}
 	
 	public void handleEdgeDeletion(StreamEdge oldestEdge, NodeMap nodeMap, DegreeMap degreeMap ) {
-		//System.out.println("- " + oldestEdge.toString());
+		System.out.println("- " + oldestEdge.toString());
 		String oldSrc = oldestEdge.getSource();
 		String oldDest = oldestEdge.getDestination();
 		

@@ -72,7 +72,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		//kCore.addNode(src);
 		HashSet<String> tempNeighbors = nodeMap.getNeighbors(src);
 		if(tempNeighbors == null)
-			return;
+			System.exit(1);
 
 		SetFunctions helper = new SetFunctions();
 		HashSet<String> neighbors = new HashSet<String>(helper.intersectionSet(tempNeighbors,graph.keySet()));
