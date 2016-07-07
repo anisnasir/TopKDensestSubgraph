@@ -258,16 +258,16 @@ public class Main {
  				BagOfSnowballs bag = (BagOfSnowballs) densest;
  				bag.addEdge(item, nodeMap,degreeMap);
  				
- 				System.out.println(bag.kCore.kCore);
+ 				//System.out.println(bag.kCore.kCore);
  				if(oldestEdge != null) {
  					utility.handleEdgeDeletion(oldestEdge, nodeMap, degreeMap);
  					bag.removeEdge(oldestEdge,nodeMap, degreeMap);
 
- 	 				System.out.println(bag.kCore.kCore);
+ 	 				//System.out.println(bag.kCore.kCore);
  				}
  				output = bag.getDensest(degreeMap, nodeMap);
  				//System.out.println(bag.bag.size());
- 				bag.print();
+ 				//bag.print();
  				
  				
  			} else if (simulatorType == 11) {
