@@ -72,7 +72,6 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		//kCore.addNode(src);
 		HashSet<String> tempNeighbors = nodeMap.getNeighbors(src);
 		
-
 		SetFunctions helper = new SetFunctions();
 		HashSet<String> neighbors = new HashSet<String>(helper.intersectionSet(tempNeighbors,graph.keySet()));
 		if(neighbors!= null) {
@@ -136,13 +135,18 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
 		//System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
-		Set<String> nodes = newSnowBall.getNodes();
+		Set<String> nodes = new HashSet<String>(newSnowBall.getNodes());
 		HashSet<String> localNodes = new HashSet<String>(this.getNodes());
 		
 		SetFunctions helper = new SetFunctions();
 		int intersection = helper.intersection(nodes, localNodes);
-		if(intersection > 0)
-			return; //System.exit(1);
+		if(intersection > 0) {
+			System.out.println(this.getNodes() + " "  + newSnowBall.getNodes());
+			System.out.println(this.graph);
+			System.out.println(newSnowBall.graph);
+			System.exit(1);
+		}
+			
 		this.numEdges+=newSnowBall.numEdges;
 		this.numNodes+=newSnowBall.numNodes;
 		
@@ -151,6 +155,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 			this.kCore.kCore.put(node, newSnowBall.getCoreNumber(node));
 			this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
 			this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
+			
 		}
 		
 		for(String node:nodes) {
@@ -163,6 +168,9 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 
 			}
 		}
+		newSnowBall.graph = new HashMap<String,HashSet<String>>();
+		newSnowBall.numEdges = 0 ;
+		newSnowBall.numNodes = 0 ;
 		//System.out.println(this.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes);
 	}
@@ -237,6 +245,12 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 				}
 			}
 		}
+		
+		if(nodeMap.getDegree(src) == 0)
+			graph.remove(src);
+		if(nodeMap.getDegree(dst) == 0)
+			graph.remove(dst);
+		
 
 		
 	}
@@ -246,16 +260,12 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 
 	@Override
 	public int compareTo(SnowBall o) {
-		if (o.getDensity() == this.getDensity() && o.serialVersionUID == this.serialVersionUID)
+		if (this.id == o.id) {
 			return 0;
-		else if (this.getDensity() > o.getDensity())
+		}else if (this.getDensity() > o.getDensity())
 			return 1;
 		else 
 			return -1;
-	}
-
-	public boolean equals(SnowBall o) {
-		return (this.id == o.id);
 	}
 
 	public int  getCoreNumber(String src) {
