@@ -135,8 +135,10 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
 		//System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
-		Set<String> nodes = new HashSet<String>(newSnowBall.getNodes());
+		long startTime = System.currentTimeMillis();
+		HashSet<String> nodes = new HashSet<String>(newSnowBall.getNodes());
 		HashSet<String> localNodes = new HashSet<String>(this.getNodes());
+		
 		
 		SetFunctions helper = new SetFunctions();
 		int intersection = helper.intersection(nodes, localNodes);
@@ -147,6 +149,8 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 			System.exit(1);
 		}
 			
+		System.out.println(("step 1 "   + (System.currentTimeMillis()-startTime)/(double)1000));
+		
 		this.numEdges+=newSnowBall.numEdges;
 		this.numNodes+=newSnowBall.numNodes;
 		
@@ -158,6 +162,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 			
 		}
 		
+		System.out.println("step 2 "  + ((System.currentTimeMillis()-startTime)/(double)1000));
 		for(String node:nodes) {
 			HashSet<String> neighbors = nodeMap.getNeighbors(node);
 			if(neighbors!=null) {
@@ -168,9 +173,11 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 
 			}
 		}
+		System.out.println("step 3 " + ((System.currentTimeMillis()-startTime)/(double)1000 ) );
 		newSnowBall.graph = new HashMap<String,HashSet<String>>();
 		newSnowBall.numEdges = 0 ;
 		newSnowBall.numNodes = 0 ;
+		System.out.println("step 4 " + ((System.currentTimeMillis()-startTime)/(double)1000));
 		//System.out.println(this.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes);
 	}

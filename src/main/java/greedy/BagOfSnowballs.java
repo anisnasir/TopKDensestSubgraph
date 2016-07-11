@@ -22,7 +22,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
-
+	
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
 		kCore = new KCoreTraversal(bagGraph);
@@ -549,22 +549,53 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<String> visited = new HashSet<String>();
 		HashSet<String> neighbors = new HashSet<String>();
 		
-		HashSet<SnowBall> merge = new HashSet<SnowBall>();
  		kCore.color(src,kCore.getKCore(src), visited, neighbors);
- 		neighbors.removeAll(srcSnowBall.getNodes());
+ 		
+ 		
+ 		//remove all the other snowballs
+ 		HashSet<SnowBall> merge = new HashSet<SnowBall>();
  		for(SnowBall s:bag) {
 			SetFunctions helper = new SetFunctions();
-			HashSet<String> common = helper.intersectionSet(s.getNodes(), neighbors) ;
+			HashSet<String> common = helper.intersectionSet(new HashSet<String>(s.getNodes()), neighbors) ;
 			if(common.size() > 0 && !srcSnowBall.equals(s)) {
 				merge.add(s);
 			}
 		}
-		for(SnowBall s:merge) {
-			srcSnowBall.merge(s, nodeMap);
+ 		
+ 		for(SnowBall s:merge) {
+			//srcSnowBall.merge(s, nodeMap);
 			bag.remove(s);
 		}
 		
-		this.ensureInvariant(srcSnowBall, nodeMap);
+ 		srcSnowBall.graph = new HashMap<String,HashSet<String>>();
+ 		srcSnowBall.kCore = new KCoreTraversal(srcSnowBall.graph);
+ 		srcSnowBall.kCore.mcd = new HashMap<String,Integer>();
+ 		srcSnowBall.kCore.pcd = new HashMap<String,Integer>();
+ 		
+ 		int edgeCount = 0 ;
+ 		for(String node: neighbors) {
+ 			HashSet<String> neigs = nodeMap.getNeighbors(node);
+ 			SetFunctions helper = new SetFunctions();
+			HashSet<String> common = helper.intersectionSet(neigs, neighbors) ;
+			edgeCount+= common.size();
+			srcSnowBall.graph.put(node, common);
+			srcSnowBall.kCore.kCore.put(node, kCore.getKCore(node));	
+ 		}
+ 		
+ 		srcSnowBall.numEdges = edgeCount/2;
+ 		srcSnowBall.numNodes = neighbors.size();
+ 		srcSnowBall.getDensity();
+ 		
+ 		
+ 		for(String node: neighbors) {
+ 			srcSnowBall.kCore.setmcd(node);
+ 		}
+ 		for(String node: neighbors) {
+ 			srcSnowBall.kCore.setpcd(node);
+ 		}
+ 		
+ 		this.ensureInvariant(srcSnowBall, nodeMap);
+ 		
 	}
 
 	@Override
