@@ -101,7 +101,7 @@ public class Main {
 		}
 		
 		//input reader
-		String sep = " ";
+		String sep = "\t";
 		BufferedReader in = null;
 		
 		try {
