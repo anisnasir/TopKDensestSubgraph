@@ -158,8 +158,8 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
-					this.fixMainCore(src, nodeMap, srcSnowBall);
-					ensureInvariant(srcSnowBall,nodeMap);
+					//this.fixMainCore(src, nodeMap, srcSnowBall);
+					//ensureInvariant(srcSnowBall,nodeMap);
 				}
 			}
 			
@@ -273,11 +273,21 @@ public class BagOfSnowballs implements DensestSubgraph{
 		}
 	}
 	boolean canMerge(String src, String dst, SnowBall s1, SnowBall s2, NodeMap nodeMap) {
-		HashSet<String> visited = new HashSet<String>();
+		/*HashSet<String> visited = new HashSet<String>();
 		HashSet<String> neighbors = new HashSet<String>();
 
 		kCore.color(src,kCore.getKCore(src), visited, neighbors);
 		return neighbors.contains(dst);
+		*/
+		if(this.verifyMainCore(src, nodeMap, s1)) {
+			this.fixMainCore(src, nodeMap,s1);
+		}
+		if(!s1.contains(dst)) {
+			if(this.verifyMainCore(dst, nodeMap, s2)) {
+				this.fixMainCore(dst, nodeMap,s2);
+			}
+		}
+		return true;
 	} 
 
 	void cleanup(NodeMap nodeMap) {
@@ -309,11 +319,16 @@ public class BagOfSnowballs implements DensestSubgraph{
 			maximalDensity = 0 ;
 			return 0;
 		}
+		int k1;
+		if(bag.size() > k) 
+			k1  =1;
+		else 
+			k1 = k;
 		int count = 0;
-		PriorityQueue<Double> queue = new PriorityQueue<Double>(k);
+		PriorityQueue<Double> queue = new PriorityQueue<Double>(k1);
 		for(SnowBall s: bag) {
 			double tempDensity = s.getDensity();
-			if(count < k) {
+			if(count < k1) {
 				queue.offer(tempDensity);
 				count++;
 			}else {
@@ -325,7 +340,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 
 		}
-		if(count < k )
+		if(count < k1 )
 			return 0;
 		maximalDensity = queue.peek();
 		return maximalDensity;
