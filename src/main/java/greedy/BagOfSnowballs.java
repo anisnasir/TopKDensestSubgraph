@@ -146,7 +146,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}else {
 				addEdgeKCore(edge);
 			}
-		
 			SnowBall srcSnowBall = addNode(src,nodeMap);
 			SnowBall dstSnowBall = addNode(dst, nodeMap);
 	
@@ -158,7 +157,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 			}
 			else {
 				if(this.canMerge(src, dst, srcSnowBall,dstSnowBall, nodeMap)) {
-					//this.fixMainCore(src, nodeMap, srcSnowBall);
+					this.fixMainCore(src, nodeMap, srcSnowBall);
 					//ensureInvariant(srcSnowBall,nodeMap);
 				}
 			}
@@ -247,6 +246,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<String> neighbors = nodeMap.getNeighbors(src);
 		for(SnowBall s: bag) {
 			if(s.contains(src)) {
+
 				return s;
 			}
 			SetFunctions helper = new SetFunctions();
@@ -264,22 +264,24 @@ public class BagOfSnowballs implements DensestSubgraph{
 			newBall.setMaximalDensity(maximalDensity, nodeMap);
 			bag.add(newBall);
 			//updateStats(newBall,src,nodeMap);
+
 			return newBall;
 		}else {
 			max.addNode(src, nodeMap);
 			ensureInvariant(max,nodeMap);
 			//updateStats(max,src,nodeMap);
+
 			return max;
 		}
 	}
 	boolean canMerge(String src, String dst, SnowBall s1, SnowBall s2, NodeMap nodeMap) {
-		/*HashSet<String> visited = new HashSet<String>();
+		HashSet<String> visited = new HashSet<String>();
 		HashSet<String> neighbors = new HashSet<String>();
 
 		kCore.color(src,kCore.getKCore(src), visited, neighbors);
 		return neighbors.contains(dst);
-		*/
-		if(this.verifyMainCore(src, nodeMap, s1)) {
+		
+		/*if(this.verifyMainCore(src, nodeMap, s1)) {
 			this.fixMainCore(src, nodeMap,s1);
 		}
 		if(!s1.contains(dst)) {
@@ -287,7 +289,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 				this.fixMainCore(dst, nodeMap,s2);
 			}
 		}
-		return true;
+		return true;*/
 	} 
 
 	void cleanup(NodeMap nodeMap) {
@@ -522,6 +524,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 		for(String node: nodes) {
 			addNode(node,nodeMap);
 		}
+
 	}
 	void synchronizeSnowBalls(NodeMap nodeMap) {
 		for(SnowBall s: bag) {
@@ -610,7 +613,7 @@ public class BagOfSnowballs implements DensestSubgraph{
  		}
  		
  		this.ensureInvariant(srcSnowBall, nodeMap);
- 		
+
 	}
 
 	@Override
