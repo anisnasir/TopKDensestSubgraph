@@ -2,7 +2,7 @@
 JAR="target/kcore-0.0.1-SNAPSHOT.jar"
 simulatorType=10
 inDir="/home/anis/Datasets/"
-inFile="com-lj-1.5m.ungraph"
+inFile="com-lj-1.5.ungraph"
 window=1000001
 epsilon=0.1
 algo="greedy"
