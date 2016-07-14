@@ -228,13 +228,13 @@ public class Main {
 				output=densest.getDensest(degreeMap, nodeMap);
  			}  else if ( simulatorType == 5) {
  				if(executeCounter++ % EXECUTE_INTERVAL == 0)
- 					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+ 					output = densest.getDensest(degreeMap,nodeMap);
 			} else if ( simulatorType == 6) {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
-					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+					output = densest.getDensest(degreeMap,nodeMap);
 			} else if ( simulatorType == 7) {
 				if(executeCounter++ % EXECUTE_INTERVAL == 0)
-					output = densest.getDensest(degreeMap.getCopy(),nodeMap.getCopy());
+					output = densest.getDensest(degreeMap,nodeMap);
 			}  else if (simulatorType == 8) {
 				KCoreQuadTopK kCoreTopK = (KCoreQuadTopK) densest;
 				KCoreQuad kCore = kCoreTopK.densest;
@@ -244,7 +244,7 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
-				if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
 					output = densest.getDensest(degreeMap,nodeMap.getCopy());
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
@@ -283,7 +283,7 @@ public class Main {
 				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
 				output = densest.getDensest(degreeMap,nodeMap);
 				
-				System.out.println(kCore.kCore);
+				//System.out.println(kCore.kCore);
 			}
 			
 			
