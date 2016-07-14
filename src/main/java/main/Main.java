@@ -283,7 +283,7 @@ public class Main {
 				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
 				output = densest.getDensest(degreeMap,nodeMap);
 				
-				System.out.println(kCore.kCore);
+				//System.out.println(kCore.kCore);
 			}
 			
 			
