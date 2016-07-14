@@ -24,7 +24,7 @@
           <manifest>
             <addClasspath>true</addClasspath>
             <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>kcore.Main</mainClass>
+            <mainClass>main.Main</mainClass>
           </manifest>
         </archive>
       </configuration>
