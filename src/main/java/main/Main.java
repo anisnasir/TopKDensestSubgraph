@@ -280,7 +280,7 @@ public class Main {
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 					
 				}
-				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				if(executeCounter++ % EXECUTE_INTERVAL == 0)
 				output = densest.getDensest(degreeMap,nodeMap);
 				
 				//System.out.println(kCore.kCore);
