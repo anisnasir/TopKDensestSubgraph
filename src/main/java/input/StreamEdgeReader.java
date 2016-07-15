@@ -32,6 +32,7 @@ public class StreamEdgeReader {
 
 			String src = tokens[0].trim();
 			String dest = tokens[1].trim();
+			
 			if(src.compareTo(dest) < 0)
 				return new StreamEdge(src, dest);
 			else

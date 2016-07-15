@@ -116,6 +116,9 @@ public class Main {
         //initialize the input reader
         StreamEdgeReader reader = new StreamEdgeReader(in,sep);
 		StreamEdge item = reader.nextItem();
+		while(item.getSource().equals(item.getDestination())) {
+			item = reader.nextItem();
+		}
 		
 		//Declare outprint interval variables
 		int PRINT_INTERVAL=100000;
@@ -309,7 +312,7 @@ public class Main {
 			
 			item = reader.nextItem();
 			if(item !=null)
-				while(nodeMap.contains(item)) {
+				while(nodeMap.contains(item) || (item.getSource().equals(item.getDestination()))) {
 					item = reader.nextItem();
 					if(item == null)
 						break;
