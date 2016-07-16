@@ -174,6 +174,7 @@ public class Main {
 		
 		int executeCounter = 0;
 		int EXECUTE_INTERVAL = 1000;
+		int EXECUTE_INTERVAL2 = 10000;
 		int edgeCounter = 0;
 		while (item != null) {
 			if (++edgeCounter % PRINT_INTERVAL == 0) {
@@ -247,7 +248,7 @@ public class Main {
 					utility.handleEdgeDeletion(oldestEdge, nodeMap);
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 				}
-				//if(executeCounter++ % EXECUTE_INTERVAL == 0)
+				if(executeCounter++ % EXECUTE_INTERVAL2 == 0)
 					output = densest.getDensest(degreeMap,nodeMap.getCopy());
 			}  else if (simulatorType == 9) {
 				EpastoTopK epasto = (EpastoTopK)densest;
@@ -283,8 +284,8 @@ public class Main {
 					kCore.removeEdge(oldestEdge.getSource(), oldestEdge.getDestination());
 					
 				}
-				if(executeCounter++ % EXECUTE_INTERVAL == 0)
-				output = densest.getDensest(degreeMap,nodeMap);
+				if(executeCounter++ % EXECUTE_INTERVAL2 == 0)
+					output = densest.getDensest(degreeMap,nodeMap);
 				
 				//System.out.println(kCore.kCore);
 			}
