@@ -444,12 +444,22 @@ public class BagOfSnowballs implements DensestSubgraph{
 
 			}
 			if(temp!=null) {
-				if(this.verifyMainCore(src, nodeMap, temp)) {
+				HashSet<String> nodes = new HashSet<String>(temp.getNodes());
+				for(String node: nodes) {
+					if(temp.contains(node)) {
+						if(this.verifyMainCore(node, nodeMap, temp)) {
+							this.fixMainCore(node, nodeMap, temp);
+					}
+				}
+				ensureInvariant(temp,nodeMap);
+				/*if(this.verifyMainCore(src, nodeMap, temp)) {
 					this.fixMainCore(src, nodeMap, temp);
 				}else if(this.verifyMainCore(dst, nodeMap, temp)) {
 						this.fixMainCore(dst, nodeMap, temp);
 				}else {
 					ensureInvariant(temp,nodeMap);
+				}
+				*/
 				}
 				if(temp.contains(src) && temp.contains(dst) && temp.getMainCore() == 1) {
 					ArrayList<String> visited = new ArrayList<String>();
@@ -470,7 +480,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 							bag.add(newSnowBall);
 					}
 				}
-			} else {
+			}/* else {
 				if(srcSnowBall != null ) {
 					if(this.verifyMainCore(src, nodeMap, srcSnowBall)) {
 						this.fixMainCore(src, nodeMap, srcSnowBall);
@@ -488,7 +498,7 @@ public class BagOfSnowballs implements DensestSubgraph{
 						this.fixMainCore(dst, nodeMap, dstSnowBall);
 					}
 				}
-			}
+			}*/
 		}
 
 		//System.out.println("-bag graph" + bagGraph+ " " + maximalDensity);

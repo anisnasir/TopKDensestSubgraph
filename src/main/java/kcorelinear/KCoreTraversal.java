@@ -356,6 +356,8 @@ public class KCoreTraversal implements DensestSubgraph,IncrementalKCore{
 		}
 
 	}
+	
+	
 
 	void propagateDismissal(HashMap<String,Integer> cd, HashSet<String> dismissed, HashSet<String> visited,  int k ,String v) {
 		dismissed.add(v);
