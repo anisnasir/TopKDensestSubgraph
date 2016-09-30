@@ -181,20 +181,6 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		//System.out.println(this.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes);
 	}
-	/*
-	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
-		//System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
-		
-		//System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
-		
-		Set<String> nodes = newSnowBall.getNodes();
-		for(String node:nodes) {
-			this.addNode(node, nodeMap);
-		}
-		//System.out.println(this.getNodes());
-		//System.out.println(this.numEdges + " " + this.numNodes);
-	
-	}*/
 
 	public void addEdge(StreamEdge edge) {
 		String src = edge.getSource();
