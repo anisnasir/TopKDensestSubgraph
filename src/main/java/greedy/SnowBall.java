@@ -21,13 +21,13 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	static long counter = 0 ;
 	long id;
 	HashMap<String,HashSet<String>> graph;
-	KCoreTraversal kCore;
+	KCoreQuad kCore;
 
 	public SnowBall() {
 		this.id = counter++;
 		this.density = 0;
 		this.graph = new HashMap<String,HashSet<String>>();
-		this.kCore = new KCoreTraversal(graph);
+		this.kCore = new KCoreQuad(graph);
 	}
 	public int getNumNodes() {
 		return this.numNodes;
@@ -138,12 +138,12 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		
 		SetFunctions helper = new SetFunctions();
 		int intersection = helper.intersection(nodes, localNodes);
-		/*if(intersection > 0) {
+		if(intersection > 0) {
 			System.out.println(this.getNodes() + " "  + newSnowBall.getNodes());
 			System.out.println(this.graph);
 			System.out.println(newSnowBall.graph);
 			System.exit(1);
-		}*/
+		}
 			
 		//System.out.println(("step 1 "   + (System.currentTimeMillis()-startTime)/(double)1000));
 		
@@ -171,6 +171,7 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		}
 		//System.out.println("step 3 " + ((System.currentTimeMillis()-startTime)/(double)1000 ) );
 		newSnowBall.graph = new HashMap<String,HashSet<String>>();
+		newSnowBall.kCore = new KCoreQuad(newSnowBall.graph);
 		newSnowBall.numEdges = 0 ;
 		newSnowBall.numNodes = 0 ;
 		//System.out.println("step 4 " + ((System.currentTimeMillis()-startTime)/(double)1000));
