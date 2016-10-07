@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 
 import kcorelinear.KCoreTraversal;
+import kcorequad.KCoreQuad;
 import output.Output;
 import struct.DegreeMap;
 import struct.NodeMap;
@@ -18,14 +19,14 @@ import utility.SetFunctions;
 public class BagOfSnowballs implements DensestSubgraph{
 	public Bag<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
-	public KCoreTraversal kCore;
+	public KCoreQuad kCore;
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
 
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
-		kCore = new KCoreTraversal(bagGraph);
+		kCore = new KCoreQuad(bagGraph);
 		bag = new Bag<SnowBall>();
 		this.k = k;
 	}
@@ -365,14 +366,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 						}
 					}
 					ensureInvariant(temp,nodeMap);
-					/*if(this.verifyMainCore(src, nodeMap, temp)) {
-					this.fixMainCore(src, nodeMap, temp);
-				}else if(this.verifyMainCore(dst, nodeMap, temp)) {
-						this.fixMainCore(dst, nodeMap, temp);
-				}else {
-					ensureInvariant(temp,nodeMap);
-				}
-					 */
 				}
 				if(temp.contains(src) && temp.contains(dst) && temp.getMainCore() == 1) {
 					ArrayList<String> visited = new ArrayList<String>();

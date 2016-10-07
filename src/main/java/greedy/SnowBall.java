@@ -105,11 +105,10 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		for(String str:graph.keySet()) {
 			int globalDegree = nodeMap.getDegree(str);
 			HashSet<String> neighbors = graph.get(str);
-			int localDegree = neighbors.size();
 			if(globalDegree < maximalDensity) {
 				removeNodes.add(str);
 				flag =  false;
-			}else if (localDegree < newDensity || kCore.getKCore(str) < this.getMainCore()) {
+			}else if ( kCore.getKCore(str) < this.getMainCore()) {
 				removeNodes.add(str);
 				temp.add(str);
 				flag = false;
@@ -135,21 +134,21 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
 		//System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 		HashSet<String> nodes = new HashSet<String>(newSnowBall.getNodes());
 		HashSet<String> localNodes = new HashSet<String>(this.getNodes());
 		
 		
 		SetFunctions helper = new SetFunctions();
 		int intersection = helper.intersection(nodes, localNodes);
-		if(intersection > 0) {
+		/*if(intersection > 0) {
 			System.out.println(this.getNodes() + " "  + newSnowBall.getNodes());
 			System.out.println(this.graph);
 			System.out.println(newSnowBall.graph);
 			System.exit(1);
-		}
+		}*/
 			
-		System.out.println(("step 1 "   + (System.currentTimeMillis()-startTime)/(double)1000));
+		//System.out.println(("step 1 "   + (System.currentTimeMillis()-startTime)/(double)1000));
 		
 		this.numEdges+=newSnowBall.numEdges;
 		this.numNodes+=newSnowBall.numNodes;
@@ -157,12 +156,12 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 		for(String node:nodes) {
 			this.graph.put(node, new HashSet<String>(newSnowBall.graph.get(node)));
 			this.kCore.kCore.put(node, newSnowBall.getCoreNumber(node));
-			this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
-			this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
+			//this.kCore.mcd.put(node, newSnowBall.kCore.getmcd(node));
+			//this.kCore.pcd.put(node, newSnowBall.kCore.getpcd(node));
 			
 		}
 		
-		System.out.println("step 2 "  + ((System.currentTimeMillis()-startTime)/(double)1000));
+		//System.out.println("step 2 "  + ((System.currentTimeMillis()-startTime)/(double)1000));
 		for(String node:nodes) {
 			HashSet<String> neighbors = nodeMap.getNeighbors(node);
 			if(neighbors!=null) {
@@ -173,11 +172,11 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 
 			}
 		}
-		System.out.println("step 3 " + ((System.currentTimeMillis()-startTime)/(double)1000 ) );
+		//System.out.println("step 3 " + ((System.currentTimeMillis()-startTime)/(double)1000 ) );
 		newSnowBall.graph = new HashMap<String,HashSet<String>>();
 		newSnowBall.numEdges = 0 ;
 		newSnowBall.numNodes = 0 ;
-		System.out.println("step 4 " + ((System.currentTimeMillis()-startTime)/(double)1000));
+		//System.out.println("step 4 " + ((System.currentTimeMillis()-startTime)/(double)1000));
 		//System.out.println(this.getNodes());
 		//System.out.println(this.numEdges + " " + this.numNodes);
 	}
