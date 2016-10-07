@@ -19,14 +19,14 @@ import utility.SetFunctions;
 public class BagOfSnowballs implements DensestSubgraph{
 	public Bag<SnowBall> bag;
 	HashMap<String,HashSet<String>> bagGraph;
-	public KCoreQuad kCore;
+	public KCoreTraversal kCore;
 	double maximalDensity = 0;
 	int count = 0; 
 	int k ;
 
 	public BagOfSnowballs(int k ) {
 		bagGraph = new HashMap<String,HashSet<String>> ();
-		kCore = new KCoreQuad(bagGraph);
+		kCore = new KCoreTraversal(bagGraph);
 		bag = new Bag<SnowBall>();
 		this.k = k;
 	}

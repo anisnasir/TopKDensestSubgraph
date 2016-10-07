@@ -271,7 +271,7 @@ public class Main {
  				}
  				output = bag.getDensest(degreeMap, nodeMap);
  				//System.out.println(bag.bag.size());
- 				//bag.print();
+ 				bag.print();
  				
  				
  			} else if (simulatorType == 11) {
