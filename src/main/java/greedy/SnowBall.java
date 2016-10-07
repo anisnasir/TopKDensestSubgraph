@@ -132,9 +132,6 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 	}
 
 	void merge(SnowBall newSnowBall, NodeMap nodeMap) {
-		//System.out.println(this.getNodes() + " " + newSnowBall.getNodes());
-		//System.out.println(this.numEdges + " " + this.numNodes + " " + newSnowBall.numEdges + " " + newSnowBall.numNodes);
-		//long startTime = System.currentTimeMillis();
 		HashSet<String> nodes = new HashSet<String>(newSnowBall.getNodes());
 		HashSet<String> localNodes = new HashSet<String>(this.getNodes());
 		

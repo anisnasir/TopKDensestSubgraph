@@ -465,8 +465,6 @@ public class BagOfSnowballs implements DensestSubgraph{
 		HashSet<String> neighbors = new HashSet<String>();
 
 		kCore.color(src,kCore.getKCore(src), visited, neighbors);
-
-
 		//remove all the other snowballs
 		HashSet<SnowBall> merge = new HashSet<SnowBall>();
 		for(SnowBall s:bag) {
@@ -478,38 +476,11 @@ public class BagOfSnowballs implements DensestSubgraph{
 		}
 
 		for(SnowBall s:merge) {
-			//srcSnowBall.merge(s, nodeMap);
+			srcSnowBall.merge(s, nodeMap);
 			bag.remove(s);
 		}
-
-		srcSnowBall.graph = new HashMap<String,HashSet<String>>();
-		srcSnowBall.kCore = new KCoreTraversal(srcSnowBall.graph);
-		srcSnowBall.kCore.mcd = new HashMap<String,Integer>();
-		srcSnowBall.kCore.pcd = new HashMap<String,Integer>();
-
-		int edgeCount = 0 ;
-		for(String node: neighbors) {
-			HashSet<String> neigs = nodeMap.getNeighbors(node);
-			SetFunctions helper = new SetFunctions();
-			HashSet<String> common = helper.intersectionSet(neigs, neighbors) ;
-			edgeCount+= common.size();
-			srcSnowBall.graph.put(node, common);
-			srcSnowBall.kCore.kCore.put(node, kCore.getKCore(node));	
-		}
-
-		srcSnowBall.numEdges = edgeCount/2;
-		srcSnowBall.numNodes = neighbors.size();
-		srcSnowBall.getDensity();
-
-
-		for(String node: neighbors) {
-			srcSnowBall.kCore.setmcd(node);
-		}
-		for(String node: neighbors) {
-			srcSnowBall.kCore.setpcd(node);
-		}
-
-		this.ensureInvariant(srcSnowBall, nodeMap);
+		this.ensureInvariant(srcSnowBall, nodeMap);	
+		
 
 	}
 
