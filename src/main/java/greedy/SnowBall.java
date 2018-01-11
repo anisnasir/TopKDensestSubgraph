@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import kcorelinear.KCoreTraversal;
 import kcorequad.KCoreQuad;
 import struct.NodeMap;
@@ -260,5 +262,16 @@ public class SnowBall implements Serializable, Comparable<SnowBall>{
 
 	public int  getCoreNumber(String src) {
 		return this.kCore.getKCore(src);
+	}
+	
+	public int hashcode() {
+		int hashCode =  new HashCodeBuilder(17, 31).
+				append(this.serialVersionUID).
+				toHashCode();
+		return hashCode;
+	}
+	public boolean equals(Object o) {
+		SnowBall other  = (SnowBall)o;
+		return (this.id == other.id && this.density == other.density && this.numNodes == other.numNodes && this.numEdges == other.numEdges);
 	}
 }
